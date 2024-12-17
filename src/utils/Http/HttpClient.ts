@@ -21,12 +21,12 @@ export class HttpClient {
     return response.data;
   }
 
-  async put<T>(
+  async patch<T>(
     url: string,
     data: unknown,
     config?: AxiosRequestConfig,
   ): Promise<T> {
-    const response = await this.axios.put<T>(url, data, config);
+    const response = await this.axios.patch<T>(url, data, config);
     return response.data;
   }
 
