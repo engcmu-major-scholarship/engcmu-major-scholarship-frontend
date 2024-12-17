@@ -1,9 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-export class AxiosBase {
+export class HttpClient {
   protected readonly axios: AxiosInstance;
 
-  protected constructor(config: AxiosRequestConfig) {
+  constructor(config: AxiosRequestConfig) {
     this.axios = axios.create(config);
   }
 
