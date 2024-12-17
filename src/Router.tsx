@@ -4,7 +4,7 @@ import Callback from './pages/Callback/Callback';
 import Login from './pages/Login/Login';
 import AuthProvider from './providers/AuthProvider';
 import { useAuth } from './hooks/useAuth';
-import AxiosProvider from './providers/AxiosProvider';
+import HttpClientProvider from './providers/HttpClientProvider';
 import SignupProvider from './providers/SignupProvider';
 import Signup from './pages/Signup/Signup';
 
@@ -39,7 +39,7 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={providersGiver([AuthProvider, AxiosProvider])}>
+        <Route element={providersGiver([AuthProvider, HttpClientProvider])}>
           <Route path="/" element={<Home />} />
           <Route element={<UnprotectedRoute />}>
             <Route path="/login" element={<Login />} />

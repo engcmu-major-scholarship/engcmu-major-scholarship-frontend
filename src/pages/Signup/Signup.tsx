@@ -28,13 +28,19 @@ const Signup = () => {
             placeholder="Enter your 13-digit ID"
             {...register('citizenId', {
               required: 'Citizen ID is required',
-              minLength: {
-                value: 13,
-                message: 'Citizen ID must be 13 characters long',
-              },
-              maxLength: {
-                value: 13,
-                message: 'Citizen ID must be 13 characters long',
+              validate: (value: string) => {
+                if (value.length !== 13) {
+                  return 'Citizen ID must be 13 characters long';
+                }
+                let sum = 0;
+                for (let i = 0; i < 12; i++) {
+                  sum += parseInt(value.charAt(i), 10) * (13 - i);
+                }
+                sum = (11 - (sum % 11)) % 10;
+                if (sum !== parseInt(value.charAt(12), 10)) {
+                  return 'Invalid Citizen ID';
+                }
+                return true;
               },
             })}
             className={`border rounded-md p-2 focus:outline-none ${

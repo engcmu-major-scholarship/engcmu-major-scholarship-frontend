@@ -1,7 +1,7 @@
 import { useContext, useEffect } from 'react';
-import hashParamsParser from '../../utils/hashParamsParser';
+import hashParamsParser from './hashParamsParser';
 import { SignupContext } from '../../contexts/SignupContext';
-import { useAxios } from '../../hooks/useAxios';
+import { useHttpClient } from '../../hooks/useHttpClient';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 
@@ -16,7 +16,7 @@ export interface GoogleCallbackProps {
 
 const useCallbackController = () => {
   const { setToken } = useAuth();
-  const { unprotectedAPI } = useAxios();
+  const httpClient = useHttpClient();
   const { setGoogleToken } = useContext(SignupContext);
   const navigate = useNavigate();
   useEffect(() => {
@@ -27,35 +27,28 @@ const useCallbackController = () => {
       console.error(hashParams.error);
     }
     if (hashParams.access_token) {
-      unprotectedAPI
-        .get<boolean>('/auth/is-signup', {
-          params: {
-            access_token: hashParams.access_token,
-          },
+      httpClient
+        .post<string>('/auth/signin', {
+          accessToken: hashParams.access_token,
         })
-        .then((res) => {
-          if (res) {
+        .then((response) => {
+          setToken(response);
+          navigate('/test');
+        })
+        .catch((error) => {
+          if (
+            error.response.status === 404 &&
+            error.response.data.message === 'User not found'
+          ) {
             setGoogleToken(hashParams.access_token);
-            navigate('/signup', { replace: true });
+            navigate('/signup');
           } else {
-            unprotectedAPI
-              .get<string>('/auth/login', {
-                params: {
-                  access_token: hashParams.access_token,
-                },
-              })
-              .then((res) => {
-                setToken(res);
-                navigate('/test', { replace: true });
-              })
-              .catch((err) => {
-                console.error(err);
-                navigate('/login', { replace: true });
-              });
+            console.error(error.response.data.message);
+            navigate('/login');
           }
         });
     }
-  }, [navigate, setGoogleToken, setToken, unprotectedAPI]);
+  }, [navigate, setGoogleToken, setToken, httpClient]);
 
   return {};
 };

@@ -1,6 +1,6 @@
 import { useContext, useEffect } from 'react';
 import { useAuth } from '../../hooks/useAuth';
-import { useAxios } from '../../hooks/useAxios';
+import { useHttpClient } from '../../hooks/useHttpClient';
 import { SignupContext } from '../../contexts/SignupContext';
 import { useNavigate } from 'react-router';
 
@@ -9,18 +9,16 @@ export type SignupData = {
 };
 
 const useSignupController = () => {
-  const { unprotectedAPI } = useAxios();
+  const httpClient = useHttpClient();
   const { setToken } = useAuth();
   const { googleToken } = useContext(SignupContext);
   const navigate = useNavigate();
 
   const onSubmit = (data: SignupData) => {
-    unprotectedAPI
-      .get<string>('/auth/signup', {
-        params: {
-          citizen_id: data.citizenId,
-          access_token: googleToken,
-        },
+    httpClient
+      .post<string>('/auth/signup', {
+        citizenId: data.citizenId,
+        accessToken: googleToken,
       })
       .then((res) => {
         setToken(res);
