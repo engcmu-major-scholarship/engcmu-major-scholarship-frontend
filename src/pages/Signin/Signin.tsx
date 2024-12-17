@@ -1,7 +1,7 @@
-import useLoginController from './useLoginController';
+import useSigninController from './useSigninController';
 
-const Login = () => {
-  const { handleGoogleSignIn } = useLoginController();
+const Signin = () => {
+  const { handleGoogleSignIn } = useSigninController();
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
       <div className="text-9xl text-center">Login</div>
@@ -41,4 +41,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signin;

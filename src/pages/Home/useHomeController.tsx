@@ -5,12 +5,12 @@ const useHomeController = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
 
-  const navigateToLogin = () => {
-    navigate('/login');
+  const navigateToSignin = () => {
+    navigate('/signin');
   };
   return {
     token,
-    navigateToLogin,
+    navigateToLogin: navigateToSignin,
   };
 };
 

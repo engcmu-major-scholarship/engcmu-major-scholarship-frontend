@@ -10,7 +10,7 @@ const Home = () => {
         onClick={navigateToLogin}
         disabled={token !== null}
       >
-        Login
+        Signin
       </button>
     </div>
   );

@@ -1,7 +1,7 @@
 import { BrowserRouter, Navigate, Outlet, Route, Routes } from 'react-router';
 import Home from './pages/Home/Home';
 import Callback from './pages/Callback/Callback';
-import Login from './pages/Login/Login';
+import Signin from './pages/Signin/Signin';
 import AuthProvider from './providers/AuthProvider';
 import { useAuth } from './hooks/useAuth';
 import HttpClientProvider from './providers/HttpClientProvider';
@@ -22,7 +22,7 @@ const providersGiver = ([...providers]: (({
 const ProtectedRoute = () => {
   const { token } = useAuth();
   if (!token) {
-    return <Navigate to="/login" replace={true} />;
+    return <Navigate to="/signin" replace={true} />;
   }
   return <Outlet />;
 };
@@ -42,12 +42,12 @@ const Router = () => {
         <Route element={providersGiver([AuthProvider, HttpClientProvider])}>
           <Route path="/" element={<Home />} />
           <Route element={<UnprotectedRoute />}>
-            <Route path="/login" element={<Login />} />
+            <Route path="/signin" element={<Signin />} />
             <Route element={providersGiver([SignupProvider])}>
               <Route path="/callback" element={<Callback />} />
               <Route path="/signup" element={<Signup />} />
             </Route>
-            <Route path="/logout" element={<Home />} />
+            <Route path="/signout" element={<Home />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/test" element={<Home />} />

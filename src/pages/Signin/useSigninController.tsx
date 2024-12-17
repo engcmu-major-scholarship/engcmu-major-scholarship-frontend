@@ -1,4 +1,4 @@
-const useLoginController = () => {
+const useSigninController = () => {
   const handleGoogleSignIn = () => {
     const paramsBuilder = new URLSearchParams();
     paramsBuilder.append('client_id', import.meta.env.VITE_GOOGLE_CLIENT_ID);
@@ -15,4 +15,4 @@ const useLoginController = () => {
   };
 };
 
-export default useLoginController;
+export default useSigninController;
