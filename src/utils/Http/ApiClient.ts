@@ -1,3 +1,4 @@
+import { Path } from '../../constants/Path';
 import { HttpClient } from './HttpClient';
 
 export class ApiClient extends HttpClient {
@@ -16,7 +17,7 @@ export class ApiClient extends HttpClient {
       (error) => {
         if (error.response?.status === 401) {
           localStorage.removeItem('token');
-          window.location.replace('/login');
+          window.location.replace(Path.SIGNIN);
         }
         return Promise.reject(error);
       },

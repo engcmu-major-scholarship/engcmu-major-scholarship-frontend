@@ -4,7 +4,7 @@ const Signin = () => {
   const { handleGoogleSignIn } = useSigninController();
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
-      <div className="text-9xl text-center">Login</div>
+      <div className="text-9xl text-center">Signin</div>
       <button
         className="flex justify-center items-center w-64 h-12 border border-gray-300 rounded-lg hover:shadow-md cursor-pointer"
         onClick={handleGoogleSignIn}

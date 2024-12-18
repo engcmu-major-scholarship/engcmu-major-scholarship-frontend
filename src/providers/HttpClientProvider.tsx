@@ -4,6 +4,7 @@ import { HttpClientContext } from '../contexts/HttpClientContext';
 import { useAuth } from '../hooks/useAuth';
 import { HttpClient } from '../utils/Http/HttpClient';
 import { Role } from '../types/Roles';
+import { Api } from '../constants/Api';
 
 export type TokenPayload = {
   userId: string;
@@ -20,7 +21,7 @@ const HttpClientProvider = ({ children }: { children: ReactNode }) => {
       setHttpClient(new ApiClient({ token }));
       const httpClient = new ApiClient({ token });
       httpClient
-        .get<TokenPayload>('/auth/resolve-token')
+        .get<TokenPayload>(Api.RESOLVE_TOKEN)
         .then((res) => {
           setGoogleAccount(res.googleAccount);
           setRoles(res.roles);

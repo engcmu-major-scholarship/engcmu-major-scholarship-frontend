@@ -7,6 +7,7 @@ import { useAuth } from './hooks/useAuth';
 import HttpClientProvider from './providers/HttpClientProvider';
 import SignupProvider from './providers/SignupProvider';
 import Signup from './pages/Signup/Signup';
+import { Path } from './constants/Path';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -22,7 +23,7 @@ const providersGiver = ([...providers]: (({
 const ProtectedRoute = () => {
   const { token } = useAuth();
   if (!token) {
-    return <Navigate to="/signin" replace={true} />;
+    return <Navigate to={Path.SIGNIN} replace={true} />;
   }
   return <Outlet />;
 };
@@ -30,7 +31,7 @@ const ProtectedRoute = () => {
 const UnprotectedRoute = () => {
   const { token } = useAuth();
   if (token) {
-    return <Navigate to="/" replace={true} />;
+    return <Navigate to={Path.HOME} replace={true} />;
   }
   return <Outlet />;
 };
@@ -40,17 +41,17 @@ const Router = () => {
     <BrowserRouter>
       <Routes>
         <Route element={providersGiver([AuthProvider, HttpClientProvider])}>
-          <Route path="/" element={<Home />} />
+          <Route path={Path.HOME} element={<Home />} />
           <Route element={<UnprotectedRoute />}>
-            <Route path="/signin" element={<Signin />} />
+            <Route path={Path.SIGNIN} element={<Signin />} />
             <Route element={providersGiver([SignupProvider])}>
-              <Route path="/callback" element={<Callback />} />
-              <Route path="/signup" element={<Signup />} />
+              <Route path={Path.CALLBACK} element={<Callback />} />
+              <Route path={Path.SIGNUP} element={<Signup />} />
             </Route>
-            <Route path="/signout" element={<Home />} />
+            <Route path={Path.SIGNOUT} element={<Home />} />
           </Route>
           <Route element={<ProtectedRoute />}>
-            <Route path="/test" element={<Home />} />
+            <Route path={Path.TEST} element={<Home />} />
           </Route>
         </Route>
       </Routes>

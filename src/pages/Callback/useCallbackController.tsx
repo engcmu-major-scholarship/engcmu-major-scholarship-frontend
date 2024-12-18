@@ -4,6 +4,8 @@ import { SignupContext } from '../../contexts/SignupContext';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import { useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
+import { Api } from '../../constants/Api';
+import { Path } from '../../constants/Path';
 
 export interface GoogleCallbackProps {
   access_token: string;
@@ -28,12 +30,12 @@ const useCallbackController = () => {
     }
     if (hashParams.access_token) {
       httpClient
-        .post<string>('/auth/signin', {
+        .post<string>(Api.SIGNIN, {
           accessToken: hashParams.access_token,
         })
         .then((response) => {
           setToken(response);
-          navigate('/test');
+          navigate(Path.TEST);
         })
         .catch((error) => {
           if (
@@ -41,10 +43,10 @@ const useCallbackController = () => {
             error.response.data.message === 'User not found'
           ) {
             setGoogleToken(hashParams.access_token);
-            navigate('/signup');
+            navigate(Path.SIGNUP);
           } else {
             console.error(error.response.data.message);
-            navigate('/login');
+            navigate(Path.SIGNIN);
           }
         });
     }
