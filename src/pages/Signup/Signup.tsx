@@ -18,6 +18,110 @@ const Signup = () => {
       >
         <div className="flex flex-col">
           <label
+            htmlFor="firstName"
+            className="mb-2 text-sm font-medium text-gray-600"
+          >
+            First Name
+          </label>
+          <input
+            id="firstName"
+            placeholder="Enter your first name"
+            {...register('firstName', {
+              required: 'First Name is required',
+            })}
+            className={`border rounded-md p-2 focus:outline-none ${
+              errors.firstName ? 'border-red-500' : 'border-gray-300'
+            }`}
+          />
+          {errors.firstName && (
+            <span className="text-red-500 text-sm mt-1">
+              {errors.firstName.message}
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col">
+          <label
+            htmlFor="lastName"
+            className="mb-2 text-sm font-medium text-gray-600"
+          >
+            Last Name
+          </label>
+          <input
+            id="lastName"
+            placeholder="Enter your last name"
+            {...register('lastName', {
+              required: 'Last Name is required',
+            })}
+            className={`border rounded-md p-2 focus:outline-none ${
+              errors.lastName ? 'border-red-500' : 'border-gray-300'
+            }`}
+          />
+          {errors.lastName && (
+            <span className="text-red-500 text-sm mt-1">
+              {errors.lastName.message}
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col">
+          <label
+            htmlFor="phone"
+            className="mb-2 text-sm font-medium text-gray-600"
+          >
+            Phone Number
+          </label>
+          <input
+            id="phone"
+            placeholder="Enter your phone number"
+            {...register('phoneNumber', {
+              required: 'Phone Number is required',
+              pattern: {
+                value: /^[0-9]+$/,
+                message: 'Phone Number must contain only digits',
+              },
+            })}
+            className={`border rounded-md p-2 focus:outline-none ${
+              errors.phoneNumber ? 'border-red-500' : 'border-gray-300'
+            }`}
+          />
+          {errors.phoneNumber && (
+            <span className="text-red-500 text-sm mt-1">
+              {errors.phoneNumber.message}
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col">
+          <label
+            htmlFor="email"
+            className="mb-2 text-sm font-medium text-gray-600"
+          >
+            Contact Email
+          </label>
+          <input
+            id="email"
+            placeholder="Enter your email"
+            {...register('email', {
+              required: 'Email is required',
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+                message: 'Invalid email address',
+              },
+            })}
+            className={`border rounded-md p-2 focus:outline-none ${
+              errors.email ? 'border-red-500' : 'border-gray-300'
+            }`}
+          />
+          {errors.email && (
+            <span className="text-red-500 text-sm mt-1">
+              {errors.email.message}
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col">
+          <label
             htmlFor="citizenId"
             className="mb-2 text-sm font-medium text-gray-600"
           >

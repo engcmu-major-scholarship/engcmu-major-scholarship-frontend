@@ -8,6 +8,10 @@ import { Path } from '../../constants/Path';
 
 export type SignupData = {
   citizenId: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
 };
 
 const useSignupController = () => {
@@ -19,8 +23,12 @@ const useSignupController = () => {
   const onSubmit = (data: SignupData) => {
     httpClient
       .post<string>(Api.SIGNUP, {
-        citizenId: data.citizenId,
         accessToken: googleToken,
+        citizenId: data.citizenId,
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: data.email,
+        phoneNumber: data.phoneNumber,
       })
       .then((res) => {
         setToken(res);
