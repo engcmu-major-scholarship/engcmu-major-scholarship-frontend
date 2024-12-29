@@ -8,29 +8,32 @@ import { Api } from '../constants/Api';
 
 export type TokenPayload = {
   userId: string;
-  googleAccount: string;
+  CMUAccount: string;
   roles: Role[];
+  iat?: number;
+  exp?: number;
+  iss?: string;
 };
 
 const HttpClientProvider = ({ children }: { children: ReactNode }) => {
-  const { token, setGoogleAccount, setRoles } = useAuth();
+  const { token, setCMUAccount, setRoles } = useAuth();
   const [httpClient, setHttpClient] = useState<HttpClient>(new ApiClient());
 
   const setHttpClientToken = useCallback(
     (token: string) => {
-      setHttpClient(new ApiClient({ token }));
       const httpClient = new ApiClient({ token });
+      setHttpClient(httpClient);
       httpClient
         .get<TokenPayload>(Api.RESOLVE_TOKEN)
         .then((res) => {
-          setGoogleAccount(res.googleAccount);
+          setCMUAccount(res.CMUAccount);
           setRoles(res.roles);
         })
         .catch((err) => {
           console.error(err);
         });
     },
-    [setGoogleAccount, setRoles],
+    [setCMUAccount, setRoles],
   );
 
   useEffect(() => {
