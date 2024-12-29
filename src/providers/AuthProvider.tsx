@@ -32,8 +32,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         token,
         setToken,
         removeToken,
-        CMUAccount: CMUAccount,
-        setCMUAccount: setCMUAccount,
+        CMUAccount,
+        setCMUAccount,
         roles,
         setRoles,
       }}
