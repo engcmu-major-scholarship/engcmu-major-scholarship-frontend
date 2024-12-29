@@ -6,7 +6,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setTokenState] = useState<string | null>(
     localStorage.getItem('token'),
   );
-  const [google_account, setGoogleAccount] = useState<string | null>(null);
+  const [CMUAccount, setCMUAccount] = useState<string | null>(null);
   const [roles, setRoles] = useState<Role[]>([]);
 
   const setToken = (token: string) => {
@@ -32,8 +32,8 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
         token,
         setToken,
         removeToken,
-        google_account,
-        setGoogleAccount,
+        CMUAccount,
+        setCMUAccount,
         roles,
         setRoles,
       }}

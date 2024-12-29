@@ -1,8 +1,7 @@
 export enum Path {
   HOME = '/',
   SIGNIN = '/signin',
-  CALLBACK = '/callback',
-  SIGNUP = '/signup',
+  CALLBACK = '/cmuEntraIDCallback',
   SIGNOUT = '/signout',
   TEST = '/test',
 }

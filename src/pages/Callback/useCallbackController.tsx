@@ -1,56 +1,43 @@
-import { useContext, useEffect } from 'react';
-import hashParamsParser from './hashParamsParser';
-import { SignupContext } from '../../contexts/SignupContext';
+import { useEffect } from 'react';
 import { useHttpClient } from '../../hooks/useHttpClient';
-import { useNavigate } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 import { Api } from '../../constants/Api';
 import { Path } from '../../constants/Path';
 
-export interface GoogleCallbackProps {
-  access_token: string;
-  token_type: string;
-  expires_in: string;
-  scope: string;
-  error: string;
-  [key: string]: string;
-}
-
 const useCallbackController = () => {
+  const [searchParams] = useSearchParams();
   const { setToken } = useAuth();
   const httpClient = useHttpClient();
-  const { setGoogleToken } = useContext(SignupContext);
   const navigate = useNavigate();
   useEffect(() => {
-    const hashParams = hashParamsParser<GoogleCallbackProps>(
-      window.location.hash,
-    );
-    if (hashParams.error) {
-      console.error(hashParams.error);
+    const error = searchParams.get('error');
+    const authorizationCode = searchParams.get('code');
+    if (error) {
+      navigate(Path.SIGNIN, {
+        replace: true,
+        state: { error },
+      });
     }
-    if (hashParams.access_token) {
+    if (authorizationCode) {
       httpClient
         .post<string>(Api.SIGNIN, {
-          accessToken: hashParams.access_token,
+          authorizationCode,
+          redirectUri: window.location.origin + Path.CALLBACK,
         })
         .then((response) => {
           setToken(response);
-          navigate(Path.TEST);
+          navigate(Path.TEST, { replace: true });
         })
         .catch((error) => {
-          if (
-            error.response.status === 404 &&
-            error.response.data.message === 'User not found'
-          ) {
-            setGoogleToken(hashParams.access_token);
-            navigate(Path.SIGNUP);
-          } else {
-            console.error(error.response.data.message);
-            navigate(Path.SIGNIN);
-          }
+          console.error(error.response.data.message);
+          navigate(Path.SIGNIN, {
+            replace: true,
+            state: { error: error.response.data.message },
+          });
         });
     }
-  }, [navigate, setGoogleToken, setToken, httpClient]);
+  }, [navigate, setToken, httpClient, searchParams]);
 
   return {};
 };

@@ -5,9 +5,8 @@ import Signin from './pages/Signin/Signin';
 import AuthProvider from './providers/AuthProvider';
 import { useAuth } from './hooks/useAuth';
 import HttpClientProvider from './providers/HttpClientProvider';
-import SignupProvider from './providers/SignupProvider';
-import Signup from './pages/Signup/Signup';
 import { Path } from './constants/Path';
+import Error404 from './pages/Error404';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -44,15 +43,13 @@ const Router = () => {
           <Route path={Path.HOME} element={<Home />} />
           <Route element={<UnprotectedRoute />}>
             <Route path={Path.SIGNIN} element={<Signin />} />
-            <Route element={providersGiver([SignupProvider])}>
-              <Route path={Path.CALLBACK} element={<Callback />} />
-              <Route path={Path.SIGNUP} element={<Signup />} />
-            </Route>
+            <Route path={Path.CALLBACK} element={<Callback />} />
             <Route path={Path.SIGNOUT} element={<Home />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path={Path.TEST} element={<Home />} />
           </Route>
+          <Route path="*" element={<Error404 />} />
         </Route>
       </Routes>
     </BrowserRouter>

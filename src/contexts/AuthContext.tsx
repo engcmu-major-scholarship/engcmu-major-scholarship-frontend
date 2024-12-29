@@ -5,8 +5,8 @@ export type AuthContextType = {
   token: string | null;
   setToken: (token: string) => void;
   removeToken: () => void;
-  google_account: string | null;
-  setGoogleAccount: Dispatch<SetStateAction<string | null>>;
+  CMUAccount: string | null;
+  setCMUAccount: Dispatch<SetStateAction<string | null>>;
   roles: Role[];
   setRoles: Dispatch<SetStateAction<Role[]>>;
 };
@@ -15,8 +15,8 @@ export const AuthContext = createContext<AuthContextType>({
   token: null,
   setToken: () => {},
   removeToken: () => {},
-  google_account: null,
-  setGoogleAccount: () => {},
+  CMUAccount: null,
+  setCMUAccount: () => {},
   roles: [],
   setRoles: () => {},
 });
