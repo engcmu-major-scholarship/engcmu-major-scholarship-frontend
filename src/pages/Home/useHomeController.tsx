@@ -9,9 +9,14 @@ const useHomeController = () => {
   const navigateToSignin = () => {
     navigate(Path.SIGNIN);
   };
+
+  const navigateToSignOut = () => {
+    navigate(Path.SIGNOUT);
+  };
   return {
     token,
     navigateToSignin,
+    navigateToSignOut,
   };
 };
 

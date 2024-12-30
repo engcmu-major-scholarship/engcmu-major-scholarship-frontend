@@ -7,6 +7,7 @@ import { useAuth } from './hooks/useAuth';
 import HttpClientProvider from './providers/HttpClientProvider';
 import { Path } from './constants/Path';
 import Error404 from './pages/Error404';
+import Signout from './pages/Signout/Signout';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -41,10 +42,10 @@ const Router = () => {
       <Routes>
         <Route element={providersGiver([AuthProvider, HttpClientProvider])}>
           <Route path={Path.HOME} element={<Home />} />
+          <Route path={Path.SIGNOUT} element={<Signout />} />
           <Route element={<UnprotectedRoute />}>
             <Route path={Path.SIGNIN} element={<Signin />} />
             <Route path={Path.CALLBACK} element={<Callback />} />
-            <Route path={Path.SIGNOUT} element={<Home />} />
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path={Path.TEST} element={<Home />} />
