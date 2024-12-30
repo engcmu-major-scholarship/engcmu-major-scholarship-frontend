@@ -25,3 +25,8 @@ dist-ssr
 
 # dotenv environment variable files
 .env
+
+.env*
+.flaskenv*
+!.env.project
+!.env.vault
