@@ -3,14 +3,15 @@ import { useNavigate } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 
 const useSignoutController = () => {
-  const { removeToken } = useAuth();
+  const { removeToken, setCMUAccount } = useAuth();
   const navigate = useNavigate();
   useEffect(() => {
     removeToken();
+    setCMUAccount(null);
     navigate('/', { replace: true });
-  }, [navigate, removeToken]);
+  }, [navigate, removeToken, setCMUAccount]);
 
-  return {};
+  return;
 };
 
 export default useSignoutController;

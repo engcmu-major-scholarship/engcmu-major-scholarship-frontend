@@ -39,7 +39,7 @@ const useCallbackController = () => {
     }
   }, [navigate, setToken, httpClient, searchParams]);
 
-  return {};
+  return;
 };
 
 export default useCallbackController;

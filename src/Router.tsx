@@ -8,6 +8,8 @@ import HttpClientProvider from './providers/HttpClientProvider';
 import { Path } from './constants/Path';
 import Error404 from './pages/Error404';
 import Signout from './pages/Signout/Signout';
+import Navbar from './pages/Navbar/Navbar';
+import RolesBaseAccessProvider from './providers/RolesBaseAccessProvider';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -40,15 +42,25 @@ const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route element={providersGiver([AuthProvider, HttpClientProvider])}>
-          <Route path={Path.HOME} element={<Home />} />
+        <Route
+          element={providersGiver([
+            AuthProvider,
+            HttpClientProvider,
+            RolesBaseAccessProvider,
+          ])}
+        >
+          <Route element={<Navbar />}>
+            <Route path={Path.HOME} element={<Home />} />
+          </Route>
           <Route path={Path.SIGNOUT} element={<Signout />} />
           <Route element={<UnprotectedRoute />}>
             <Route path={Path.SIGNIN} element={<Signin />} />
             <Route path={Path.CALLBACK} element={<Callback />} />
           </Route>
           <Route element={<ProtectedRoute />}>
-            <Route path={Path.TEST} element={<Home />} />
+            <Route element={<Navbar />}>
+              <Route path={Path.TEST} element={<Home />} />
+            </Route>
           </Route>
           <Route path="*" element={<Error404 />} />
         </Route>
