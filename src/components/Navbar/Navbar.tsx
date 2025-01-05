@@ -124,7 +124,7 @@ const Navbar = () => {
 
         <div
           className={`fixed right-0 h-fit bg-white shadow-2xl transition-all duration-300 ease-in-out overflow-hidden ${
-            isProfileMenuOpen ? 'w-48 translate-x-0' : 'w-0 -translate-x-full'
+            isProfileMenuOpen ? 'w-48 -translate-x-0' : 'w-0 translate-x-full'
           }`}
         >
           <div className="flex flex-col p-4">
