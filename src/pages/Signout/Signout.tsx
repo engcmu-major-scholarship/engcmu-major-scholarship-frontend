@@ -1,8 +1,7 @@
 import useSignoutController from './useSignoutController';
 
 const Signout = () => {
-  // eslint-disable-next-line no-empty-pattern
-  const {} = useSignoutController();
+  useSignoutController();
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
       <div role="status">

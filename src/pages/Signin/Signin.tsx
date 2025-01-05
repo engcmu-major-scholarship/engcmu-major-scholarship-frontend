@@ -1,8 +1,9 @@
+import { handleCMUAccountSignIn } from '../../utils/handleCMUAccountSignIn';
 import useSigninController from './useSigninController';
 import cmuLogo from '/cmu.png';
 
 const Signin = () => {
-  const { handleCMUAccountSignIn, error } = useSigninController();
+  const { error } = useSigninController();
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
       <div className="text-9xl text-center">Signin</div>

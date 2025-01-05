@@ -1,8 +1,7 @@
 import useCallbackController from './useCallbackController';
 
 const Callback = () => {
-  // eslint-disable-next-line no-empty-pattern
-  const {} = useCallbackController();
+  useCallbackController();
   return (
     <div className="h-screen w-screen flex flex-col justify-center items-center">
       <div role="status">
