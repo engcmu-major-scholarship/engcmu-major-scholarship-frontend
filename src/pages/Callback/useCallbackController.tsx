@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 import { Api } from '../../constants/Api';
 import { Path } from '../../constants/Path';
+import { handleCMUAccountSignIn } from '../../utils/handleCMUAccountSignIn';
 
 const useCallbackController = () => {
   const [searchParams] = useSearchParams();
@@ -14,10 +15,7 @@ const useCallbackController = () => {
     const error = searchParams.get('error');
     const authorizationCode = searchParams.get('code');
     if (error) {
-      navigate(Path.SIGNIN, {
-        replace: true,
-        state: { error },
-      });
+      handleCMUAccountSignIn();
     }
     if (authorizationCode) {
       httpClient
@@ -31,10 +29,7 @@ const useCallbackController = () => {
         })
         .catch((error) => {
           console.error(error.response.data.message);
-          navigate(Path.SIGNIN, {
-            replace: true,
-            state: { error: error.response.data.message },
-          });
+          handleCMUAccountSignIn();
         });
     }
   }, [navigate, setToken, httpClient, searchParams]);

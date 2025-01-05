@@ -8,8 +8,9 @@ import HttpClientProvider from './providers/HttpClientProvider';
 import { Path } from './constants/Path';
 import Error404 from './pages/Error404';
 import Signout from './pages/Signout/Signout';
-import Navbar from './pages/Navbar/Navbar';
+import Navbar from './components/Navbar/Navbar';
 import RolesBaseAccessProvider from './providers/RolesBaseAccessProvider';
+import { handleCMUAccountSignIn } from './utils/handleCMUAccountSignIn';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -25,7 +26,7 @@ const providersGiver = ([...providers]: (({
 const ProtectedRoute = () => {
   const { token } = useAuth();
   if (!token) {
-    return <Navigate to={Path.SIGNIN} replace={true} />;
+    handleCMUAccountSignIn();
   }
   return <Outlet />;
 };
