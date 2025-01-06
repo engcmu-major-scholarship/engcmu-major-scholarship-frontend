@@ -101,7 +101,7 @@ const Navbar = () => {
 
       <div className="h-full flex flex-row">
         <div
-          className={`${isFixed ? 'fixed left-0' : ''} h-full bg-white shadow-2xl transition-all duration-300 ease-in-out overflow-hidden ${
+          className={`${isFixed ? 'fixed left-0' : ''} h-full bg-white drop-shadow-md transition-all duration-300 ease-in-out overflow-hidden ${
             isSideBarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full'
           }`}
         >
@@ -123,7 +123,7 @@ const Navbar = () => {
         <Outlet />
 
         <div
-          className={`fixed right-0 h-fit bg-white shadow-2xl transition-all duration-300 ease-in-out overflow-hidden ${
+          className={`fixed right-0 h-fit bg-white drop-shadow-md transition-all duration-300 ease-in-out overflow-hidden ${
             isProfileMenuOpen ? 'w-48 -translate-x-0' : 'w-0 translate-x-full'
           }`}
         >
