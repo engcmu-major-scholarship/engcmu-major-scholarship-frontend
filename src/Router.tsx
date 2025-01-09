@@ -11,6 +11,7 @@ import Signout from './pages/Signout/Signout';
 import Navbar from './components/Navbar/Navbar';
 import RolesBaseAccessProvider from './providers/RolesBaseAccessProvider';
 import { handleCMUAccountSignIn } from './utils/handleCMUAccountSignIn';
+import ScholarshipAll from './pages/ScholarshipAll/ScholarshipAll';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -52,7 +53,11 @@ const Router = () => {
         >
           <Route element={<Navbar />}>
             <Route path={Path.HOME} element={<Home />} />
-            <Route path={Path.SCHOLARSHIP} element={<Home />} />
+            <Route path={Path.SCHOLARSHIP} element={<ScholarshipAll />} />
+            <Route
+              path={`${Path.SCHOLARSHIP}/:id`}
+              element={<ScholarshipAll />}
+            />
           </Route>
           <Route path={Path.SIGNOUT} element={<Signout />} />
           <Route element={<UnprotectedRoute />}>

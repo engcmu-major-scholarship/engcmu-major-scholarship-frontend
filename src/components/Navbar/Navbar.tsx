@@ -20,8 +20,8 @@ const Navbar = () => {
   const { accessibles } = useContext(RolesBaseAccessContext);
 
   return (
-    <div className="h-screen w-screen flex flex-col">
-      <div className="sticky top-0 bg-gradient-to-r from-[#dbe9ea] to-[#c3d591] p-4 flex flex-row justify-between">
+    <div className="max-h-screen max-w-screen h-screen w-screen flex flex-col">
+      <div className="sticky top-0 h-[10%] p-4 bg-gradient-to-r from-[#dbe9ea] to-[#c3d591] flex flex-row justify-between items-center">
         <button
           onClick={toggleSideBar}
           className="text-white transition-transform duration-300"
@@ -86,7 +86,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="h-full flex flex-row">
+      <div className="max-h-[90%] max-w-full h-[90%] flex flex-row">
         <div
           className={`${isFixed ? 'fixed left-0' : ''} h-full bg-white drop-shadow-md transition-all duration-300 ease-in-out ${
             isSideBarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full'
