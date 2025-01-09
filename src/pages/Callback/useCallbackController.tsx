@@ -25,7 +25,7 @@ const useCallbackController = () => {
         })
         .then((response) => {
           setToken(response);
-          navigate(Path.TEST, { replace: true });
+          navigate(Path.HOME, { replace: true });
         })
         .catch((error) => {
           console.error(error.response.data.message);

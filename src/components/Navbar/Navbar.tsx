@@ -1,36 +1,23 @@
-import { useContext, useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router';
+import { useContext } from 'react';
+import { NavLink, Outlet } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 import { RolesBaseAccessContext } from '../../contexts/RolesBaseAccessContext';
 import { handleCMUAccountSignIn } from '../../utils/handleCMUAccountSignIn';
-import { Path } from '../../constants/Path';
 import useNavbarController from './useNavbarController';
 import { Role } from '../../types/Roles';
 
 const Navbar = () => {
-  useNavbarController();
+  const {
+    isSideBarOpen,
+    isProfileMenuOpen,
+    isFixed,
+    toggleSideBar,
+    toggleProfileMenu,
+    navigateToProfile,
+    logout,
+  } = useNavbarController();
   const { CMUAccount, roles } = useAuth();
   const { accessibles } = useContext(RolesBaseAccessContext);
-  const navigate = useNavigate();
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
-  const [isFixed] = useState(false);
-
-  const toggleSideBar = () => {
-    setIsSideBarOpen(!isSideBarOpen);
-  };
-
-  const toggleProfileMenu = () => {
-    setIsProfileMenuOpen(!isProfileMenuOpen);
-  };
-
-  const navigateToProfile = () => {
-    navigate(Path.PROFILE);
-  };
-
-  const logout = () => {
-    navigate(Path.SIGNOUT);
-  };
 
   return (
     <div className="h-screen w-screen flex flex-col">
@@ -101,17 +88,17 @@ const Navbar = () => {
 
       <div className="h-full flex flex-row">
         <div
-          className={`${isFixed ? 'fixed left-0' : ''} h-full bg-white drop-shadow-md transition-all duration-300 ease-in-out overflow-hidden ${
+          className={`${isFixed ? 'fixed left-0' : ''} h-full bg-white drop-shadow-md transition-all duration-300 ease-in-out ${
             isSideBarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full'
           }`}
         >
-          <div className="flex flex-col p-4">
+          <div className="flex flex-col overflow-hidden">
             {accessibles.map((path, index) => (
               <NavLink
                 key={index}
                 to={path.link}
                 className={({ isActive }) =>
-                  `p-3 text-center rounded-2xl ${isActive ? 'bg-gradient-to-r from-[#dbe9ea] to-[#c3d591]' : ''}`
+                  `m-2 p-3 text-center text-nowrap drop-shadow-md rounded-2xl ${isActive ? 'bg-gradient-to-r from-[#dbe9ea] to-[#c3d591]' : ''}`
                 }
               >
                 {path.label}
@@ -123,7 +110,7 @@ const Navbar = () => {
         <Outlet />
 
         <div
-          className={`fixed right-0 h-fit bg-white drop-shadow-md transition-all duration-300 ease-in-out overflow-hidden ${
+          className={`fixed right-0 h-fit bg-white drop-shadow-md transition-all duration-300 ease-in-out ${
             isProfileMenuOpen ? 'w-48 -translate-x-0' : 'w-0 translate-x-full'
           }`}
         >
@@ -131,14 +118,14 @@ const Navbar = () => {
             {roles.includes(Role.STUDENT) ? (
               <button
                 onClick={navigateToProfile}
-                className="block text-center py-2 hover:underline"
+                className="block text-center text-nowrap py-2 hover:underline"
               >
                 โปรไฟล์
               </button>
             ) : null}
             <button
               onClick={logout}
-              className="block text-center py-2 hover:underline"
+              className="block text-center text-nowrap py-2 hover:underline"
             >
               ออกจากระบบ
             </button>

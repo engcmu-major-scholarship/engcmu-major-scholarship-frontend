@@ -52,6 +52,7 @@ const Router = () => {
         >
           <Route element={<Navbar />}>
             <Route path={Path.HOME} element={<Home />} />
+            <Route path={Path.SCHOLARSHIP} element={<Home />} />
           </Route>
           <Route path={Path.SIGNOUT} element={<Signout />} />
           <Route element={<UnprotectedRoute />}>
@@ -60,7 +61,7 @@ const Router = () => {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route element={<Navbar />}>
-              <Route path={Path.TEST} element={<Home />} />
+              <Route path={Path.PROFILE} element={<Home />} />
             </Route>
           </Route>
           <Route path="*" element={<Error404 />} />
