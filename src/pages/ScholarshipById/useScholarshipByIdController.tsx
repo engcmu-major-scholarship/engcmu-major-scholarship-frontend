@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useHttpClient } from '../hooks/useHttpClient';
+import { useHttpClient } from '../../hooks/useHttpClient';
 import { useParams } from 'react-router';
-import { Api } from '../constants/Api';
+import { Api } from '../../constants/Api';
 
 export type Scholarship = {
   name: string;
