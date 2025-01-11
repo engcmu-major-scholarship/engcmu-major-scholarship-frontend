@@ -6,14 +6,14 @@ import { HttpClient } from '../utils/Http/HttpClient';
 import { Role } from '../types/Roles';
 import { Api } from '../constants/Api';
 
-export type TokenPayload = {
+export interface TokenPayload {
   userId: string;
   CMUAccount: string;
   roles: Role[];
   iat?: number;
   exp?: number;
   iss?: string;
-};
+}
 
 const HttpClientProvider = ({ children }: { children: ReactNode }) => {
   const { token, setCMUAccount, setRoles } = useAuth();

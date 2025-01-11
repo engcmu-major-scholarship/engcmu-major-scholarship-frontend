@@ -3,7 +3,7 @@ import { useHttpClient } from '../../hooks/useHttpClient';
 import { useParams } from 'react-router';
 import { Api } from '../../constants/Api';
 
-export type Scholarship = {
+export interface Scholarship {
   name: string;
   description: string;
   requirement: string;
@@ -11,7 +11,7 @@ export type Scholarship = {
   docLink: string;
   appDocLink: string;
   isPublic: boolean;
-};
+}
 
 const useScholarshipByIdController = () => {
   const httpClient = useHttpClient();

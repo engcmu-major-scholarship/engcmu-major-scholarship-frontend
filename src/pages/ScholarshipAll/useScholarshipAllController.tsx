@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import { Api } from '../../constants/Api';
 
-export type BasicScholarshipInfo = {
+export interface BasicScholarshipInfo {
   id: number;
   name: string;
-  detail: string;
-};
+  description: string;
+}
 
 const useScholarshipAllController = () => {
   const httpClient = useHttpClient();
