@@ -13,9 +13,9 @@ const ScholarshipAll = () => {
         {scholarships.map((scholarship, index) => (
           <div
             key={index}
-            className="flex flex-col w-9/12 p-5 bg-[#E4F0F1] rounded-lg"
+            className="flex flex-col w-9/12 p-12 bg-[#E4F0F1] rounded-lg"
           >
-            <div className="text-lg">{scholarship.name}</div>
+            <div className="text-lg font-bold">{scholarship.name}</div>
             <div className="text-sm">{scholarship.description}</div>
             <button
               className="text-sm mt-2 text-end underline"
