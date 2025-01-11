@@ -8,9 +8,10 @@ export interface Scholarship {
   description: string;
   requirement: string;
   defaultBudget: number | null;
+  openDate: Date;
+  closeDate: Date;
   docLink: string;
   appDocLink: string;
-  isPublic: boolean;
 }
 
 const useScholarshipByIdController = () => {
@@ -20,7 +21,11 @@ const useScholarshipByIdController = () => {
 
   useEffect(() => {
     httpClient.get<Scholarship>(`${Api.SCHOLARSHIP}/${id}`).then((response) => {
-      setScholarship(response);
+      setScholarship({
+        ...response,
+        openDate: new Date(response.openDate),
+        closeDate: new Date(response.closeDate),
+      });
     });
   }, [id, httpClient]);
 

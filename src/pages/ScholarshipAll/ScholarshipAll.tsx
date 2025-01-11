@@ -5,6 +5,7 @@ import { Path } from '../../constants/Path';
 const ScholarshipAll = () => {
   const { scholarships } = useScholarshipAllController();
   const navigate = useNavigate();
+
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
       <div className="w-full p-4 text-xl text-center">ทุนทั้งหมด</div>
