@@ -13,6 +13,8 @@ import RolesBaseAccessProvider from './providers/RolesBaseAccessProvider';
 import { handleCMUAccountSignIn } from './utils/handleCMUAccountSignIn';
 import ScholarshipAll from './pages/Scholarship/ScholarshipAll/ScholarshipAll';
 import ScholarshipById from './pages/Scholarship/ScholarshipById/ScholarshipById';
+import CreateScholarship from './pages/Scholarship/CreateScholarship/CreateScholarship';
+import EditScholarship from './pages/Scholarship/EditScholarship/EditScholarship';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -68,6 +70,14 @@ const Router = () => {
           <Route element={<ProtectedRoute />}>
             <Route element={<Navbar />}>
               <Route path={Path.PROFILE} element={<Home />} />
+              <Route
+                path={Path.CREATE_SCHOLARSHIP}
+                element={<CreateScholarship />}
+              />
+              <Route
+                path={`${Path.EDIT_SCHOLARSHIP}/:id`}
+                element={<EditScholarship />}
+              />
             </Route>
           </Route>
           <Route path="*" element={<Error404 />} />

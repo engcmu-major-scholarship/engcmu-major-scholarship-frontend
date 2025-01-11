@@ -8,8 +8,6 @@ import { Role } from '../../types/Roles';
 
 const Navbar = () => {
   const {
-    isSideBarOpen,
-    isProfileMenuOpen,
     isFixed,
     toggleSideBar,
     toggleProfileMenu,
@@ -17,7 +15,9 @@ const Navbar = () => {
     logout,
   } = useNavbarController();
   const { CMUAccount, roles } = useAuth();
-  const { accessibles } = useContext(RolesBaseAccessContext);
+  const { accessibles, isSideBarOpen, isProfileMenuOpen } = useContext(
+    RolesBaseAccessContext,
+  );
 
   return (
     <div className="max-h-screen max-w-screen h-screen w-screen flex flex-col">

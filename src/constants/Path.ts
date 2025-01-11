@@ -10,7 +10,8 @@ export enum Path {
 
   CONSIDER = '/consider',
   RECIPIENT = '/recipient',
-  MANAGE_SCHOLARSHIP = '/manage-scholarship',
+  CREATE_SCHOLARSHIP = '/scholarship/create',
+  EDIT_SCHOLARSHIP = '/scholarship/edit',
 
   SIGNIN = '/signin',
   CALLBACK = '/cmuEntraIDCallback',

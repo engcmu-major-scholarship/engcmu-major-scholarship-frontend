@@ -1,11 +1,16 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Path } from '../../constants/Path';
+import { RolesBaseAccessContext } from '../../contexts/RolesBaseAccessContext';
 
 const useNavbarController = () => {
   const navigate = useNavigate();
-  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
-  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
+  const {
+    isSideBarOpen,
+    setIsSideBarOpen,
+    isProfileMenuOpen,
+    setIsProfileMenuOpen,
+  } = useContext(RolesBaseAccessContext);
   const [isFixed] = useState(false);
 
   const toggleSideBar = () => {
@@ -25,8 +30,6 @@ const useNavbarController = () => {
   };
   return {
     isFixed,
-    isSideBarOpen,
-    isProfileMenuOpen,
     toggleSideBar,
     toggleProfileMenu,
     navigateToProfile,

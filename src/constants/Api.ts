@@ -3,4 +3,5 @@ export enum Api {
   RESOLVE_TOKEN = '/auth/resolve-token',
 
   SCHOLARSHIP = '/scholarship',
+  APPLICATION = '/application',
 }

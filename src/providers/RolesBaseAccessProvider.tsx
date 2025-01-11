@@ -188,7 +188,7 @@ const adminPaths: PathInfo[] = [
   },
   {
     label: 'จัดการทุน',
-    link: Path.MANAGE_SCHOLARSHIP,
+    link: Path.EDIT_SCHOLARSHIP,
     icon: (
       <svg
         width="60"
@@ -209,6 +209,8 @@ const adminPaths: PathInfo[] = [
 const RolesBaseAccessProvider = ({ children }: { children: ReactNode }) => {
   const { token, roles } = useAuth();
   const [accessibles, setAccessibles] = useState<PathInfo[]>([]);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(false);
+  const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
 
   useEffect(() => {
     if (!token) {
@@ -229,7 +231,16 @@ const RolesBaseAccessProvider = ({ children }: { children: ReactNode }) => {
   }, [token, roles]);
 
   return (
-    <RolesBaseAccessContext.Provider value={{ accessibles, setAccessibles }}>
+    <RolesBaseAccessContext.Provider
+      value={{
+        accessibles,
+        setAccessibles,
+        isSideBarOpen,
+        setIsSideBarOpen,
+        isProfileMenuOpen,
+        setIsProfileMenuOpen,
+      }}
+    >
       {children}
     </RolesBaseAccessContext.Provider>
   );
