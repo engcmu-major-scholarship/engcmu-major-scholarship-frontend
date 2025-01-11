@@ -25,6 +25,16 @@ const ScholarshipById = () => {
           <span className="font-semibold">เงื่อนไขทุน</span>
           <span>{scholarship?.requirement}</span>
         </p>
+        <object
+          data={scholarship?.docLink}
+          type="application/pdf"
+          className="mb-4 h-[600px] w-full"
+        >
+          <p>
+            Your browser does not support PDFs.{' '}
+            <a href={scholarship?.docLink}>Download the PDF</a>.
+          </p>
+        </object>
         <div className="flex flex-row gap-2">
           <a
             href={scholarship?.docLink}
