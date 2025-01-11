@@ -1,7 +1,7 @@
 import useScholarshipByIdController from './useScholarshipByIdController';
 
 const ScholarshipById = () => {
-  const { scholarship } = useScholarshipByIdController();
+  const { scholarship, navigateBack } = useScholarshipByIdController();
 
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
@@ -84,6 +84,14 @@ const ScholarshipById = () => {
             </svg>
             ดาวน์โหลดเอกสารใบสมัคร
           </a>
+        </div>
+        <div className="flex justify-end mt-6">
+          <button
+            className=" text-black font-bold border border-solid border-black py-4 px-6 rounded-2xl"
+            onClick={navigateBack}
+          >
+            กลับหน้าทุนทั้งหมด
+          </button>
         </div>
       </div>
     </div>

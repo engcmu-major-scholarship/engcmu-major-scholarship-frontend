@@ -11,8 +11,8 @@ import Signout from './pages/Signout/Signout';
 import Navbar from './components/Navbar/Navbar';
 import RolesBaseAccessProvider from './providers/RolesBaseAccessProvider';
 import { handleCMUAccountSignIn } from './utils/handleCMUAccountSignIn';
-import ScholarshipAll from './pages/ScholarshipAll/ScholarshipAll';
-import ScholarshipById from './pages/ScholarshipById/ScholarshipById';
+import ScholarshipAll from './pages/Scholarship/ScholarshipAll/ScholarshipAll';
+import ScholarshipById from './pages/Scholarship/ScholarshipById/ScholarshipById';
 
 const providersGiver = ([...providers]: (({
   children,

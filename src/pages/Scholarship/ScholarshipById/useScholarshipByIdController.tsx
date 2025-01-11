@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useHttpClient } from '../../hooks/useHttpClient';
-import { useParams } from 'react-router';
-import { Api } from '../../constants/Api';
+import { useHttpClient } from '../../../hooks/useHttpClient';
+import { useNavigate, useParams } from 'react-router';
+import { Api } from '../../../constants/Api';
 
 export interface Scholarship {
   name: string;
@@ -17,7 +17,12 @@ export interface Scholarship {
 const useScholarshipByIdController = () => {
   const httpClient = useHttpClient();
   const { id } = useParams();
+  const navigate = useNavigate();
   const [scholarship, setScholarship] = useState<Scholarship | null>(null);
+
+  const navigateBack = () => {
+    navigate(-1);
+  };
 
   useEffect(() => {
     httpClient.get<Scholarship>(`${Api.SCHOLARSHIP}/${id}`).then((response) => {
@@ -31,6 +36,7 @@ const useScholarshipByIdController = () => {
 
   return {
     scholarship,
+    navigateBack,
   };
 };
 

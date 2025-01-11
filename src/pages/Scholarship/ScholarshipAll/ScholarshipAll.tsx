@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router';
 import useScholarshipAllController from './useScholarshipAllController';
-import { Path } from '../../constants/Path';
+import { Path } from '../../../constants/Path';
 
 const ScholarshipAll = () => {
   const { scholarships } = useScholarshipAllController();

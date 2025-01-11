@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useHttpClient } from '../../hooks/useHttpClient';
-import { Api } from '../../constants/Api';
+import { useHttpClient } from '../../../hooks/useHttpClient';
+import { Api } from '../../../constants/Api';
 
 export interface BasicScholarshipInfo {
   id: number;

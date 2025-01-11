@@ -88,7 +88,7 @@ const Navbar = () => {
 
       <div className="max-h-[90%] max-w-full h-[90%] flex flex-row">
         <div
-          className={`${isFixed ? 'fixed left-0' : ''} h-full bg-white drop-shadow-md transition-all duration-300 ease-in-out ${
+          className={`${isFixed ? 'fixed left-0' : ''} h-full bg-white drop-shadow-md transition-all duration-300 ease-in-out overflow-y-auto ${
             isSideBarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full'
           }`}
         >
@@ -98,7 +98,7 @@ const Navbar = () => {
                 key={index}
                 to={path.link}
                 className={({ isActive }) =>
-                  `m-2 p-3 text-center text-nowrap drop-shadow-md rounded-2xl ${isActive ? 'bg-gradient-to-r from-[#dbe9ea] to-[#c3d591]' : ''}`
+                  `mx-4 my-2 p-3 text-center text-nowrap drop-shadow-md rounded-2xl ${isActive ? 'bg-gradient-to-r from-[#dbe9ea] to-[#c3d591]' : ''}`
                 }
               >
                 {path.label}
