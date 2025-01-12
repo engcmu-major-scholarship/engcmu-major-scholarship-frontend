@@ -4,31 +4,31 @@ const ScholarshipById = () => {
   const { scholarship, navigateBack } = useScholarshipByIdController();
 
   return (
-    <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
-      <div className="p-12">
-        <div className="text-2xl text-center p-6 pt-0 font-bold text-gray-800">
+    <div className="h-full w-full flex flex-col overflow-y-auto">
+      <div className="flex flex-col px-24 py-4 gap-4">
+        <div className="text-2xl text-center p-2 font-bold text-gray-800">
           {scholarship?.name}
         </div>
-        <p className="flex flex-col text-gray-700 mb-4">
+        <p className="flex flex-col text-gray-700">
           <span className="font-semibold">วันที่เปิดรับสมัคร</span>
           <span>{`${scholarship?.openDate.toLocaleDateString()} - ${scholarship?.closeDate.toLocaleDateString()}`}</span>
         </p>
-        <p className="flex flex-col text-gray-700 mb-4">
+        <p className="flex flex-col text-gray-700">
           <span className="font-semibold">จำนวนเงินทุน</span>
           {scholarship?.defaultBudget?.toLocaleString()} บาท
         </p>
-        <p className="flex flex-col text-gray-700 mb-4">
+        <p className="flex flex-col text-gray-700">
           <span className="font-semibold">รายละเอียดทุน</span>
           <span>{scholarship?.description}</span>
         </p>
-        <p className="flex flex-col text-gray-700 mb-4">
+        <p className="flex flex-col text-gray-700">
           <span className="font-semibold">เงื่อนไขทุน</span>
           <span>{scholarship?.requirement}</span>
         </p>
         <object
           data={scholarship?.docLink}
           type="application/pdf"
-          className="mb-4 h-[600px] w-full"
+          className="h-[600px] w-full"
         >
           <p>
             Your browser does not support PDFs.{' '}
@@ -101,7 +101,7 @@ const ScholarshipById = () => {
             ดาวน์โหลดเอกสารใบสมัคร
           </a>
         </div>
-        <div className="flex justify-end mt-6">
+        <div className="flex justify-end">
           <button
             className=" text-black font-bold border border-solid border-black py-4 px-6 rounded-2xl"
             onClick={navigateBack}
