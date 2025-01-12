@@ -98,7 +98,7 @@ const Navbar = () => {
                 key={index}
                 to={path.link}
                 className={({ isActive }) =>
-                  `mx-4 my-2 p-3 text-center text-nowrap drop-shadow-md rounded-2xl ${isActive ? 'bg-gradient-to-r from-[#dbe9ea] to-[#c3d591]' : ''}`
+                  `mx-4 my-2 p-3 text-center text-nowrap drop-shadow-md rounded-2xl ${isActive ? 'bg-gradient-to-r from-[#dbe9ea] to-[#c3d591]' : 'bg-transparent hover:bg-gray-200 text-gray-600 hover:text-black transition-colors duration-300 ease-in-out'}`
                 }
               >
                 {path.label}
