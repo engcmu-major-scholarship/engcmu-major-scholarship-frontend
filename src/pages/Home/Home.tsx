@@ -10,7 +10,7 @@ const Home = () => {
   const { accessibles } = useContext(RolesBaseAccessContext);
   const navigate = useNavigate();
   return (
-    <div className="h-full w-full flex flex-col justify-center items-center">
+    <div className="h-full w-full flex flex-col justify-center items-center overflow-auto">
       <div className="flex flex-row gap-8">
         {accessibles.map((path, index) => {
           if (

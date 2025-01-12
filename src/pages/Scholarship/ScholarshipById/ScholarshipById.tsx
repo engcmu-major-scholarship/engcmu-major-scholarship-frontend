@@ -4,7 +4,7 @@ const ScholarshipById = () => {
   const { scholarship, navigateBack } = useScholarshipByIdController();
 
   return (
-    <div className="h-full w-full flex flex-col overflow-y-auto">
+    <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
       <div className="p-12">
         <div className="text-2xl text-center p-6 pt-0 font-bold text-gray-800">
           {scholarship?.name}
@@ -32,7 +32,13 @@ const ScholarshipById = () => {
         >
           <p>
             Your browser does not support PDFs.{' '}
-            <a href={scholarship?.docLink}>Download the PDF</a>.
+            {/* <a href={scholarship?.docLink}>Download the PDF</a>. */}
+            <button
+              className="text-blue-500 underline"
+              onClick={() => window.open(scholarship?.docLink, '_blank')}
+            >
+              ดาวน์โหลดเอกสารรายละเอียดทุน
+            </button>
           </p>
         </object>
         <div className="flex flex-row gap-2">

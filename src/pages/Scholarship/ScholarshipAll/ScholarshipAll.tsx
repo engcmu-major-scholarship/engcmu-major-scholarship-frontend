@@ -11,7 +11,7 @@ const ScholarshipAll = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="h-full w-full flex flex-col overflow-y-auto">
+    <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
       <div className="w-full p-4 text-xl text-center">ทุนทั้งหมด</div>
       {roles.includes(Role.ADMIN) ? (
         <div className="w-full flex justify-end px-24 py-4">
