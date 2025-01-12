@@ -27,7 +27,7 @@ const ScholarshipAll = () => {
         {scholarships.map((scholarship, index) => (
           <div
             key={index}
-            className="flex flex-col w-9/12 p-12 gap-2 bg-[#E4F0F1] rounded-lg"
+            className="flex flex-col w-9/12 p-12 gap-2 bg-[#e4f0f1] rounded-lg"
           >
             {roles.includes(Role.ADMIN) ? (
               <div className="flex justify-end">
