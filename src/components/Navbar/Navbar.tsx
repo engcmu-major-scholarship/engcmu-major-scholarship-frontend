@@ -8,8 +8,6 @@ import { Role } from '../../types/Roles';
 
 const Navbar = () => {
   const {
-    isSideBarOpen,
-    isProfileMenuOpen,
     isFixed,
     toggleSideBar,
     toggleProfileMenu,
@@ -17,11 +15,13 @@ const Navbar = () => {
     logout,
   } = useNavbarController();
   const { CMUAccount, roles } = useAuth();
-  const { accessibles } = useContext(RolesBaseAccessContext);
+  const { accessibles, isSideBarOpen, isProfileMenuOpen } = useContext(
+    RolesBaseAccessContext,
+  );
 
   return (
-    <div className="h-screen w-screen flex flex-col">
-      <div className="sticky top-0 bg-gradient-to-r from-[#dbe9ea] to-[#c3d591] p-4 flex flex-row justify-between">
+    <div className="max-h-screen max-w-screen h-screen w-screen flex flex-col">
+      <div className="sticky top-0 h-[10%] p-4 bg-gradient-to-r from-[#dbe9ea] to-[#c3d591] flex flex-row justify-between items-center">
         <button
           onClick={toggleSideBar}
           className="text-white transition-transform duration-300"
@@ -86,9 +86,9 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className="h-full flex flex-row">
+      <div className="max-h-[90%] max-w-full h-[90%] flex flex-row">
         <div
-          className={`${isFixed ? 'fixed left-0' : ''} h-full bg-white drop-shadow-md transition-all duration-300 ease-in-out ${
+          className={`${isFixed ? 'fixed left-0' : ''} h-full bg-white drop-shadow-md transition-all duration-300 ease-in-out overflow-y-auto ${
             isSideBarOpen ? 'w-64 translate-x-0' : 'w-0 -translate-x-full'
           }`}
         >
@@ -98,7 +98,7 @@ const Navbar = () => {
                 key={index}
                 to={path.link}
                 className={({ isActive }) =>
-                  `m-2 p-3 text-center text-nowrap drop-shadow-md rounded-2xl ${isActive ? 'bg-gradient-to-r from-[#dbe9ea] to-[#c3d591]' : ''}`
+                  `mx-4 my-2 p-3 text-center text-nowrap drop-shadow-md rounded-2xl ${isActive ? 'bg-gradient-to-r from-[#dbe9ea] to-[#c3d591]' : 'bg-transparent hover:bg-gray-200 text-gray-600 hover:text-black transition-colors duration-300 ease-in-out'}`
                 }
               >
                 {path.label}

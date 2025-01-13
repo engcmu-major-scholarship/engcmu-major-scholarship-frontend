@@ -1,19 +1,22 @@
 export enum Path {
+  // Public
   HOME = '/',
-
-  PROFILE = '/profile',
   SCHOLARSHIP = '/scholarship',
 
+  // Student
+  PROFILE = '/profile',
   APPLY = '/apply',
   STATUS = '/status',
   HISTORY = '/history',
 
+  // Admin
   CONSIDER = '/consider',
   RECIPIENT = '/recipient',
-  MANAGE_SCHOLARSHIP = '/manage-scholarship',
+  CREATE_SCHOLARSHIP = '/scholarship/create',
+  EDIT_SCHOLARSHIP = '/scholarship/edit',
 
+  // Auth
   SIGNIN = '/signin',
   CALLBACK = '/cmuEntraIDCallback',
   SIGNOUT = '/signout',
-  TEST = '/test',
 }

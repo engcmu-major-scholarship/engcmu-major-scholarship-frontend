@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction } from 'react';
 import { Role } from '../types/Roles';
 
-export type AuthContextType = {
+export interface AuthContextType {
   token: string | null;
   setToken: (token: string) => void;
   removeToken: () => void;
@@ -9,7 +9,7 @@ export type AuthContextType = {
   setCMUAccount: Dispatch<SetStateAction<string | null>>;
   roles: Role[];
   setRoles: Dispatch<SetStateAction<Role[]>>;
-};
+}
 
 export const AuthContext = createContext<AuthContextType>({
   token: null,
