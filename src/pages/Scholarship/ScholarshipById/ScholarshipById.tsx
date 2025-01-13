@@ -13,10 +13,12 @@ const ScholarshipById = () => {
           <span className="font-semibold">วันที่เปิดรับสมัคร</span>
           <span>{`${scholarship?.openDate.toLocaleDateString()} - ${scholarship?.closeDate.toLocaleDateString()}`}</span>
         </p>
-        <p className="flex flex-col text-gray-700">
-          <span className="font-semibold">จำนวนเงินทุน</span>
-          {scholarship?.defaultBudget?.toLocaleString()} บาท
-        </p>
+        {scholarship?.defaultBudget ? (
+          <p className="flex flex-col text-gray-700">
+            <span className="font-semibold">จำนวนเงินทุน</span>
+            {scholarship?.defaultBudget?.toLocaleString()} บาท
+          </p>
+        ) : null}
         <p className="flex flex-col text-gray-700">
           <span className="font-semibold">รายละเอียดทุน</span>
           <span>{scholarship?.description}</span>
