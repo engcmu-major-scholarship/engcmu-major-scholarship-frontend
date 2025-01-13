@@ -1,7 +1,229 @@
+import useCreateScholarshipController, {
+  CreateScholarshipForm,
+} from './useCreateScholarshipController';
+import { useForm } from 'react-hook-form';
+
 const CreateScholarship = () => {
+  const { onSubmit } = useCreateScholarshipController();
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CreateScholarshipForm>();
+
   return (
     <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
-      Create Scholarship
+      <form
+        className="flex flex-col px-24 py-4 gap-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <div className="w-full text-xl text-center">เพิ่มทุน</div>
+        <div className="flex flex-row gap-4">
+          <div className="flex flex-col w-3/4 gap-2">
+            <label htmlFor="scholarName" className="text-sm font-medium">
+              ชื่อทุน
+            </label>
+            <input
+              id="scholarName"
+              type="text"
+              className="border text-sm rounded-lg w-full p-2.5"
+              {...register('name', { required: 'ต้องระบุชื่อทุน' })}
+            />
+            {errors.name && (
+              <div className="text-red-500 text-sm">{errors.name.message}</div>
+            )}
+          </div>
+          <div className="flex flex-col w-1/4 gap-2">
+            <label htmlFor="budget" className="text-sm font-medium">
+              จำนวนเงินทุน
+            </label>
+            <input
+              id="budget"
+              type="number"
+              className="border text-sm rounded-lg w-full p-2.5"
+              {...register('defaultBudget', {
+                min: { value: 1, message: 'จำนวนเงินต้องมากกว่า 1' },
+              })}
+            />
+            {errors.defaultBudget && (
+              <div className="text-red-500 text-sm">
+                {errors.defaultBudget.message}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-row gap-4">
+          <div className="flex flex-col w-1/4 gap-2">
+            <label htmlFor="openDate" className="text-sm font-medium">
+              วันเปิดรับสมัคร
+            </label>
+            <input
+              id="openDate"
+              type="date"
+              className="border text-sm rounded-lg w-full p-2.5"
+              {...register('openDate', { required: 'ต้องระบุวันเปิดรับสมัคร' })}
+            />
+            {errors.openDate && (
+              <div className="text-red-500 text-sm">
+                {errors.openDate.message}
+              </div>
+            )}
+          </div>
+          <div className="flex flex-col w-1/4 gap-2">
+            <label htmlFor="closeDate" className="text-sm font-medium">
+              วันปิดรับสมัคร
+            </label>
+            <input
+              id="closeDate"
+              type="date"
+              className="border text-sm rounded-lg w-full p-2.5"
+              {...register('closeDate', {
+                required: 'ต้องระบุวันปิดรับสมัคร',
+                validate: (value) =>
+                  value > watch('openDate') ||
+                  'วันปิดรับสมัครต้องมากกว่าวันเปิดรับสมัคร',
+              })}
+            />
+            {errors.closeDate && (
+              <div className="text-red-500 text-sm">
+                {errors.closeDate.message}
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="flex flex-col w-full gap-2">
+          <label htmlFor="description" className="text-sm font-medium">
+            รายละเอียดทุน
+          </label>
+          <textarea
+            id="description"
+            className="border text-sm rounded-lg w-full h-40 p-2.5"
+            {...register('description', { required: 'ต้องระบุรายละเอียดทุน' })}
+          />
+          {errors.description && (
+            <div className="text-red-500 text-sm">
+              {errors.description.message}
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col w-full gap-2">
+          <label htmlFor="requirement" className="text-sm font-medium">
+            เงื่อนไขการสมัคร
+          </label>
+          <textarea
+            id="requirement"
+            className="border text-sm rounded-lg w-full h-40 p-2.5"
+            {...register('requirement', {
+              required: 'ต้องระบุเงื่อนไขการสมัคร',
+            })}
+          />
+          {errors.requirement && (
+            <div className="text-red-500 text-sm">
+              {errors.requirement.message}
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col w-full gap-2">
+          <label htmlFor="scholarDoc" className="text-sm font-medium">
+            เอกสารรายละเอียดทุน
+          </label>
+          <input
+            id="scholarDoc"
+            type="file"
+            className="border text-sm rounded-lg w-60 p-2.5"
+            {...register('scholarDoc', {
+              required: 'ต้องแนบเอกสารรายละเอียดทุน',
+            })}
+          />
+          {errors.scholarDoc && (
+            <div className="text-red-500 text-sm">
+              {errors.scholarDoc.message}
+            </div>
+          )}
+          {watch('scholarDoc') && watch('scholarDoc')?.length !== 0 ? (
+            <object
+              data={URL.createObjectURL(watch('scholarDoc')[0])}
+              type="application/pdf"
+              className="w-full h-[600px]"
+            ></object>
+          ) : (
+            <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center">
+              <div className="text-5xl text-center text-gray-500">
+                Preview PDF
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col w-full gap-2">
+          <label htmlFor="appDoc" className="text-sm font-medium">
+            เอกสารการสมัคร
+          </label>
+          <input
+            id="appDoc"
+            type="file"
+            className="border text-sm rounded-lg w-60 p-2.5"
+            {...register('appDoc', {
+              required: 'ต้องแนบเอกสารการสมัคร',
+            })}
+          />
+          {errors.appDoc && (
+            <div className="text-red-500 text-sm">{errors.appDoc.message}</div>
+          )}
+          {watch('appDoc') && watch('appDoc')?.length !== 0 ? (
+            <object
+              data={URL.createObjectURL(watch('appDoc')[0])}
+              type="application/pdf"
+              className="w-full h-[600px]"
+            ></object>
+          ) : (
+            <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center">
+              <div className="text-5xl text-center text-gray-500">
+                Preview PDF
+              </div>
+            </div>
+          )}
+        </div>
+        <div className="flex flex-row gap-4">
+          <div className="flex flex-row gap-2">
+            <div className="relative inline-block w-24 h-10">
+              <input
+                id="switch-component-desc"
+                type="checkbox"
+                className="peer appearance-none w-24 h-10 bg-slate-100 rounded-full checked:bg-[#dbe9ea] cursor-pointer transition-colors duration-300"
+                {...register('published')}
+              />
+              <label
+                htmlFor="switch-component-desc"
+                className="absolute top-0 left-0 w-10 h-10 bg-white rounded-full border border-slate-300 shadow-sm transition-transform duration-300 peer-checked:translate-x-14 peer-checked:border-slate-800 cursor-pointer"
+              ></label>
+            </div>
+            <label
+              htmlFor="switch-component-desc"
+              className="flex text-slate-600 text-sm cursor-pointer"
+            >
+              <div className="justify-center items-center flex">
+                <div className="text-2xl">เผยแพร่ทุน</div>
+              </div>
+            </label>
+          </div>
+        </div>
+        <div className="flex flex-row justify-between">
+          <button
+            className=" text-black border border-solid border-black py-3 px-8 text-lg rounded-2xl"
+            // onClick={}
+          >
+            ยกเลิก
+          </button>
+          <button
+            className=" text-black bg-[#dbe9ea] hover:bg-[#a9b3b3] py-3 px-8 text-lg rounded-2xl"
+            // onClick={}
+            type="submit"
+          >
+            บันทึก
+          </button>
+        </div>
+      </form>
     </div>
   );
 };
