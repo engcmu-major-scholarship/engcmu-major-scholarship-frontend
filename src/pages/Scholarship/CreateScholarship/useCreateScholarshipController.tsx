@@ -26,10 +26,13 @@ const useCreateScholarshipController = () => {
           name: data.name,
           description: data.description,
           requirement: data.requirement,
-          defaultBudget: data.defaultBudget ? data.defaultBudget : undefined,
+          defaultBudget:
+            !data.defaultBudget || data.defaultBudget === 0
+              ? null
+              : data.defaultBudget,
           openDate: data.openDate,
           closeDate: data.closeDate,
-          published: data.published ? data.published : undefined,
+          published: data.published,
           scholarDoc: data.scholarDoc[0],
           appDoc: data.appDoc[0],
         },
