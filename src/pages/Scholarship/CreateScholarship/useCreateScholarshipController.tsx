@@ -17,6 +17,7 @@ export interface CreateScholarshipForm {
 const useCreateScholarshipController = () => {
   const httpClient = useHttpClient();
   const navigate = useNavigate();
+
   const onSubmit = (data: CreateScholarshipForm) => {
     httpClient
       .post(
@@ -53,8 +54,13 @@ const useCreateScholarshipController = () => {
       });
   };
 
+  const navigateBack = () => {
+    navigate(-1);
+  };
+
   return {
     onSubmit,
+    navigateBack,
   };
 };
 
