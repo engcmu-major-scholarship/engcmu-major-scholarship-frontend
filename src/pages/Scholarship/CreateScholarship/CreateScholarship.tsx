@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Modal from '../../../components/Modal/Modal';
 import useCreateScholarshipController, {
   CreateScholarshipForm,
@@ -15,10 +15,6 @@ const CreateScholarship = () => {
   } = useForm<CreateScholarshipForm>();
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
-
-  useEffect(() => {
-    setIsSubmitModalOpen(false);
-  }, [errors]);
 
   return (
     <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
@@ -142,6 +138,8 @@ const CreateScholarship = () => {
             className="border text-sm rounded-lg w-60 p-2.5"
             {...register('scholarDoc', {
               required: 'ต้องแนบเอกสารรายละเอียดทุน',
+              validate: (value) =>
+                value[0].type === 'application/pdf' || 'เอกสารต้องเป็นไฟล์ PDF',
             })}
           />
           {errors.scholarDoc && (
@@ -173,6 +171,8 @@ const CreateScholarship = () => {
             className="border text-sm rounded-lg w-60 p-2.5"
             {...register('appDoc', {
               required: 'ต้องแนบเอกสารการสมัคร',
+              validate: (value) =>
+                value[0].type === 'application/pdf' || 'เอกสารต้องเป็นไฟล์ PDF',
             })}
           />
           {errors.appDoc && (
@@ -266,7 +266,10 @@ const CreateScholarship = () => {
               </button>
               <button
                 className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl"
-                onClick={handleSubmit(onSubmit)}
+                onClick={(e) => {
+                  setIsSubmitModalOpen(false);
+                  handleSubmit(onSubmit)(e);
+                }}
               >
                 ยืนยัน
               </button>
