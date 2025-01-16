@@ -4,15 +4,16 @@ import { useAuth } from '../../hooks/useAuth';
 import { RolesBaseAccessContext } from '../../contexts/RolesBaseAccessContext';
 
 const useSignoutController = () => {
-  const { removeToken, setCMUAccount } = useAuth();
+  const { removeToken, setCMUAccount, setRoles } = useAuth();
   const { setIsProfileMenuOpen } = useContext(RolesBaseAccessContext);
   const navigate = useNavigate();
   useEffect(() => {
     removeToken();
     setCMUAccount(null);
+    setRoles([]);
     setIsProfileMenuOpen(false);
     navigate('/', { replace: true });
-  }, [navigate, removeToken, setCMUAccount, setIsProfileMenuOpen]);
+  }, [navigate, removeToken, setCMUAccount, setIsProfileMenuOpen, setRoles]);
 
   return;
 };

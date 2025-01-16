@@ -14,6 +14,7 @@ export interface Scholarship {
   closeDate: Date;
   docLink: string;
   appDocLink: string;
+  published: boolean;
 }
 
 const useScholarshipByIdController = () => {
