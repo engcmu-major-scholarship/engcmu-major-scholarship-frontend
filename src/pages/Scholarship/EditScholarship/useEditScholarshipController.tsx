@@ -56,7 +56,9 @@ const useEditScholarshipController = () => {
           defaultBudget:
             data.defaultBudget === oldScholarship?.defaultBudget
               ? undefined
-              : data.defaultBudget,
+              : !data.defaultBudget || data.defaultBudget === 0
+                ? null
+                : data.defaultBudget,
           openDate:
             data.openDate ===
             oldScholarship?.openDate.toISOString().split('T')[0]
