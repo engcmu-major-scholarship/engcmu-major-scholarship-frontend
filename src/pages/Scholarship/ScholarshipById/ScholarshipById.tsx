@@ -30,7 +30,7 @@ const ScholarshipById = () => {
         <object
           data={scholarship?.docLink}
           type="application/pdf"
-          className="h-[600px] w-full"
+          className="h-[600px] w-full bg-gray-100"
         >
           <p>
             Your browser does not support PDFs.{' '}

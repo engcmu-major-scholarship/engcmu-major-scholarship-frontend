@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 import { useHttpClient } from '../../../hooks/useHttpClient';
 import { useNavigate, useParams } from 'react-router';
 import { Api } from '../../../constants/Api';
+import { useAuth } from '../../../hooks/useAuth';
+import { Role } from '../../../types/Roles';
 
 export interface Scholarship {
   name: string;
@@ -12,9 +14,11 @@ export interface Scholarship {
   closeDate: Date;
   docLink: string;
   appDocLink: string;
+  published: boolean;
 }
 
 const useScholarshipByIdController = () => {
+  const { roles } = useAuth();
   const httpClient = useHttpClient();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -25,14 +29,18 @@ const useScholarshipByIdController = () => {
   };
 
   useEffect(() => {
-    httpClient.get<Scholarship>(`${Api.SCHOLARSHIP}/${id}`).then((response) => {
+    let endpoint: string = `${Api.SCHOLARSHIP}/${id}`;
+    if (roles.includes(Role.ADMIN)) {
+      endpoint = `${Api.SCHOLARSHIP}/admin/${id}`;
+    }
+    httpClient.get<Scholarship>(endpoint).then((response) => {
       setScholarship({
         ...response,
         openDate: new Date(response.openDate),
         closeDate: new Date(response.closeDate),
       });
     });
-  }, [id, httpClient]);
+  }, [id, httpClient, roles]);
 
   return {
     scholarship,

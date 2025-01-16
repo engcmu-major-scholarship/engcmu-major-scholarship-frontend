@@ -1,22 +1,26 @@
+import { useState } from 'react';
+import Modal from '../../../components/Modal/Modal';
 import useCreateScholarshipController, {
   CreateScholarshipForm,
 } from './useCreateScholarshipController';
 import { useForm } from 'react-hook-form';
 
 const CreateScholarship = () => {
-  const { onSubmit } = useCreateScholarshipController();
+  const { onSubmit, navigateBack } = useCreateScholarshipController();
   const {
     register,
     watch,
     handleSubmit,
     formState: { errors },
   } = useForm<CreateScholarshipForm>();
+  const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 
   return (
     <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
-      <form
+      <div
         className="flex flex-col px-24 py-4 gap-4"
-        onSubmit={handleSubmit(onSubmit)}
+        // onSubmit={handleSubmit(onSubmit)}
       >
         <div className="w-full text-xl text-center">เพิ่มทุน</div>
         <div className="flex flex-row gap-4">
@@ -134,6 +138,8 @@ const CreateScholarship = () => {
             className="border text-sm rounded-lg w-60 p-2.5"
             {...register('scholarDoc', {
               required: 'ต้องแนบเอกสารรายละเอียดทุน',
+              validate: (value) =>
+                value[0].type === 'application/pdf' || 'เอกสารต้องเป็นไฟล์ PDF',
             })}
           />
           {errors.scholarDoc && (
@@ -148,7 +154,7 @@ const CreateScholarship = () => {
               className="w-full h-[600px]"
             ></object>
           ) : (
-            <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center">
+            <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center bg-gray-100">
               <div className="text-5xl text-center text-gray-500">
                 Preview PDF
               </div>
@@ -165,6 +171,8 @@ const CreateScholarship = () => {
             className="border text-sm rounded-lg w-60 p-2.5"
             {...register('appDoc', {
               required: 'ต้องแนบเอกสารการสมัคร',
+              validate: (value) =>
+                value[0].type === 'application/pdf' || 'เอกสารต้องเป็นไฟล์ PDF',
             })}
           />
           {errors.appDoc && (
@@ -177,7 +185,7 @@ const CreateScholarship = () => {
               className="w-full h-[600px]"
             ></object>
           ) : (
-            <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center">
+            <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center bg-gray-100">
               <div className="text-5xl text-center text-gray-500">
                 Preview PDF
               </div>
@@ -211,19 +219,64 @@ const CreateScholarship = () => {
         <div className="flex flex-row justify-between">
           <button
             className=" text-black border border-solid border-black py-3 px-8 text-lg rounded-2xl"
-            // onClick={}
+            onClick={() => setIsCancelModalOpen(true)}
           >
             ยกเลิก
           </button>
           <button
             className=" text-black bg-[#dbe9ea] hover:bg-[#a9b3b3] py-3 px-8 text-lg rounded-2xl"
-            // onClick={}
-            type="submit"
+            onClick={() => setIsSubmitModalOpen(true)}
+            // type="submit"
           >
             บันทึก
           </button>
         </div>
-      </form>
+      </div>
+      {isCancelModalOpen && (
+        <Modal>
+          <div className="w-1/3 h-1/3 p-12 bg-white rounded-lg flex flex-col items-center justify-center gap-5">
+            <div className="text-2xl">ต้องการยกเลิกการเพิ่มทุนหรือไม่</div>
+            <div className="flex flex-row gap-4">
+              <button
+                className="border border-solid border-black py-3 px-8 text-lg rounded-2xl"
+                onClick={() => setIsCancelModalOpen(false)}
+              >
+                ยกเลิก
+              </button>
+              <button
+                className="bg-red-500 text-white py-3 px-8 text-lg rounded-2xl"
+                onClick={navigateBack}
+              >
+                ยืนยัน
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
+      {isSubmitModalOpen && (
+        <Modal>
+          <div className="w-1/3 h-1/3 p-12 bg-white rounded-lg flex flex-col items-center justify-center gap-5">
+            <div className="text-2xl">ต้องการบันทึกทุนหรือไม่</div>
+            <div className="flex flex-row gap-4">
+              <button
+                className="border border-solid border-black py-3 px-8 text-lg rounded-2xl"
+                onClick={() => setIsSubmitModalOpen(false)}
+              >
+                ยกเลิก
+              </button>
+              <button
+                className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl"
+                onClick={(e) => {
+                  setIsSubmitModalOpen(false);
+                  handleSubmit(onSubmit)(e);
+                }}
+              >
+                ยืนยัน
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

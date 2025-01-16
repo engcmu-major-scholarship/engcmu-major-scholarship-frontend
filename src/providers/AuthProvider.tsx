@@ -26,6 +26,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (!token) {
+      setCMUAccount(null);
+      setRoles([]);
+    }
+  }, [token]);
+
   return (
     <AuthContext.Provider
       value={{

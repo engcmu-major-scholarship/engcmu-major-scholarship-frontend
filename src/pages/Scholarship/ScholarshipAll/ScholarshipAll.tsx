@@ -54,14 +54,16 @@ const ScholarshipAll = () => {
               ) : null}
               <div className="text-xl font-bold">{scholarship.name}</div>
               <div className="text">{scholarship.description}</div>
-              <button
-                className="text mt-2 text-end underline"
-                onClick={() =>
-                  navigate(`${Path.SCHOLARSHIP}/${scholarship.id}`)
-                }
-              >
-                ดูรายละเอียดทุน
-              </button>
+              <div className="flex justify-end">
+                <button
+                  className="underline"
+                  onClick={() =>
+                    navigate(`${Path.SCHOLARSHIP}/${scholarship.id}`)
+                  }
+                >
+                  ดูรายละเอียดทุน
+                </button>
+              </div>
             </div>
           ))}
         </div>

@@ -4,15 +4,14 @@ import { useAuth } from '../../hooks/useAuth';
 import { RolesBaseAccessContext } from '../../contexts/RolesBaseAccessContext';
 
 const useSignoutController = () => {
-  const { removeToken, setCMUAccount } = useAuth();
+  const { removeToken } = useAuth();
   const { setIsProfileMenuOpen } = useContext(RolesBaseAccessContext);
   const navigate = useNavigate();
   useEffect(() => {
     removeToken();
-    setCMUAccount(null);
     setIsProfileMenuOpen(false);
     navigate('/', { replace: true });
-  }, [navigate, removeToken, setCMUAccount, setIsProfileMenuOpen]);
+  }, [navigate, removeToken, setIsProfileMenuOpen]);
 
   return;
 };
