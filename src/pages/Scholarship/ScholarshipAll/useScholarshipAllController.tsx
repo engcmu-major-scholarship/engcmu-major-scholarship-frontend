@@ -17,6 +17,10 @@ const useScholarshipAllController = () => {
   const navigate = useNavigate();
   const { roles } = useAuth();
   const [scholarships, setScholarships] = useState<BasicScholarshipInfo[]>([]);
+  const [searchResults, setSearchResults] = useState<BasicScholarshipInfo[]>(
+    [],
+  );
+  const [searchText, setSearchText] = useState<string>('');
 
   const navigateToCreateScholarship = () => {
     navigate(Path.CREATE_SCHOLARSHIP);
@@ -29,12 +33,30 @@ const useScholarshipAllController = () => {
     }
     httpClient.get<BasicScholarshipInfo[]>(endpoint).then((response) => {
       setScholarships(response);
+      setSearchResults(response);
     });
   }, [httpClient, roles]);
 
+  useEffect(() => {
+    if (searchText === '') {
+      setSearchResults(scholarships);
+    } else {
+      const results = scholarships.filter(
+        (scholarship) =>
+          scholarship.name.toLowerCase().includes(searchText.toLowerCase()) ||
+          scholarship.description
+            .toLowerCase()
+            .includes(searchText.toLowerCase()),
+      );
+      setSearchResults(results);
+    }
+  }, [scholarships, searchText]);
+
   return {
-    scholarships,
+    searchResults,
     navigateToCreateScholarship,
+    searchText,
+    setSearchText,
   };
 };
 
