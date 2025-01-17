@@ -18,28 +18,28 @@ const ScholarshipAll = () => {
     <div className="h-full w-full flex flex-col overflow-y-auto">
       <div className="flex flex-col px-24 py-4 gap-4">
         <div className="w-full text-xl text-center">ทุนทั้งหมด</div>
-        {roles.includes(Role.ADMIN) ? (
-          <div className="w-full flex justify-between items-center">
-            <div className="flex flex-col w-1/4 gap-2">
-              <label htmlFor="scholarName" className="text-sm font-medium">
-                ค้นหาทุน
-              </label>
-              <input
-                id="scholarName"
-                type="text"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                className="border-2 text-sm rounded-lg w-full p-2.5"
-              />
-            </div>
+        <div className="w-full flex justify-between items-center">
+          <div className="flex flex-col w-1/4 gap-2">
+            <label htmlFor="scholarName" className="text-sm font-medium">
+              ค้นหาทุน
+            </label>
+            <input
+              id="scholarName"
+              type="text"
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              className="border-2 text-sm rounded-lg w-full p-2.5"
+            />
+          </div>
+          {roles.includes(Role.ADMIN) ? (
             <button
               className=" text-black font-bold border border-solid border-black py-2 px-6 rounded-2xl"
               onClick={navigateToCreateScholarship}
             >
               เพิ่มทุน
             </button>
-          </div>
-        ) : null}
+          ) : null}
+        </div>
         <div className="w-full flex flex-col gap-3 items-center">
           {searchResults.map((scholarship, index) => (
             <div
