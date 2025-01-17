@@ -20,11 +20,11 @@ const ScholarshipAll = () => {
         <div className="w-full text-xl text-center">ทุนทั้งหมด</div>
         <div className="w-full flex justify-between items-center">
           <div className="flex flex-col w-1/4 gap-2">
-            <label htmlFor="scholarName" className="text-sm font-medium">
+            <label htmlFor="scholarSearch" className="text-sm font-medium">
               ค้นหาทุน
             </label>
             <input
-              id="scholarName"
+              id="scholarSearch"
               type="text"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
