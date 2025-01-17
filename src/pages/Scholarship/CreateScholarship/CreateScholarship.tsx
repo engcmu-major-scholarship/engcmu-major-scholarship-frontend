@@ -31,7 +31,7 @@ const CreateScholarship = () => {
             <input
               id="scholarName"
               type="text"
-              className="border text-sm rounded-lg w-full p-2.5"
+              className="border-2 text-sm rounded-lg w-full p-2.5"
               {...register('name', { required: 'ต้องระบุชื่อทุน' })}
             />
             {errors.name && (
@@ -45,7 +45,7 @@ const CreateScholarship = () => {
             <input
               id="budget"
               type="number"
-              className="border text-sm rounded-lg w-full p-2.5"
+              className="border-2 text-sm rounded-lg w-full p-2.5"
               {...register('defaultBudget', {
                 min: { value: 1, message: 'จำนวนเงินต้องมากกว่า 1' },
               })}
@@ -65,7 +65,7 @@ const CreateScholarship = () => {
             <input
               id="openDate"
               type="date"
-              className="border text-sm rounded-lg w-full p-2.5"
+              className="border-2 text-sm rounded-lg w-full p-2.5"
               {...register('openDate', { required: 'ต้องระบุวันเปิดรับสมัคร' })}
             />
             {errors.openDate && (
@@ -81,7 +81,7 @@ const CreateScholarship = () => {
             <input
               id="closeDate"
               type="date"
-              className="border text-sm rounded-lg w-full p-2.5"
+              className="border-2 text-sm rounded-lg w-full p-2.5"
               {...register('closeDate', {
                 required: 'ต้องระบุวันปิดรับสมัคร',
                 validate: (value) =>
@@ -102,7 +102,7 @@ const CreateScholarship = () => {
           </label>
           <textarea
             id="description"
-            className="border text-sm rounded-lg w-full h-40 p-2.5"
+            className="border-2 text-sm rounded-lg w-full h-40 p-2.5"
             {...register('description', { required: 'ต้องระบุรายละเอียดทุน' })}
           />
           {errors.description && (
@@ -117,7 +117,7 @@ const CreateScholarship = () => {
           </label>
           <textarea
             id="requirement"
-            className="border text-sm rounded-lg w-full h-40 p-2.5"
+            className="border-2 text-sm rounded-lg w-full h-40 p-2.5"
             {...register('requirement', {
               required: 'ต้องระบุเงื่อนไขการสมัคร',
             })}
@@ -135,7 +135,7 @@ const CreateScholarship = () => {
           <input
             id="scholarDoc"
             type="file"
-            className="border text-sm rounded-lg w-60 p-2.5"
+            className="border-2 text-sm rounded-lg w-60 p-2.5"
             {...register('scholarDoc', {
               required: 'ต้องแนบเอกสารรายละเอียดทุน',
               validate: (value) =>
@@ -168,7 +168,7 @@ const CreateScholarship = () => {
           <input
             id="appDoc"
             type="file"
-            className="border text-sm rounded-lg w-60 p-2.5"
+            className="border-2 text-sm rounded-lg w-60 p-2.5"
             {...register('appDoc', {
               required: 'ต้องแนบเอกสารการสมัคร',
               validate: (value) =>
