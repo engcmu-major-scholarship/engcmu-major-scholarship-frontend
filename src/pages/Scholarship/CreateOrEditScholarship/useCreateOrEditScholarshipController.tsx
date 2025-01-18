@@ -20,14 +20,14 @@ export interface GetScholarship {
 
 export interface CreateOrEditScholarshipForm {
   name: string;
-  defaultBudget: number | null;
   description: string;
   requirement: string;
+  defaultBudget: number | null;
   openDate: Date | string;
   closeDate: Date | string;
-  appDoc: File[];
-  scholarDoc: File[];
   published: boolean;
+  scholarDoc: File[];
+  appDoc: File[];
 }
 
 const useCreateOrEditScholarshipController = () => {
@@ -88,40 +88,73 @@ const useCreateOrEditScholarshipController = () => {
 
   const onSubmit = (data: CreateOrEditScholarshipForm) => {
     if (id) {
-      httpClient.patch(
-        `${Api.SCHOLARSHIP}/${id}`,
-        {
-          ...getOnlyDirtyFields(dirtyFields, data),
-          defaultBudget: dirtyFields.defaultBudget
-            ? !data.defaultBudget || data.defaultBudget === 0
-              ? null
-              : data.defaultBudget
-            : undefined,
-        },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+      httpClient
+        .patch(
+          `${Api.SCHOLARSHIP}/${id}`,
+          {
+            ...getOnlyDirtyFields(dirtyFields, data),
+            openDate: dirtyFields.openDate
+              ? new Date(data.openDate)
+              : undefined,
+            closeDate: dirtyFields.closeDate
+              ? new Date(data.closeDate)
+              : undefined,
+            defaultBudget: dirtyFields.defaultBudget
+              ? !data.defaultBudget || data.defaultBudget === 0
+                ? null
+                : data.defaultBudget
+              : undefined,
+            scholarDoc: dirtyFields.scholarDoc ? data.scholarDoc[0] : undefined,
+            appDoc: dirtyFields.appDoc ? data.appDoc[0] : undefined,
           },
-        },
-      );
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        )
+        .then(() => {
+          navigateBack();
+        })
+        .catch((error) => {
+          console.error(error);
+          alert('ไม่สามารถแก้ไขทุนได้');
+        });
     } else {
-      httpClient.post(
-        Api.SCHOLARSHIP,
-        {
-          ...data,
-          defaultBudget:
-            !data.defaultBudget || data.defaultBudget === 0
-              ? null
-              : data.defaultBudget,
-        },
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
+      httpClient
+        .post(
+          Api.SCHOLARSHIP,
+          {
+            ...data,
+            openDate: new Date(data.openDate),
+            closeDate: new Date(data.closeDate),
+            defaultBudget:
+              !data.defaultBudget || data.defaultBudget === 0
+                ? null
+                : data.defaultBudget,
+            scholarDoc: data.scholarDoc[0],
+            appDoc: data.appDoc[0],
           },
-        },
-      );
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        )
+        .then(() => {
+          navigateBack();
+        })
+        .catch((error) => {
+          console.error(error);
+          if (error.response) {
+            if (error.response.status === 400) {
+              alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+            } else if (error.response.status === 422) {
+              alert('มีทุนชื่อนี้อยู่ในระบบแล้ว');
+            }
+          }
+        });
     }
-    navigateBack();
   };
 
   const navigateBack = () => {

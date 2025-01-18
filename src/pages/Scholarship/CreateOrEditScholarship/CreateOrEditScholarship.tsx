@@ -236,7 +236,9 @@ const CreateOrEditScholarship = () => {
       {isCancelModalOpen && (
         <Modal>
           <div className="w-1/3 h-1/3 p-12 bg-white rounded-lg flex flex-col items-center justify-center gap-5">
-            <div className="text-2xl">ต้องการยกเลิกการเพิ่มทุนหรือไม่</div>
+            <div className="text-2xl">
+              ต้องการยกเลิกการ{id ? 'แก้ไข' : 'เพิ่ม'}ทุนหรือไม่
+            </div>
             <div className="flex flex-row gap-4">
               <button
                 className="border border-solid border-black py-3 px-8 text-lg rounded-2xl"
