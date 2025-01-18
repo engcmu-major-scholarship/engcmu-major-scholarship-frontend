@@ -88,22 +88,38 @@ const useCreateOrEditScholarshipController = () => {
 
   const onSubmit = (data: CreateOrEditScholarshipForm) => {
     if (id) {
-      httpClient.patch(`${Api.SCHOLARSHIP}/${id}`, {
-        ...getOnlyDirtyFields(dirtyFields, data),
-        defaultBudget: dirtyFields.defaultBudget
-          ? !data.defaultBudget || data.defaultBudget === 0
-            ? null
-            : data.defaultBudget
-          : undefined,
-      });
+      httpClient.patch(
+        `${Api.SCHOLARSHIP}/${id}`,
+        {
+          ...getOnlyDirtyFields(dirtyFields, data),
+          defaultBudget: dirtyFields.defaultBudget
+            ? !data.defaultBudget || data.defaultBudget === 0
+              ? null
+              : data.defaultBudget
+            : undefined,
+        },
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
     } else {
-      httpClient.post(Api.SCHOLARSHIP, {
-        ...data,
-        defaultBudget:
-          !data.defaultBudget || data.defaultBudget === 0
-            ? null
-            : data.defaultBudget,
-      });
+      httpClient.post(
+        Api.SCHOLARSHIP,
+        {
+          ...data,
+          defaultBudget:
+            !data.defaultBudget || data.defaultBudget === 0
+              ? null
+              : data.defaultBudget,
+        },
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      );
     }
     navigateBack();
   };
