@@ -7,7 +7,6 @@
 # Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
 
 ARG NODE_VERSION=22.13.0
-ARG DOTENV_KEY
 
 ################################################################################
 # Use node image for base image for all stages.
