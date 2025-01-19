@@ -2,6 +2,7 @@ export enum Api {
   APPLICATION = '/application',
   APPLICATION_HISTORY = '/application/history',
   SCHOLARSHIP = '/scholarship',
+  APPLYABLE_SCHOLARSHIP = '/scholarship/applyable',
   SETTING = '/setting',
 
   // Auth
