@@ -11,11 +11,10 @@ import Signout from './pages/Signout/Signout';
 import Navbar from './components/Navbar/Navbar';
 import RolesBaseAccessProvider from './providers/RolesBaseAccessProvider';
 import { handleCMUAccountSignIn } from './utils/handleCMUAccountSignIn';
-import ScholarshipAll from './pages/Scholarship/ScholarshipAll/ScholarshipAll';
-import ScholarshipById from './pages/Scholarship/ScholarshipById/ScholarshipById';
 import History from './pages/History/History';
-import CreateOrEditScholarship from './pages/Scholarship/CreateOrEditScholarship/CreateOrEditScholarship';
-import ScholarshipRegistration from './pages/Register/Register';
+import ConfigScholarship from './pages/Scholarship/ConfigScholarship/ConfigScholarship';
+import Apply from './pages/Apply/Apply';
+import Scholarship from './pages/Scholarship/Scholarship';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -57,10 +56,9 @@ const Router = () => {
         >
           <Route element={<Navbar />}>
             <Route path={Path.HOME} element={<Home />} />
-            <Route path={Path.SCHOLARSHIP} element={<ScholarshipAll />} />
             <Route
-              path={`${Path.SCHOLARSHIP}/:id`}
-              element={<ScholarshipById />}
+              path={`${Path.SCHOLARSHIP}/:id?`}
+              element={<Scholarship />}
             />
           </Route>
           <Route path={Path.SIGNOUT} element={<Signout />} />
@@ -73,24 +71,10 @@ const Router = () => {
               <Route path={Path.PROFILE} element={<Home />} />
               <Route path={Path.HISTORY} element={<History />} />
               <Route
-                path={Path.CREATE_SCHOLARSHIP}
-                element={<CreateOrEditScholarship />}
+                path={`${Path.CONFIG_SCHOLARSHIP}/:id?`}
+                element={<ConfigScholarship />}
               />
-              <Route
-                path={`${Path.EDIT_SCHOLARSHIP}/:id`}
-                element={<CreateOrEditScholarship />}
-              />
-              <Route
-                path={Path.APPLY}
-                element={
-                  <ScholarshipRegistration
-                    onSubmit={(data) => {
-                      console.log('Scholarship Registration Data:', data);
-                      // You can handle the form submission logic here, such as sending it to an API.
-                    }}
-                  />
-                }
-              />
+              <Route path={`${Path.APPLY}/:id?`} element={<Apply />} />
             </Route>
           </Route>
           <Route path="*" element={<Error404 />} />

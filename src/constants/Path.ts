@@ -12,8 +12,7 @@ export enum Path {
   // Admin
   CONSIDER = '/consider',
   RECIPIENT = '/recipient',
-  CREATE_SCHOLARSHIP = '/scholarship/create',
-  EDIT_SCHOLARSHIP = '/scholarship/edit',
+  CONFIG_SCHOLARSHIP = '/scholarship/config',
 
   // Auth
   SIGNIN = '/signin',

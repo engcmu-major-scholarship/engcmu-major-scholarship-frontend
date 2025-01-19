@@ -2,7 +2,6 @@ import useHistoryController from './useHistoryController';
 
 const History = () => {
   const { history } = useHistoryController();
-  console.log(history);
 
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">

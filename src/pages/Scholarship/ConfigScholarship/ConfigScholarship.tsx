@@ -1,7 +1,7 @@
-import Modal from '../../../components/Modal/Modal';
-import useCreateOrEditScholarshipController from './useCreateOrEditScholarshipController';
+import Modal from '../../../components/Modal';
+import useConfigScholarshipController from './useConfigScholarshipController';
 
-const CreateOrEditScholarship = () => {
+const ConfigScholarship = () => {
   const {
     id,
     register,
@@ -16,7 +16,7 @@ const CreateOrEditScholarship = () => {
     onSubmit,
     navigateBack,
     handleSubmit,
-  } = useCreateOrEditScholarshipController();
+  } = useConfigScholarshipController();
 
   return (
     <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
@@ -136,6 +136,7 @@ const CreateOrEditScholarship = () => {
           <input
             id="scholarDoc"
             type="file"
+            accept="application/pdf"
             className="border-2 text-sm rounded-lg w-60 p-2.5"
             {...register('scholarDoc', {
               required: { value: !id, message: 'ต้องแนบเอกสารรายละเอียดทุน' },
@@ -153,7 +154,19 @@ const CreateOrEditScholarship = () => {
               data={URL.createObjectURL(watch('scholarDoc')[0])}
               type="application/pdf"
               className="w-full h-[600px]"
-            ></object>
+            >
+              <div className="text-red-500 text-sm">
+                {
+                  'This browser does not support PDFs. Please download the PDF to view it: '
+                }
+                <a
+                  className="text-blue-700"
+                  href={URL.createObjectURL(watch('scholarDoc')[0])}
+                >
+                  Download PDF
+                </a>
+              </div>
+            </object>
           ) : (
             <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center bg-gray-100">
               <div className="text-5xl text-center text-gray-500">
@@ -169,6 +182,7 @@ const CreateOrEditScholarship = () => {
           <input
             id="appDoc"
             type="file"
+            accept="application/pdf"
             className="border-2 text-sm rounded-lg w-60 p-2.5"
             {...register('appDoc', {
               required: { value: !id, message: 'ต้องแนบเอกสารการสมัคร' },
@@ -184,7 +198,19 @@ const CreateOrEditScholarship = () => {
               data={URL.createObjectURL(watch('appDoc')[0])}
               type="application/pdf"
               className="w-full h-[600px]"
-            ></object>
+            >
+              <div className="text-red-500 text-sm">
+                {
+                  'This browser does not support PDFs. Please download the PDF to view it: '
+                }
+                <a
+                  className="text-blue-700"
+                  href={URL.createObjectURL(watch('appDoc')[0])}
+                >
+                  Download PDF
+                </a>
+              </div>
+            </object>
           ) : (
             <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center bg-gray-100">
               <div className="text-5xl text-center text-gray-500">
@@ -227,7 +253,6 @@ const CreateOrEditScholarship = () => {
           <button
             className=" text-black bg-[#dbe9ea] hover:bg-[#a9b3b3] py-3 px-8 text-lg rounded-2xl"
             onClick={() => setIsSubmitModalOpen(true)}
-            // type="submit"
           >
             บันทึก
           </button>
@@ -284,4 +309,4 @@ const CreateOrEditScholarship = () => {
   );
 };
 
-export default CreateOrEditScholarship;
+export default ConfigScholarship;

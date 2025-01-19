@@ -115,14 +115,14 @@ const Navbar = () => {
           }`}
         >
           <div className="flex flex-col p-4">
-            {roles.includes(Role.STUDENT) ? (
+            {roles.includes(Role.STUDENT) && (
               <button
                 onClick={navigateToProfile}
                 className="block text-center text-nowrap py-2 hover:underline"
               >
                 โปรไฟล์
               </button>
-            ) : null}
+            )}
             <button
               onClick={logout}
               className="block text-center text-nowrap py-2 hover:underline"

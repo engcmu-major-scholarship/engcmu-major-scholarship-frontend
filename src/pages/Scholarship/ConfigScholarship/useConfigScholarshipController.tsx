@@ -30,7 +30,7 @@ export interface CreateOrEditScholarshipForm {
   appDoc: File[];
 }
 
-const useCreateOrEditScholarshipController = () => {
+const useConfigScholarshipController = () => {
   const { id } = useParams();
   const { roles } = useAuth();
   const httpClient = useHttpClient();
@@ -198,4 +198,4 @@ function getOnlyDirtyFields<T extends Record<keyof T, unknown>>(
   return dirtyData;
 }
 
-export default useCreateOrEditScholarshipController;
+export default useConfigScholarshipController;
