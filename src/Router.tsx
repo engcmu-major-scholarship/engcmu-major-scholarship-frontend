@@ -15,6 +15,7 @@ import ScholarshipAll from './pages/Scholarship/ScholarshipAll/ScholarshipAll';
 import ScholarshipById from './pages/Scholarship/ScholarshipById/ScholarshipById';
 import History from './pages/History/History';
 import CreateOrEditScholarship from './pages/Scholarship/CreateOrEditScholarship/CreateOrEditScholarship';
+import ScholarshipRegistration from './pages/Register/Register';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -78,6 +79,17 @@ const Router = () => {
               <Route
                 path={`${Path.EDIT_SCHOLARSHIP}/:id`}
                 element={<CreateOrEditScholarship />}
+              />
+              <Route
+                path={Path.APPLY}
+                element={
+                  <ScholarshipRegistration
+                    onSubmit={(data) => {
+                      console.log('Scholarship Registration Data:', data);
+                      // You can handle the form submission logic here, such as sending it to an API.
+                    }}
+                  />
+                }
               />
             </Route>
           </Route>
