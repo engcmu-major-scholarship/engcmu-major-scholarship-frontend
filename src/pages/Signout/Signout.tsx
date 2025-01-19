@@ -1,4 +1,4 @@
-import Loading from '../../components/Loading/Loading';
+import Loading from '../../components/Loading';
 import useSignoutController from './useSignoutController';
 
 const Signout = () => {
