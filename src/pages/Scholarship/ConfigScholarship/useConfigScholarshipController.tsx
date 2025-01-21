@@ -6,6 +6,7 @@ import { useAuth } from '../../../hooks/useAuth';
 import { Api } from '../../../constants/Api';
 import { Role } from '../../../types/Roles';
 import { getOnlyDirtyFields } from '../../../utils/getOnlyDirtyFields';
+import { objectToFromData } from '../../../utils/objectToFormData';
 
 export interface GetScholarship {
   name: string;
@@ -86,29 +87,22 @@ const useConfigScholarshipController = () => {
 
   const onSubmit = (data: CreateOrEditScholarshipForm) => {
     if (id) {
+      const formData = objectToFromData({
+        ...getOnlyDirtyFields(dirtyFields, data),
+        defaultBudget: dirtyFields.defaultBudget
+          ? !data.defaultBudget || data.defaultBudget === 0
+            ? null
+            : data.defaultBudget
+          : undefined,
+        scholarDoc: touchedFields.scholarDoc ? data.scholarDoc[0] : undefined,
+        appDoc: touchedFields.appDoc ? data.appDoc[0] : undefined,
+      } as unknown as CreateOrEditScholarshipForm);
       httpClient
-        .patch(
-          `${Api.SCHOLARSHIP}/${id}`,
-          {
-            ...getOnlyDirtyFields(dirtyFields, data),
-            openDate: dirtyFields.openDate ? data.openDate : undefined,
-            closeDate: dirtyFields.closeDate ? data.closeDate : undefined,
-            defaultBudget: dirtyFields.defaultBudget
-              ? !data.defaultBudget || data.defaultBudget === 0
-                ? null
-                : data.defaultBudget
-              : undefined,
-            scholarDoc: touchedFields.scholarDoc
-              ? data.scholarDoc[0]
-              : undefined,
-            appDoc: touchedFields.appDoc ? data.appDoc[0] : undefined,
+        .patch(`${Api.SCHOLARSHIP}/${id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
           },
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
+        })
         .then(() => {
           navigateBack();
         })
@@ -122,26 +116,21 @@ const useConfigScholarshipController = () => {
           }
         });
     } else {
+      const formData = objectToFromData({
+        ...data,
+        defaultBudget:
+          !data.defaultBudget || data.defaultBudget === 0
+            ? null
+            : data.defaultBudget,
+        scholarDoc: data.scholarDoc[0],
+        appDoc: data.appDoc[0],
+      } as unknown as CreateOrEditScholarshipForm);
       httpClient
-        .post(
-          Api.SCHOLARSHIP,
-          {
-            ...data,
-            openDate: data.openDate,
-            closeDate: data.closeDate,
-            defaultBudget:
-              !data.defaultBudget || data.defaultBudget === 0
-                ? null
-                : data.defaultBudget,
-            scholarDoc: data.scholarDoc[0],
-            appDoc: data.appDoc[0],
+        .post(Api.SCHOLARSHIP, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
           },
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
+        })
         .then(() => {
           navigateBack();
         })

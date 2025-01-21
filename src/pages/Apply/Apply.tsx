@@ -4,6 +4,8 @@ import useApplyController from './useApplyController';
 
 const Apply = () => {
   const {
+    id,
+    onSave,
     onSubmit,
     register,
     errors,
@@ -13,6 +15,8 @@ const Apply = () => {
     scholarships,
     isCancelModalOpen,
     setIsCancelModalOpen,
+    isSaveModalOpen,
+    setIsSaveModalOpen,
     isSubmitModalOpen,
     setIsSubmitModalOpen,
     navigateBack,
@@ -21,7 +25,9 @@ const Apply = () => {
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
       <div className="flex flex-col px-24 py-4 gap-4">
-        <div className="w-full text-xl text-center">สมัครทุน</div>
+        <div className="w-full text-xl text-center">
+          {id ? 'แก้ไขใบสมัคร' : 'สมัครทุน'}
+        </div>
         <div className="flex flex-row gap-4">
           <div className="flex flex-col w-1/3 gap-2">
             <label htmlFor="scholar" className="text-sm font-medium">
@@ -69,7 +75,7 @@ const Apply = () => {
                   (scholarship) => scholarship.id === watch('scholarId'),
                 )?.defaultBudget !== null
               }
-              {...register('amount')}
+              {...register('amount', { valueAsNumber: true })}
             />
             {errors.amount && (
               <div className="text-red-500 text-sm">
@@ -81,7 +87,7 @@ const Apply = () => {
         <PDFInputReactHookForm
           register={register}
           registerOptions={{
-            required: 'ต้องแนบเอกสารการสมัคร',
+            required: { value: !id, message: 'ต้องแนบเอกสารการสมัคร' },
             validate: (value) =>
               value[0].type === 'application/pdf' || 'เอกสารต้องเป็นไฟล์ PDF',
           }}
@@ -97,12 +103,20 @@ const Apply = () => {
           >
             ยกเลิก
           </button>
-          <button
-            className="text-black bg-[#dbe9ea] hover:bg-[#a9b3b3] py-3 px-8 text-lg rounded-2xl"
-            onClick={() => setIsSubmitModalOpen(true)}
-          >
-            ส่งใบสมัคร
-          </button>
+          <div className="flex flex-row gap-4">
+            <button
+              className="text-black bg-[#dbe9ea] hover:bg-[#a9b3b3] py-3 px-8 text-lg rounded-2xl"
+              onClick={() => setIsSaveModalOpen(true)}
+            >
+              บันทึก
+            </button>
+            <button
+              className="text-black bg-[#dbe9ea] hover:bg-[#a9b3b3] py-3 px-8 text-lg rounded-2xl"
+              onClick={() => setIsSubmitModalOpen(true)}
+            >
+              บันทึกและส่ง
+            </button>
+          </div>
         </div>
       </div>
       {isCancelModalOpen && (
@@ -126,10 +140,34 @@ const Apply = () => {
           </div>
         </Modal>
       )}
+      {isSaveModalOpen && (
+        <Modal>
+          <div className="w-1/3 h-1/3 p-12 bg-white rounded-lg flex flex-col items-center justify-center gap-5">
+            <div className="text-2xl">ต้องการบันทึกหรือไม่</div>
+            <div className="flex flex-row gap-4">
+              <button
+                className="border border-solid border-black py-3 px-8 text-lg rounded-2xl"
+                onClick={() => setIsSaveModalOpen(false)}
+              >
+                ยกเลิก
+              </button>
+              <button
+                className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl"
+                onClick={(e) => {
+                  setIsSaveModalOpen(false);
+                  handleSubmit(onSave)(e);
+                }}
+              >
+                ยืนยัน
+              </button>
+            </div>
+          </div>
+        </Modal>
+      )}
       {isSubmitModalOpen && (
         <Modal>
           <div className="w-1/3 h-1/3 p-12 bg-white rounded-lg flex flex-col items-center justify-center gap-5">
-            <div className="text-2xl">ต้องการส่งใบสมัครหรือไม่</div>
+            <div className="text-2xl">ต้องการบันทึกและส่งใบสมัครหรือไม่</div>
             <div className="flex flex-row gap-4">
               <button
                 className="border border-solid border-black py-3 px-8 text-lg rounded-2xl"

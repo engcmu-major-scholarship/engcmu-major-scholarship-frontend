@@ -74,7 +74,7 @@ const Router = () => {
                 path={`${Path.CONFIG_SCHOLARSHIP}/:id?`}
                 element={<ConfigScholarship />}
               />
-              <Route path={Path.APPLY} element={<Apply />} />
+              <Route path={`${Path.APPLY}/:id?`} element={<Apply />} />
             </Route>
           </Route>
           <Route path="*" element={<Error404 />} />
