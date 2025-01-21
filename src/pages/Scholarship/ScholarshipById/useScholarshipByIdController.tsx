@@ -34,11 +34,7 @@ const useScholarshipByIdController = () => {
       endpoint = `${Api.SCHOLARSHIP}/admin/${id}`;
     }
     httpClient.get<Scholarship>(endpoint).then((response) => {
-      setScholarship({
-        ...response,
-        openDate: new Date(response.openDate),
-        closeDate: new Date(response.closeDate),
-      });
+      setScholarship(response);
     });
   }, [id, httpClient, roles]);
 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
-import { FieldNamesMarkedBoolean, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { useHttpClient } from '../../../hooks/useHttpClient';
 import { useAuth } from '../../../hooks/useAuth';
 import { Api } from '../../../constants/Api';
 import { Role } from '../../../types/Roles';
+import { getOnlyDirtyFields } from '../../../utils/getOnlyDirtyFields';
 
 export interface GetScholarship {
   name: string;
@@ -23,8 +24,8 @@ export interface CreateOrEditScholarshipForm {
   description: string;
   requirement: string;
   defaultBudget: number | null;
-  openDate: Date | string;
-  closeDate: Date | string;
+  openDate: Date;
+  closeDate: Date;
   published: boolean;
   scholarDoc: File[];
   appDoc: File[];
@@ -41,8 +42,13 @@ const useConfigScholarshipController = () => {
     handleSubmit,
     reset,
     resetField,
-    formState: { errors, isDirty, dirtyFields },
-  } = useForm<CreateOrEditScholarshipForm>();
+    formState: { errors, isDirty, dirtyFields, touchedFields },
+  } = useForm<CreateOrEditScholarshipForm>({
+    defaultValues: {
+      openDate: new Date(),
+      closeDate: new Date(),
+    },
+  });
   const [isScholarDocLoading, setIsScholarDocLoading] = useState(false);
   const [isAppDocLoading, setIsAppDocLoading] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -55,15 +61,7 @@ const useConfigScholarshipController = () => {
       httpClient
         .get<GetScholarship>(`${Api.SCHOLARSHIP}/admin/${id}`)
         .then((response) => {
-          reset({
-            name: response.name,
-            defaultBudget: response.defaultBudget,
-            description: response.description,
-            requirement: response.requirement,
-            openDate: new Date(response.openDate).toISOString().split('T')[0],
-            closeDate: new Date(response.closeDate).toISOString().split('T')[0],
-            published: response.published,
-          });
+          reset(response);
           fetch(response.docLink).then((blobResponse) => {
             blobResponse.blob().then((blob) => {
               const scholarDoc = new File([blob], response.name, {
@@ -93,19 +91,17 @@ const useConfigScholarshipController = () => {
           `${Api.SCHOLARSHIP}/${id}`,
           {
             ...getOnlyDirtyFields(dirtyFields, data),
-            openDate: dirtyFields.openDate
-              ? new Date(data.openDate)
-              : undefined,
-            closeDate: dirtyFields.closeDate
-              ? new Date(data.closeDate)
-              : undefined,
+            openDate: dirtyFields.openDate ? data.openDate : undefined,
+            closeDate: dirtyFields.closeDate ? data.closeDate : undefined,
             defaultBudget: dirtyFields.defaultBudget
               ? !data.defaultBudget || data.defaultBudget === 0
                 ? null
                 : data.defaultBudget
               : undefined,
-            scholarDoc: dirtyFields.scholarDoc ? data.scholarDoc[0] : undefined,
-            appDoc: dirtyFields.appDoc ? data.appDoc[0] : undefined,
+            scholarDoc: touchedFields.scholarDoc
+              ? data.scholarDoc[0]
+              : undefined,
+            appDoc: touchedFields.appDoc ? data.appDoc[0] : undefined,
           },
           {
             headers: {
@@ -131,8 +127,8 @@ const useConfigScholarshipController = () => {
           Api.SCHOLARSHIP,
           {
             ...data,
-            openDate: new Date(data.openDate),
-            closeDate: new Date(data.closeDate),
+            openDate: data.openDate,
+            closeDate: data.closeDate,
             defaultBudget:
               !data.defaultBudget || data.defaultBudget === 0
                 ? null
@@ -184,18 +180,5 @@ const useConfigScholarshipController = () => {
     navigateBack,
   };
 };
-
-function getOnlyDirtyFields<T extends Record<keyof T, unknown>>(
-  dirtyFields: Partial<Readonly<FieldNamesMarkedBoolean<T>>>,
-  data: T,
-): Partial<T> {
-  const dirtyData: Partial<T> = {};
-  for (const key in dirtyFields) {
-    if (dirtyFields[key]) {
-      dirtyData[key as unknown as keyof T] = data[key as unknown as keyof T];
-    }
-  }
-  return dirtyData;
-}
 
 export default useConfigScholarshipController;

@@ -31,11 +31,9 @@ const History = () => {
                     {application.budget ? application.budget : '-'}
                   </td>
                   <td className="p-2 text-center">
-                    {application.submissionTime
-                      ? application.adminApprovalTime
-                        ? 'ได้รับการอนุมัติ'
-                        : 'ไม่ได้รับการอนุมัติ'
-                      : 'ไม่ได้ยืนยันใบสมัคร'}
+                    {application.adminApprovalTime
+                      ? 'ได้รับการอนุมัติ'
+                      : 'ไม่ได้รับการอนุมัติ'}
                   </td>
                 </tr>
               ))}

@@ -9,7 +9,6 @@ export interface ApplicationHistory {
   budget: number | null;
   year: number;
   semester: number;
-  submissionTime: Date | null;
   adminApprovalTime: Date | null;
 }
 
@@ -24,22 +23,12 @@ const useHistoryController = () => {
         .get<ApplicationHistory[]>(Api.APPLICATION_HISTORY)
         .then((response) => {
           setHistory(
-            response
-              .map((application) => ({
-                ...application,
-                submissionTime: application.submissionTime
-                  ? new Date(application.submissionTime)
-                  : null,
-                adminApprovalTime: application.adminApprovalTime
-                  ? new Date(application.adminApprovalTime)
-                  : null,
-              }))
-              .sort((a, b) => {
-                if (a.year === b.year) {
-                  return a.semester - b.semester;
-                }
-                return a.year - b.year;
-              }),
+            response.sort((a, b) => {
+              if (a.year === b.year) {
+                return a.semester - b.semester;
+              }
+              return a.year - b.year;
+            }),
           );
         });
     }

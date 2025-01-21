@@ -1,4 +1,3 @@
-import { createCMUAccountSignInUrl } from '../handleCMUAccountSignIn';
 import { HttpClient } from './HttpClient';
 
 export class ApiClient extends HttpClient {
@@ -9,18 +8,5 @@ export class ApiClient extends HttpClient {
         Authorization: `Bearer ${info?.token}`,
       },
     });
-
-    this.axios.interceptors.response.use(
-      (response) => {
-        return response;
-      },
-      (error) => {
-        if (error.response?.status === 401) {
-          localStorage.removeItem('token');
-          window.location.replace(createCMUAccountSignInUrl());
-        }
-        return Promise.reject(error);
-      },
-    );
   }
 }

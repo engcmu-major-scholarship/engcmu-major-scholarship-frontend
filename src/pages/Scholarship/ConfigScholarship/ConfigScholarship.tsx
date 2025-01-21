@@ -1,4 +1,6 @@
+import DatePickerReactHookForm from '../../../components/DatePickerReactHookForm';
 import Modal from '../../../components/Modal';
+import PDFInputReactHookForm from '../../../components/PDFInputReactHookForm';
 import useConfigScholarshipController from './useConfigScholarshipController';
 
 const ConfigScholarship = () => {
@@ -59,42 +61,34 @@ const ConfigScholarship = () => {
           </div>
         </div>
         <div className="flex flex-row gap-4">
-          <div className="flex flex-col w-1/4 gap-2">
-            <label htmlFor="openDate" className="text-sm font-medium">
-              วันเปิดรับสมัคร
-            </label>
-            <input
-              id="openDate"
-              type="date"
-              className="border-2 text-sm rounded-lg w-full p-2.5"
-              {...register('openDate', { required: 'ต้องระบุวันเปิดรับสมัคร' })}
+          <div className="w-1/4">
+            <DatePickerReactHookForm
+              register={register}
+              registerOptions={{
+                required: 'ต้องระบุวันเปิดรับสมัคร',
+                valueAsDate: true,
+              }}
+              watch={watch}
+              error={errors.openDate?.message}
+              name="openDate"
+              label="วันเปิดรับสมัคร"
             />
-            {errors.openDate && (
-              <div className="text-red-500 text-sm">
-                {errors.openDate.message}
-              </div>
-            )}
           </div>
-          <div className="flex flex-col w-1/4 gap-2">
-            <label htmlFor="closeDate" className="text-sm font-medium">
-              วันปิดรับสมัคร
-            </label>
-            <input
-              id="closeDate"
-              type="date"
-              className="border-2 text-sm rounded-lg w-full p-2.5"
-              {...register('closeDate', {
+          <div className="w-1/4">
+            <DatePickerReactHookForm
+              register={register}
+              registerOptions={{
                 required: 'ต้องระบุวันปิดรับสมัคร',
                 validate: (value) =>
                   value > watch('openDate') ||
                   'วันปิดรับสมัครต้องมากกว่าวันเปิดรับสมัคร',
-              })}
+                valueAsDate: true,
+              }}
+              watch={watch}
+              error={errors.closeDate?.message}
+              name="closeDate"
+              label="วันปิดรับสมัคร"
             />
-            {errors.closeDate && (
-              <div className="text-red-500 text-sm">
-                {errors.closeDate.message}
-              </div>
-            )}
           </div>
         </div>
         <div className="flex flex-col w-full gap-2">
@@ -129,96 +123,48 @@ const ConfigScholarship = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col w-full gap-2">
-          <label htmlFor="scholarDoc" className="text-sm font-medium">
-            เอกสารรายละเอียดทุน
-          </label>
-          <input
-            id="scholarDoc"
-            type="file"
-            accept="application/pdf"
-            className="border-2 text-sm rounded-lg w-60 p-2.5"
-            {...register('scholarDoc', {
-              required: { value: !id, message: 'ต้องแนบเอกสารรายละเอียดทุน' },
-              validate: (value) =>
-                value[0].type === 'application/pdf' || 'เอกสารต้องเป็นไฟล์ PDF',
-            })}
-          />
-          {errors.scholarDoc && (
-            <div className="text-red-500 text-sm">
-              {errors.scholarDoc.message}
-            </div>
-          )}
-          {watch('scholarDoc') && watch('scholarDoc')?.length !== 0 ? (
-            <object
-              data={URL.createObjectURL(watch('scholarDoc')[0])}
-              type="application/pdf"
-              className="w-full h-[600px]"
-            >
-              <div className="text-red-500 text-sm">
-                {
-                  'This browser does not support PDFs. Please download the PDF to view it: '
-                }
-                <a
-                  className="text-blue-700"
-                  href={URL.createObjectURL(watch('scholarDoc')[0])}
-                >
-                  Download PDF
-                </a>
-              </div>
-            </object>
-          ) : (
-            <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center bg-gray-100">
-              <div className="text-5xl text-center text-gray-500">
-                {isScholarDocLoading ? 'Loading...' : 'Preview PDF'}
-              </div>
-            </div>
-          )}
-        </div>
-        <div className="flex flex-col w-full gap-2">
-          <label htmlFor="appDoc" className="text-sm font-medium">
-            เอกสารการสมัคร
-          </label>
-          <input
-            id="appDoc"
-            type="file"
-            accept="application/pdf"
-            className="border-2 text-sm rounded-lg w-60 p-2.5"
-            {...register('appDoc', {
-              required: { value: !id, message: 'ต้องแนบเอกสารการสมัคร' },
-              validate: (value) =>
-                value[0].type === 'application/pdf' || 'เอกสารต้องเป็นไฟล์ PDF',
-            })}
-          />
-          {errors.appDoc && (
-            <div className="text-red-500 text-sm">{errors.appDoc.message}</div>
-          )}
-          {watch('appDoc') && watch('appDoc')?.length !== 0 ? (
-            <object
-              data={URL.createObjectURL(watch('appDoc')[0])}
-              type="application/pdf"
-              className="w-full h-[600px]"
-            >
-              <div className="text-red-500 text-sm">
-                {
-                  'This browser does not support PDFs. Please download the PDF to view it: '
-                }
-                <a
-                  className="text-blue-700"
-                  href={URL.createObjectURL(watch('appDoc')[0])}
-                >
-                  Download PDF
-                </a>
-              </div>
-            </object>
-          ) : (
-            <div className="flex flex-col w-full h-[600px] border-2 items-center justify-center bg-gray-100">
-              <div className="text-5xl text-center text-gray-500">
-                {isAppDocLoading ? 'Loading...' : 'Preview PDF'}
-              </div>
-            </div>
-          )}
-        </div>
+        <PDFInputReactHookForm
+          register={register}
+          registerOptions={{
+            required: { value: !id, message: 'ต้องแนบเอกสารรายละเอียดทุน' },
+            validate: (value) => {
+              if (value[0]) {
+                return (
+                  value[0].type === 'application/pdf' ||
+                  'เอกสารต้องเป็นไฟล์ PDF'
+                );
+              } else {
+                return 'ต้องแนบเอกสารรายละเอียดทุน';
+              }
+            },
+          }}
+          watch={watch}
+          name="scholarDoc"
+          label="เอกสารรายละเอียดทุน"
+          error={errors.scholarDoc?.message}
+          isLoading={isScholarDocLoading}
+        />
+        <PDFInputReactHookForm
+          register={register}
+          registerOptions={{
+            required: { value: !id, message: 'ต้องแนบเอกสารการสมัคร' },
+            validate: (value) => {
+              if (value[0]) {
+                return (
+                  value[0].type === 'application/pdf' ||
+                  'เอกสารต้องเป็นไฟล์ PDF'
+                );
+              } else {
+                return 'ต้องแนบเอกสารการสมัคร';
+              }
+            },
+          }}
+          watch={watch}
+          name="appDoc"
+          label="เอกสารการสมัคร"
+          error={errors.appDoc?.message}
+          isLoading={isAppDocLoading}
+        />
         <div className="flex flex-row gap-4">
           <div className="flex flex-row gap-2">
             <div className="relative inline-block w-24 h-10">
