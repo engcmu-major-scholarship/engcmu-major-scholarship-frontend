@@ -77,7 +77,18 @@ const Profile = () => {
           name="studentIdCard"
           label="รูปบัตรนักศึกษา"
           register={register}
-          registerOptions={{ required: 'กรุณาเลือกรูปบัตรนักศึกษา' }}
+          registerOptions={{
+            validate: (value) => {
+              if (value[0]) {
+                return (
+                  /^image\/.+$/gm.test(value[0].type) ||
+                  'เอกสารต้องเป็นไฟล์รูปภาพเท่านั้น'
+                );
+              } else {
+                return 'ต้องแนบเอกสารรูปภาพบัตรนักศึกษา';
+              }
+            },
+          }}
           watch={watch}
           error={errors.studentIdCard?.message}
         />
@@ -85,7 +96,18 @@ const Profile = () => {
           name="bookBank"
           label="รูปหน้าบัญชีธนาคาร"
           register={register}
-          registerOptions={{ required: 'กรุณาเลือกรูปหน้าบัญชีธนาคาร' }}
+          registerOptions={{
+            validate: (value) => {
+              if (value[0]) {
+                return (
+                  /^image\/.+$/gm.test(value[0].type) ||
+                  'เอกสารต้องเป็นไฟล์รูปภาพเท่านั้น'
+                );
+              } else {
+                return 'ต้องแนบเอกสารรูปภาพบัญชีธนาคาร';
+              }
+            },
+          }}
           watch={watch}
           error={errors.bookBank?.message}
         />

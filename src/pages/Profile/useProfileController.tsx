@@ -87,7 +87,15 @@ const useProfileController = () => {
       })
       .catch((err) => {
         console.error(err);
-        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+        if (err.response) {
+          if (err.response.status === 422) {
+            navigateBack();
+          } else if (err.response.status === 400) {
+            alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+          } else {
+            alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+          }
+        }
       });
   };
 

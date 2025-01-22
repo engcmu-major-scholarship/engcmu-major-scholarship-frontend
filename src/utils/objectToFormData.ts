@@ -24,6 +24,8 @@ export function objectToFromData<T extends Record<keyof T, FormDataValue>>(
       });
     } else if (obj[key] instanceof Date) {
       formData.append(key, obj[key].toString());
+    } else if (obj[key] instanceof File || obj[key] instanceof Blob) {
+      formData.append(key, obj[key]);
     } else {
       formData.append(key, JSON.stringify(obj[key]));
     }
