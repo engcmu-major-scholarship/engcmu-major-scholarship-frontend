@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react';
-import { FieldNamesMarkedBoolean, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router';
 import { useHttpClient } from '../../../hooks/useHttpClient';
 import { useAuth } from '../../../hooks/useAuth';
 import { Api } from '../../../constants/Api';
 import { Role } from '../../../types/Roles';
+import { getOnlyDirtyFields } from '../../../utils/getOnlyDirtyFields';
+import { objectToFromData } from '../../../utils/objectToFormData';
 
 export interface GetScholarship {
   name: string;
@@ -23,14 +25,14 @@ export interface CreateOrEditScholarshipForm {
   description: string;
   requirement: string;
   defaultBudget: number | null;
-  openDate: Date | string;
-  closeDate: Date | string;
+  openDate: Date;
+  closeDate: Date;
   published: boolean;
   scholarDoc: File[];
   appDoc: File[];
 }
 
-const useCreateOrEditScholarshipController = () => {
+const useConfigScholarshipController = () => {
   const { id } = useParams();
   const { roles } = useAuth();
   const httpClient = useHttpClient();
@@ -41,8 +43,13 @@ const useCreateOrEditScholarshipController = () => {
     handleSubmit,
     reset,
     resetField,
-    formState: { errors, isDirty, dirtyFields },
-  } = useForm<CreateOrEditScholarshipForm>();
+    formState: { errors, isDirty, dirtyFields, touchedFields },
+  } = useForm<CreateOrEditScholarshipForm>({
+    defaultValues: {
+      openDate: new Date(),
+      closeDate: new Date(),
+    },
+  });
   const [isScholarDocLoading, setIsScholarDocLoading] = useState(false);
   const [isAppDocLoading, setIsAppDocLoading] = useState(false);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
@@ -55,15 +62,7 @@ const useCreateOrEditScholarshipController = () => {
       httpClient
         .get<GetScholarship>(`${Api.SCHOLARSHIP}/admin/${id}`)
         .then((response) => {
-          reset({
-            name: response.name,
-            defaultBudget: response.defaultBudget,
-            description: response.description,
-            requirement: response.requirement,
-            openDate: new Date(response.openDate).toISOString().split('T')[0],
-            closeDate: new Date(response.closeDate).toISOString().split('T')[0],
-            published: response.published,
-          });
+          reset(response);
           fetch(response.docLink).then((blobResponse) => {
             blobResponse.blob().then((blob) => {
               const scholarDoc = new File([blob], response.name, {
@@ -88,31 +87,22 @@ const useCreateOrEditScholarshipController = () => {
 
   const onSubmit = (data: CreateOrEditScholarshipForm) => {
     if (id) {
+      const formData = objectToFromData({
+        ...getOnlyDirtyFields(dirtyFields, data),
+        defaultBudget: dirtyFields.defaultBudget
+          ? !data.defaultBudget || data.defaultBudget === 0
+            ? null
+            : data.defaultBudget
+          : undefined,
+        scholarDoc: touchedFields.scholarDoc ? data.scholarDoc[0] : undefined,
+        appDoc: touchedFields.appDoc ? data.appDoc[0] : undefined,
+      } as unknown as CreateOrEditScholarshipForm);
       httpClient
-        .patch(
-          `${Api.SCHOLARSHIP}/${id}`,
-          {
-            ...getOnlyDirtyFields(dirtyFields, data),
-            openDate: dirtyFields.openDate
-              ? new Date(data.openDate)
-              : undefined,
-            closeDate: dirtyFields.closeDate
-              ? new Date(data.closeDate)
-              : undefined,
-            defaultBudget: dirtyFields.defaultBudget
-              ? !data.defaultBudget || data.defaultBudget === 0
-                ? null
-                : data.defaultBudget
-              : undefined,
-            scholarDoc: dirtyFields.scholarDoc ? data.scholarDoc[0] : undefined,
-            appDoc: dirtyFields.appDoc ? data.appDoc[0] : undefined,
+        .patch(`${Api.SCHOLARSHIP}/${id}`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
           },
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
+        })
         .then(() => {
           navigateBack();
         })
@@ -126,26 +116,21 @@ const useCreateOrEditScholarshipController = () => {
           }
         });
     } else {
+      const formData = objectToFromData({
+        ...data,
+        defaultBudget:
+          !data.defaultBudget || data.defaultBudget === 0
+            ? null
+            : data.defaultBudget,
+        scholarDoc: data.scholarDoc[0],
+        appDoc: data.appDoc[0],
+      } as unknown as CreateOrEditScholarshipForm);
       httpClient
-        .post(
-          Api.SCHOLARSHIP,
-          {
-            ...data,
-            openDate: new Date(data.openDate),
-            closeDate: new Date(data.closeDate),
-            defaultBudget:
-              !data.defaultBudget || data.defaultBudget === 0
-                ? null
-                : data.defaultBudget,
-            scholarDoc: data.scholarDoc[0],
-            appDoc: data.appDoc[0],
+        .post(Api.SCHOLARSHIP, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
           },
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        )
+        })
         .then(() => {
           navigateBack();
         })
@@ -185,17 +170,4 @@ const useCreateOrEditScholarshipController = () => {
   };
 };
 
-function getOnlyDirtyFields<T extends Record<keyof T, unknown>>(
-  dirtyFields: Partial<Readonly<FieldNamesMarkedBoolean<T>>>,
-  data: T,
-): Partial<T> {
-  const dirtyData: Partial<T> = {};
-  for (const key in dirtyFields) {
-    if (dirtyFields[key]) {
-      dirtyData[key as unknown as keyof T] = data[key as unknown as keyof T];
-    }
-  }
-  return dirtyData;
-}
-
-export default useCreateOrEditScholarshipController;
+export default useConfigScholarshipController;

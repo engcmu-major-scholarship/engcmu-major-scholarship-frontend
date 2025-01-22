@@ -1,6 +1,6 @@
 import { Path } from '../constants/Path';
 
-export const createCMUAccountSignInUrl = () => {
+export function createCMUAccountSignInUrl() {
   const paramsBuilder = new URLSearchParams();
   paramsBuilder.append('client_id', import.meta.env.VITE_CMU_ENTRA_CLIENT_ID);
   paramsBuilder.append('scope', 'api://cmu/.default');
@@ -12,8 +12,8 @@ export const createCMUAccountSignInUrl = () => {
     `https://login.microsoftonline.com/${import.meta.env.VITE_CMU_MS_TENANT_ID}/oauth2/v2.0/authorize?` +
     paramsBuilder.toString()
   );
-};
+}
 
-export const handleCMUAccountSignIn = () => {
+export function handleCMUAccountSignIn() {
   window.location.href = createCMUAccountSignInUrl();
-};
+}

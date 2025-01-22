@@ -31,14 +31,14 @@ const ScholarshipAll = () => {
               className="border-2 text-sm rounded-lg w-full p-2.5"
             />
           </div>
-          {roles.includes(Role.ADMIN) ? (
+          {roles.includes(Role.ADMIN) && (
             <button
               className=" text-black font-bold border border-solid border-black py-2 px-6 rounded-2xl"
               onClick={navigateToCreateScholarship}
             >
               เพิ่มทุน
             </button>
-          ) : null}
+          )}
         </div>
         <div className="w-full flex flex-col gap-3 items-center">
           {searchResults.map((scholarship, index) => (
@@ -46,11 +46,11 @@ const ScholarshipAll = () => {
               key={index}
               className="flex flex-col w-full p-12 gap-2 bg-[#e4f0f1] rounded-lg"
             >
-              {roles.includes(Role.ADMIN) ? (
+              {roles.includes(Role.ADMIN) && (
                 <div className="flex justify-end">
                   <button
                     onClick={() =>
-                      navigate(`${Path.EDIT_SCHOLARSHIP}/${scholarship.id}`)
+                      navigate(`${Path.CONFIG_SCHOLARSHIP}/${scholarship.id}`)
                     }
                   >
                     <svg
@@ -67,7 +67,7 @@ const ScholarshipAll = () => {
                     </svg>
                   </button>
                 </div>
-              ) : null}
+              )}
               <div className="text-xl font-bold">{scholarship.name}</div>
               <div className="text">{scholarship.description}</div>
               <div className="flex justify-end">

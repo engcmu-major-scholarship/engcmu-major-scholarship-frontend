@@ -23,7 +23,7 @@ const useScholarshipAllController = () => {
   const [searchText, setSearchText] = useState<string>('');
 
   const navigateToCreateScholarship = () => {
-    navigate(Path.CREATE_SCHOLARSHIP);
+    navigate(Path.CONFIG_SCHOLARSHIP);
   };
 
   useEffect(() => {
