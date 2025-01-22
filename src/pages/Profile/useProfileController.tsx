@@ -5,6 +5,7 @@ import { Role } from '../../types/Roles';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import { Api } from '../../constants/Api';
 import { useNavigate } from 'react-router';
+import { objectToFromData } from '../../utils/objectToFormData';
 
 export interface StudentProfile {
   id: string;
@@ -30,7 +31,7 @@ const useProfileController = () => {
     watch,
     resetField,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, dirtyFields, touchedFields },
   } = useForm<EditStudentProfile>();
   const [name, setName] = useState<string>('');
   const [profile, setProfile] = useState<StudentProfile | null>(null);
@@ -68,7 +69,26 @@ const useProfileController = () => {
   }, [httpClient, resetField, roles]);
 
   const onSubmit = (data: EditStudentProfile) => {
-    console.log(data);
+    const formData = objectToFromData({
+      advisorId: dirtyFields.advisorId ? data.advisorId : undefined,
+      studentIdCard: touchedFields.studentIdCard
+        ? data.studentIdCard[0]
+        : undefined,
+      bookBank: touchedFields.bookBank ? data.bookBank[0] : undefined,
+    });
+    httpClient
+      .patch(Api.STUDENT_PROFILE, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(() => {
+        navigateBack();
+      })
+      .catch((err) => {
+        console.error(err);
+        alert('เกิดข้อผิดพลาดในการบันทึกข้อมูล');
+      });
   };
 
   const navigateBack = () => {
