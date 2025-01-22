@@ -1,4 +1,4 @@
-import { ReactNode, useCallback, useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { ApiClient } from '../utils/Http/ApiClient';
 import { HttpClientContext } from '../contexts/HttpClientContext';
 import { useAuth } from '../hooks/useAuth';
@@ -19,8 +19,8 @@ const HttpClientProvider = ({ children }: { children: ReactNode }) => {
   const { token, setCMUAccount, setRoles } = useAuth();
   const [httpClient, setHttpClient] = useState<HttpClient>(new ApiClient());
 
-  const setHttpClientToken = useCallback(
-    (token: string) => {
+  useEffect(() => {
+    if (token !== null) {
       const httpClient = new ApiClient({ token });
       setHttpClient(httpClient);
       httpClient
@@ -32,15 +32,8 @@ const HttpClientProvider = ({ children }: { children: ReactNode }) => {
         .catch((err) => {
           console.error(err);
         });
-    },
-    [setCMUAccount, setRoles],
-  );
-
-  useEffect(() => {
-    if (token !== null && token !== '') {
-      setHttpClientToken(token);
     }
-  }, [setHttpClientToken, token]);
+  }, [setCMUAccount, setRoles, token]);
 
   return (
     <HttpClientContext.Provider value={httpClient}>
