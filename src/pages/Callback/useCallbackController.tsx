@@ -1,23 +1,27 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useAuth } from '../../hooks/useAuth';
 import { Api } from '../../constants/Api';
 import { Path } from '../../constants/Path';
 import { handleCMUAccountSignIn } from '../../utils/handleCMUAccountSignIn';
+// import { handleCMUAccountSignIn } from '../../utils/handleCMUAccountSignIn';
 
 const useCallbackController = () => {
   const [searchParams] = useSearchParams();
   const { setToken } = useAuth();
   const httpClient = useHttpClient();
   const navigate = useNavigate();
+  const [isFirstRender, setIsFirstRender] = useState(true);
   useEffect(() => {
     const error = searchParams.get('error');
-    const authorizationCode = searchParams.get('code');
     if (error) {
+      console.error(error);
       handleCMUAccountSignIn();
     }
-    if (authorizationCode) {
+    const authorizationCode = searchParams.get('code');
+    if (authorizationCode && isFirstRender) {
+      setIsFirstRender(false);
       httpClient
         .post<string>(Api.SIGNIN, {
           authorizationCode,
@@ -32,7 +36,7 @@ const useCallbackController = () => {
           handleCMUAccountSignIn();
         });
     }
-  }, [navigate, setToken, httpClient, searchParams]);
+  }, [httpClient, isFirstRender, navigate, searchParams, setToken]);
 
   return;
 };
