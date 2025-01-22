@@ -6,6 +6,7 @@ export enum Api {
   SCHOLARSHIP = '/scholarship',
   APPLYABLE_SCHOLARSHIP = '/scholarship/applyable',
   SETTING = '/setting',
+  CURRENT_YEAR_SEMESTER = '/setting/current-year-semester',
 
   // Auth
   SIGNIN = '/auth/signin',
