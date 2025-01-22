@@ -50,6 +50,7 @@ const useApplyController = () => {
         if (response.length === 0) {
           alert('ไม่มีทุนที่สามารถสมัครได้');
           navigate(-1);
+          return;
         }
         setScholarships(response);
         resetField('scholarId', { defaultValue: response[0].id });
