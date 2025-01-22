@@ -15,6 +15,7 @@ import History from './pages/History/History';
 import ConfigScholarship from './pages/Scholarship/ConfigScholarship/ConfigScholarship';
 import Apply from './pages/Apply/Apply';
 import Scholarship from './pages/Scholarship/Scholarship';
+import Profile from './pages/Profile/Profile';
 import Status from './pages/Status/Status';
 
 const providersGiver = ([...providers]: (({
@@ -69,7 +70,7 @@ const Router = () => {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route element={<Navbar />}>
-              <Route path={Path.PROFILE} element={<Home />} />
+              <Route path={Path.PROFILE} element={<Profile />} />
               <Route path={Path.STATUS} element={<Status />} />
               <Route path={Path.HISTORY} element={<History />} />
               <Route
