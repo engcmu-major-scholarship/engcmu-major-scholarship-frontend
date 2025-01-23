@@ -25,12 +25,10 @@ const studentData = [
   },
   // เพิ่มข้อมูลตามต้องการ
 ];
-interface Student {
-  approve: boolean;
-}
 
 const ConsiderScholarship = () => {
-  useConsiderScholarshipController();
+  const { searchResults } = useConsiderScholarshipController();
+
   const { accessibles } = useContext(RolesBaseAccessContext);
   const navigate = useNavigate();
 
@@ -132,7 +130,27 @@ const ConsiderScholarship = () => {
         </thead>
         <tbody>
           {/* เพิ่มข้อมูลในส่วนนี้ */}
-          {studentData.map((student, index) => (
+          {/* {searchResults.map((scholarship, index) => (
+                      <div
+                        key={index}
+                        className="flex flex-col w-full p-12 gap-2 bg-[#e4f0f1] rounded-lg"
+                      >
+    
+                        <div className="text-xl font-bold">{scholarship.name}</div>
+                        <div className="text">{scholarship.description}</div>
+                        <div className="flex justify-end">
+                          <button
+                            className="underline"
+                            onClick={() =>
+                              navigate(`${Path.SCHOLARSHIP}/${scholarship.id}`)
+                            }
+                          >
+                            ดูรายละเอียดทุน
+                          </button>
+                        </div>
+                      </div>
+                    ))} */}
+          {searchResults.map((application, index) => (
             <tr
               key={index}
               style={{
@@ -140,19 +158,19 @@ const ConsiderScholarship = () => {
               }}
             >
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
-                {student.id}
+                {application.student.id}
               </td>
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
-                {student.name}
+                {application.student.firstName}
               </td>
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
-                {student.scholarship}
+                {application.scholarship.name}
               </td>
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
-                {student.year}
+                {application.semester.year.year}
               </td>
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
-                {student.amount}
+                {application.requestAmount}
               </td>
               <td
                 style={{
@@ -182,7 +200,7 @@ const ConsiderScholarship = () => {
                 <label className="switch">
                   <input
                     type="checkbox"
-                    checked={student.approve} // ใช้ค่าจาก props เพื่อควบคุมสถานะของสวิตช์
+                    checked={application.adminApprovalTime ? true : false}
                     // onChange={handleSwitchChange} // ฟังก์ชันที่จะเปลี่ยนแปลงค่า approve
                   />
                   <span className="slider round"></span>
