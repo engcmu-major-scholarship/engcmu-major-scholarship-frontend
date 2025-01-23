@@ -22,6 +22,11 @@ export interface EditStudentProfile {
   bookBank: File[];
 }
 
+export interface Advisor {
+  id: number;
+  name: string;
+}
+
 const useProfileController = () => {
   const { roles } = useAuth();
   const httpClient = useHttpClient();
@@ -34,12 +39,16 @@ const useProfileController = () => {
     formState: { errors, dirtyFields, touchedFields },
   } = useForm<EditStudentProfile>();
   const [name, setName] = useState<string>('');
+  const [advisors, setAdvisors] = useState<Advisor[]>([]);
   const [profile, setProfile] = useState<StudentProfile | null>(null);
   const [isCancelModalOpen, setIsCancelModalOpen] = useState(false);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
 
   useEffect(() => {
     if (roles.includes(Role.STUDENT)) {
+      httpClient.get<Advisor[]>(Api.ADVISOR).then((data) => {
+        setAdvisors(data);
+      });
       httpClient.get<StudentProfile>(Api.STUDENT_PROFILE).then((data) => {
         setName(data.firstName + ' ' + data.lastName);
         setProfile(data);
@@ -111,6 +120,7 @@ const useProfileController = () => {
     onSubmit,
     navigateBack,
     name,
+    advisors,
     profile,
     isCancelModalOpen,
     setIsCancelModalOpen,
