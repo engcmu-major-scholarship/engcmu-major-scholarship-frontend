@@ -27,7 +27,8 @@ const studentData = [
 ];
 
 const ConsiderScholarship = () => {
-  const { searchResults } = useConsiderScholarshipController();
+  const { applications } = useConsiderScholarshipController();
+  const { scholarships } = useConsiderScholarshipController();
 
   const { accessibles } = useContext(RolesBaseAccessContext);
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ const ConsiderScholarship = () => {
       <div
         style={{
           display: 'flex',
-          marginLeft: '205px',
+          marginLeft: '150px',
         }}
       >
         <div
@@ -64,7 +65,11 @@ const ConsiderScholarship = () => {
               width: '225px',
             }}
           >
-            <option value="ทุน">ทุน</option>
+            {scholarships.map((scholarship, index) => (
+              <option key={index} value={scholarship.name}>
+                {scholarship.name}
+              </option>
+            ))}
           </select>
         </div>
         <div
@@ -92,7 +97,7 @@ const ConsiderScholarship = () => {
       </div>
       <table
         style={{
-          marginLeft: '205px',
+          marginLeft: '150px',
           width: '100%',
           height: '100px',
           borderCollapse: 'collapse',
@@ -116,6 +121,9 @@ const ConsiderScholarship = () => {
             </th>
             <th style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
               จำนวนทุนที่ขอ
+            </th>
+            <th style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
+              เคยสมัครทุนไปรึยัง
             </th>
             <th style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
               ดูข้อมูล
@@ -150,7 +158,7 @@ const ConsiderScholarship = () => {
                         </div>
                       </div>
                     ))} */}
-          {searchResults.map((application, index) => (
+          {applications.map((application, index) => (
             <tr
               key={index}
               style={{
@@ -158,19 +166,23 @@ const ConsiderScholarship = () => {
               }}
             >
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
-                {application.student.id}
+                {application.studentId}
               </td>
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
-                {application.student.firstName}
+                {application.firstName + ' ' + application.lastName}
               </td>
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
-                {application.scholarship.name}
+                {application.scholarName}
               </td>
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
-                {application.semester.year.year}
+                {/* {application.semester.year.year} */}
+                2566
               </td>
               <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
                 {application.requestAmount}
+              </td>
+              <td style={{ padding: '10px', border: '1px solid #FFFFFF' }}>
+                ข้อมูลจากไหน
               </td>
               <td
                 style={{

@@ -6,14 +6,29 @@ import { Path } from '../../../constants/Path';
 import { useAuth } from '../../../hooks/useAuth';
 import { Role } from '../../../types/Roles';
 
-import { Application } from '../../../types/ModelType.ts';
-
+//import { Application } from '../../../types/ModelType.ts';
+export interface ApplicationInfo {
+  appId: number;
+  studentId: number;
+  firstName: string;
+  lastName: string;
+  scholarName: string;
+  requestAmount: number | null;
+  adminApproveTime: Date | null;
+  isFirstTime: Date | null;
+}
+export interface BasicScholarshipInfo {
+  id: number;
+  name: string;
+  description: string;
+}
 const useConsiderScholarshipController = () => {
   const httpClient = useHttpClient();
   const navigate = useNavigate();
   const { roles } = useAuth();
-  const [applications, setApplications] = useState<Application[]>([]);
-  const [searchResults, setSearchResults] = useState<Application[]>([]);
+  const [applications, setApplications] = useState<ApplicationInfo[]>([]);
+  //const [searchResults, setSearchResults] = useState<ApplicationInfo[]>([]);
+  const [scholarships, setScholarships] = useState<BasicScholarshipInfo[]>([]);
   //const [searchText, setSearchText] = useState<string>('');
 
   // const navigateToCreateScholarship = () => {
@@ -21,19 +36,20 @@ const useConsiderScholarshipController = () => {
   // };
 
   useEffect(() => {
-    let endpoint: string = `${Api.APPLICATION}/consider/2566/1`;
-    // if (roles.includes(Role.ADMIN)) {
-    //   endpoint = `${Api.CONSIDER}/admin`;
-    // }
-    httpClient.get<Application[]>(endpoint).then((response) => {
+    let endpoint2: string = Api.SCHOLARSHIP;
+    httpClient.get<BasicScholarshipInfo[]>(endpoint2).then((response) => {
+      setScholarships(response);
+    });
+
+    let endpoint: string = `${Api.APPLICATION}/consider/2566/3`;
+    httpClient.get<ApplicationInfo[]>(endpoint).then((response) => {
       setApplications(response);
-      // setSearchResults(response);
     });
   }, [httpClient, roles]);
 
   useEffect(() => {
     //if (searchText === '') {
-    setSearchResults(applications);
+    // setSearchResults(applications);
     // } else {
     //   const results = scholarships.filter(
     //     (scholarship) =>
@@ -44,10 +60,11 @@ const useConsiderScholarshipController = () => {
     //   );
     //   setSearchResults(results);
     // }
-  }, [applications]); //, searchText
+  }, [scholarships, applications]); //, searchText
 
   return {
-    searchResults,
+    scholarships,
+    applications,
     //navigateToCreateScholarship,
     //searchText,
     //setSearchText,
