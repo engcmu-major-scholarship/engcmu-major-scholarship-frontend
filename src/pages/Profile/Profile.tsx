@@ -8,6 +8,7 @@ const Profile = () => {
     watch,
     errors,
     name,
+    advisors,
     profile,
     onSubmit,
     handleSubmit,
@@ -62,9 +63,11 @@ const Profile = () => {
                 valueAsNumber: true,
               })}
             >
-              <option value={1}>อาจารย์ A</option>
-              <option value={2}>อาจารย์ B</option>
-              <option value={3}>อาจารย์ C</option>
+              {advisors.map((advisor) => (
+                <option key={advisor.id} value={advisor.id}>
+                  {advisor.name}
+                </option>
+              ))}
             </select>
             {errors.advisorId && (
               <div className="text-red-500 text-sm">
