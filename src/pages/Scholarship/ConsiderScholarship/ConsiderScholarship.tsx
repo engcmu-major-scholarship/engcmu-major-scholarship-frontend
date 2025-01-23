@@ -5,39 +5,24 @@ import { useNavigate } from 'react-router';
 import { Path } from '../../../constants/Path';
 import { createCMUAccountSignInUrl } from '../../../utils/handleCMUAccountSignIn';
 import './toggle.css';
-
-const studentData = [
-  {
-    id: '650610xxx',
-    name: 'ทดสอบ ก่อนวันจริง',
-    scholarship: 'Research Assistant (RA)',
-    year: '2/2567',
-    amount: '2,000',
-    approve: false,
-  },
-  {
-    id: '650610yyy',
-    name: 'สมชาย ใจดี',
-    scholarship: 'Teaching Assistant (TA)',
-    year: '2/2567',
-    amount: '3,000',
-    approve: true,
-  },
-  // เพิ่มข้อมูลตามต้องการ
-];
+import { filterApplicationsByScholarshipName } from './useConsiderScholarshipController';
+import React, { useState } from 'react';
 
 const ConsiderScholarship = () => {
-  const { applications } = useConsiderScholarshipController();
-  const { scholarships } = useConsiderScholarshipController();
+  const { filterResults, scholarships, filterText, setFilterText } =
+    useConsiderScholarshipController();
 
   const { accessibles } = useContext(RolesBaseAccessContext);
   const navigate = useNavigate();
 
-  // ฟังก์ชันสำหรับเปลี่ยนค่า approve เมื่อสวิตช์ถูกคลิก
-  // const handleSwitchChange = () => {
-  //   // อัปเดตค่า approve ผ่านฟังก์ชันที่มาจาก props
-  //   updateStudentApprove(!student.approve);
-  // };
+  const [selectedScholarship, setSelectedScholarship] = useState('');
+
+  const [showPopup, setShowPopup] = useState(false);
+
+  const togglePopup = () => {
+    setShowPopup(!showPopup);
+  };
+
   return (
     <div>
       <div
@@ -59,12 +44,13 @@ const ConsiderScholarship = () => {
           }}
         >
           <select
-            // value={selectedCar}
-            // onChange={handleCarChange}
+            value={filterText}
+            onChange={(e) => setFilterText(e.target.value)}
             style={{
               width: '225px',
             }}
           >
+            <option value="">-- Select Scholarship --</option>
             {scholarships.map((scholarship, index) => (
               <option key={index} value={scholarship.name}>
                 {scholarship.name}
@@ -137,28 +123,7 @@ const ConsiderScholarship = () => {
           </tr>
         </thead>
         <tbody>
-          {/* เพิ่มข้อมูลในส่วนนี้ */}
-          {/* {searchResults.map((scholarship, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col w-full p-12 gap-2 bg-[#e4f0f1] rounded-lg"
-                      >
-    
-                        <div className="text-xl font-bold">{scholarship.name}</div>
-                        <div className="text">{scholarship.description}</div>
-                        <div className="flex justify-end">
-                          <button
-                            className="underline"
-                            onClick={() =>
-                              navigate(`${Path.SCHOLARSHIP}/${scholarship.id}`)
-                            }
-                          >
-                            ดูรายละเอียดทุน
-                          </button>
-                        </div>
-                      </div>
-                    ))} */}
-          {applications.map((application, index) => (
+          {filterResults.map((application, index) => (
             <tr
               key={index}
               style={{
@@ -212,7 +177,7 @@ const ConsiderScholarship = () => {
                 <label className="switch">
                   <input
                     type="checkbox"
-                    checked={application.adminApprovalTime ? true : false}
+                    checked={application.adminApproveTime ? true : false}
                     // onChange={handleSwitchChange} // ฟังก์ชันที่จะเปลี่ยนแปลงค่า approve
                   />
                   <span className="slider round"></span>
@@ -226,16 +191,91 @@ const ConsiderScholarship = () => {
                   textAlign: 'center',
                 }}
               >
-                <button
-                  style={{
-                    padding: '5px 10px',
-                    border: 'none',
-                    background: 'none',
-                    cursor: 'pointer',
-                  }}
-                >
-                  ➕
-                </button>
+                {application.approvalComment ? (
+                  <>
+                    <button
+                      style={{
+                        padding: '5px 10px',
+                        border: 'none',
+                        background: 'none',
+                        cursor: 'pointer',
+                      }}
+                      onClick={togglePopup}
+                    >
+                      📝
+                    </button>
+
+                    {/* ป๊อปอัพสำหรับแสดง approvalComment */}
+                    {showPopup && (
+                      <div
+                        style={{
+                          position: 'fixed',
+                          top: '50%',
+                          left: '50%',
+                          transform: 'translate(-50%, -50%)',
+                          backgroundColor: '#fff',
+                          padding: '20px',
+                          borderRadius: '8px',
+                          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                          zIndex: 1000,
+                        }}
+                      >
+                        <h3
+                          style={{
+                            fontSize: '24px',
+                            fontWeight: 'bold',
+                            color: '#007BFF',
+                            textAlign: 'center',
+                            textDecoration: 'underline',
+                          }}
+                        >
+                          Approval Comment
+                        </h3>
+                        <p>{application.approvalComment}</p>
+                        <button
+                          style={{
+                            marginTop: '10px',
+                            padding: '5px 10px',
+                            cursor: 'pointer',
+                            border: 'none',
+                            backgroundColor: '#007BFF',
+                            color: '#fff',
+                            borderRadius: '5px',
+                          }}
+                          onClick={togglePopup}
+                        >
+                          Close
+                        </button>
+                      </div>
+                    )}
+                    {/* Background overlay */}
+                    {showPopup && (
+                      <div
+                        style={{
+                          position: 'fixed',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '100%',
+                          backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                          zIndex: 999,
+                        }}
+                        onClick={togglePopup}
+                      ></div>
+                    )}
+                  </>
+                ) : (
+                  <button
+                    style={{
+                      padding: '5px 10px',
+                      border: 'none',
+                      background: 'none',
+                      cursor: 'pointer',
+                    }}
+                  >
+                    ➕
+                  </button>
+                )}
               </td>
             </tr>
           ))}

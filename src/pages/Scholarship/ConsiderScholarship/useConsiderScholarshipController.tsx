@@ -16,20 +16,22 @@ export interface ApplicationInfo {
   requestAmount: number | null;
   adminApproveTime: Date | null;
   isFirstTime: Date | null;
+  approvalComment: string | null;
 }
 export interface BasicScholarshipInfo {
   id: number;
   name: string;
   description: string;
 }
+
 const useConsiderScholarshipController = () => {
   const httpClient = useHttpClient();
   const navigate = useNavigate();
   const { roles } = useAuth();
   const [applications, setApplications] = useState<ApplicationInfo[]>([]);
-  //const [searchResults, setSearchResults] = useState<ApplicationInfo[]>([]);
+  const [filterResults, setFilterResults] = useState<ApplicationInfo[]>([]);
   const [scholarships, setScholarships] = useState<BasicScholarshipInfo[]>([]);
-  //const [searchText, setSearchText] = useState<string>('');
+  const [filterText, setFilterText] = useState<string>('');
 
   // const navigateToCreateScholarship = () => {
   //   navigate(Path.CREATE_SCHOLARSHIP);
@@ -48,26 +50,24 @@ const useConsiderScholarshipController = () => {
   }, [httpClient, roles]);
 
   useEffect(() => {
-    //if (searchText === '') {
-    // setSearchResults(applications);
-    // } else {
-    //   const results = scholarships.filter(
-    //     (scholarship) =>
-    //       scholarship.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    //       scholarship.description
-    //         .toLowerCase()
-    //         .includes(searchText.toLowerCase()),
-    //   );
-    //   setSearchResults(results);
-    // }
-  }, [scholarships, applications]); //, searchText
+    if (filterText === '') {
+      setFilterResults(applications);
+    } else {
+      const results = applications.filter((application) =>
+        application.scholarName
+          .toLowerCase()
+          .includes(filterText.toLowerCase()),
+      );
+      setFilterResults(results);
+    }
+  }, [filterText, applications]); //, searchText
 
   return {
     scholarships,
-    applications,
+    filterResults,
     //navigateToCreateScholarship,
-    //searchText,
-    //setSearchText,
+    filterText,
+    setFilterText,
   };
 };
 
