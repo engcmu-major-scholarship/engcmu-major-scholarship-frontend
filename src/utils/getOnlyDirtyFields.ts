@@ -1,11 +1,13 @@
-export function getOnlyDirtyFields<T extends Record<keyof T, unknown>>(
-  dirtyFields: Partial<Readonly<T>>,
-  data: T,
-): Partial<T> {
-  const dirtyData: Partial<T> = {};
+import { FieldNamesMarkedBoolean, FieldValues } from 'react-hook-form';
+
+export function getOnlyDirtyFields<TFieldValues extends FieldValues>(
+  dirtyFields: Partial<Readonly<FieldNamesMarkedBoolean<TFieldValues>>>,
+  data: TFieldValues,
+): Partial<TFieldValues> {
+  const dirtyData: Partial<TFieldValues> = {};
   for (const key in dirtyFields) {
     if (dirtyFields[key]) {
-      dirtyData[key as keyof T] = data[key as keyof T];
+      dirtyData[key] = data[key];
     }
   }
   return dirtyData;

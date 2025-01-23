@@ -11,7 +11,7 @@ type FormDataValue =
   | Blob[]
   | File[];
 
-export function objectToFromData<T extends Record<keyof T, FormDataValue>>(
+export function objectToFromData<T extends FormDataFields<T>>(
   obj: T,
 ): FormData {
   const formData = new FormData();
@@ -23,8 +23,10 @@ export function objectToFromData<T extends Record<keyof T, FormDataValue>>(
         formData.append(key, value);
       });
     } else if (obj[key] instanceof Date) {
-      formData.append(key, obj[key].toString());
+      formData.append(key, obj[key].toISOString());
     } else if (obj[key] instanceof File || obj[key] instanceof Blob) {
+      formData.append(key, obj[key]);
+    } else if (typeof obj[key] === 'string') {
       formData.append(key, obj[key]);
     } else {
       formData.append(key, JSON.stringify(obj[key]));
@@ -33,3 +35,7 @@ export function objectToFromData<T extends Record<keyof T, FormDataValue>>(
 
   return formData;
 }
+
+export type FormDataFields<T> = {
+  [K in keyof T]?: FormDataValue;
+};
