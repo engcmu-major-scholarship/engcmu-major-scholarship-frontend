@@ -17,6 +17,7 @@ import Apply from './pages/Apply/Apply';
 import Scholarship from './pages/Scholarship/Scholarship';
 import Profile from './pages/Profile/Profile';
 import Status from './pages/Status/Status';
+import ConsiderScholarship from './pages/Scholarship/ConsiderScholarship/ConsiderScholarship';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -78,6 +79,11 @@ const Router = () => {
                 element={<ConfigScholarship />}
               />
               <Route path={`${Path.APPLY}/:id?`} element={<Apply />} />
+              {/* admin route */}
+              <Route
+                path={`${Path.CONSIDER}`}
+                element={<ConsiderScholarship />}
+              />
             </Route>
           </Route>
           <Route path="*" element={<Error404 />} />
