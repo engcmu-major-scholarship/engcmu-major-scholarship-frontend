@@ -5,7 +5,6 @@ import { useAuth } from '../../hooks/useAuth';
 import { Api } from '../../constants/Api';
 import { Path } from '../../constants/Path';
 import { handleCMUAccountSignIn } from '../../utils/handleCMUAccountSignIn';
-// import { handleCMUAccountSignIn } from '../../utils/handleCMUAccountSignIn';
 
 const useCallbackController = () => {
   const [searchParams] = useSearchParams();
