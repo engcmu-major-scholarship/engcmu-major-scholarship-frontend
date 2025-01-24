@@ -21,7 +21,7 @@ const Navbar = () => {
 
   return (
     <div className="max-h-screen max-w-screen h-screen w-screen flex flex-col">
-      <div className="sticky top-0 h-[10%] p-4 bg-gradient-to-r from-[#dbe9ea] to-[#c3d591] flex flex-row justify-between items-center">
+      <div className="sticky top-0 h-[10%] p-4 bg-linear-to-r from-[#dbe9ea] to-[#c3d591] flex flex-row justify-between items-center">
         <button
           onClick={toggleSideBar}
           className="text-white transition-transform duration-300"
@@ -98,7 +98,7 @@ const Navbar = () => {
                 key={index}
                 to={path.link}
                 className={({ isActive }) =>
-                  `mx-4 my-2 p-3 text-center text-nowrap drop-shadow-md rounded-2xl ${isActive ? 'bg-gradient-to-r from-[#dbe9ea] to-[#c3d591]' : 'bg-transparent hover:bg-gray-200 text-gray-600 hover:text-black transition-colors duration-300 ease-in-out'}`
+                  `mx-4 my-2 p-3 text-center text-nowrap drop-shadow-md rounded-2xl ${isActive ? 'bg-linear-to-r from-[#dbe9ea] to-[#c3d591]' : 'bg-transparent hover:bg-gray-200 text-gray-600 hover:text-black transition-colors duration-300 ease-in-out'}`
                 }
               >
                 {path.label}
