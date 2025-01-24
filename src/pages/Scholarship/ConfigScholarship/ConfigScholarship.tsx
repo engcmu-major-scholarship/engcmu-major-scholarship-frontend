@@ -176,7 +176,7 @@ const ConfigScholarship = () => {
               />
               <label
                 htmlFor="switch-component-desc"
-                className="absolute top-0 left-0 w-10 h-10 bg-white rounded-full border border-slate-300 shadow-sm transition-transform duration-300 peer-checked:translate-x-14 peer-checked:border-slate-800 cursor-pointer"
+                className="absolute top-0 left-0 w-10 h-10 bg-white rounded-full border border-slate-300 shadow-xs transition-transform duration-300 peer-checked:translate-x-14 peer-checked:border-slate-800 cursor-pointer"
               ></label>
             </div>
             <label
