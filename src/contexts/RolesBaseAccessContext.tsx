@@ -8,7 +8,6 @@ export interface PathInfo {
 
 export interface RolesBaseAccessContextType {
   accessibles: PathInfo[];
-  setAccessibles: Dispatch<SetStateAction<PathInfo[]>>;
   isSideBarOpen: boolean;
   setIsSideBarOpen: Dispatch<SetStateAction<boolean>>;
   isProfileMenuOpen: boolean;
@@ -18,7 +17,6 @@ export interface RolesBaseAccessContextType {
 export const RolesBaseAccessContext = createContext<RolesBaseAccessContextType>(
   {
     accessibles: [],
-    setAccessibles: () => {},
     isSideBarOpen: false,
     setIsSideBarOpen: () => {},
     isProfileMenuOpen: false,
