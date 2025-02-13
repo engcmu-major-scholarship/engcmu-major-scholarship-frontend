@@ -4,15 +4,11 @@ import { useAuth } from '../../hooks/useAuth';
 import { RolesBaseAccessContext } from '../../contexts/RolesBaseAccessContext';
 import { handleCMUAccountSignIn } from '../../utils/handleCMUAccountSignIn';
 import useNavbarController from './useNavbarController';
-import { Role } from '../../types/Roles';
 
 const Navbar = () => {
-  const { toggleSideBar, toggleProfileMenu, navigateToProfile, logout } =
-    useNavbarController();
-  const { CMUAccount, roles } = useAuth();
-  const { accessibles, isSideBarOpen, isProfileMenuOpen } = useContext(
-    RolesBaseAccessContext,
-  );
+  const { toggleSideBar } = useNavbarController();
+  const { CMUAccount } = useAuth();
+  const { accessibles, isSideBarOpen } = useContext(RolesBaseAccessContext);
 
   return (
     <div className="max-h-screen max-w-screen h-screen w-screen flex flex-row">
@@ -21,14 +17,10 @@ const Navbar = () => {
           isSideBarOpen ? 'w-80 translate-x-0' : 'w-22 translate-x-0'
         }`}
       >
-        <div className="flex flex-col gap-2 overflow-hidden">
+        <div className="flex flex-col gap-4 overflow-hidden">
           <div className="flex flex-col overflow-hidden">
             {CMUAccount ? (
-              <button
-                type="button"
-                onClick={toggleProfileMenu}
-                className="flex flex-row gap-2 items-center mx-4 p-3 text-nowrap drop-shadow-md rounded-2xl"
-              >
+              <div className="flex flex-row gap-2 items-center mx-4 p-3 text-nowrap drop-shadow-md rounded-2xl">
                 <span>
                   <svg
                     width="25"
@@ -68,12 +60,12 @@ const Navbar = () => {
                 >
                   {CMUAccount}
                 </span>
-              </button>
+              </div>
             ) : (
               <button
                 type="button"
                 onClick={handleCMUAccountSignIn}
-                className="flex flex-row gap-2 items-center mx-4 p-3 text-nowrap drop-shadow-md rounded-2xl"
+                className="flex flex-row gap-2 items-center mx-4 p-3 text-nowrap drop-shadow-md rounded-2xl cursor-pointer"
               >
                 <span>
                   <svg
@@ -155,31 +147,7 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-
       <Outlet />
-
-      <div
-        className={`fixed right-0 h-fit bg-white drop-shadow-md transition-all duration-300 ease-in-out ${
-          isProfileMenuOpen ? 'w-48 -translate-x-0' : 'w-0 translate-x-full'
-        }`}
-      >
-        <div className="flex flex-col p-4">
-          {roles.includes(Role.STUDENT) && (
-            <button
-              onClick={navigateToProfile}
-              className="block text-center text-nowrap py-2 hover:underline"
-            >
-              โปรไฟล์
-            </button>
-          )}
-          <button
-            onClick={logout}
-            className="block text-center text-nowrap py-2 hover:underline"
-          >
-            ออกจากระบบ
-          </button>
-        </div>
-      </div>
     </div>
   );
 };

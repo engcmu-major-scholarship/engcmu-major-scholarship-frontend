@@ -15,5 +15,5 @@ export function createCMUAccountSignInUrl() {
 }
 
 export function handleCMUAccountSignIn() {
-  window.location.href = createCMUAccountSignInUrl();
+  window.location.replace(createCMUAccountSignInUrl());
 }
