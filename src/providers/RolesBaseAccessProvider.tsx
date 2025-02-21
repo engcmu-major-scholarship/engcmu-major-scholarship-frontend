@@ -108,8 +108,8 @@ const studentPaths: PathInfo[] = [
     link: Path.HISTORY,
     icon: (
       <svg
-        width="25"
-        height="25"
+        width="23"
+        height="23"
         xmlns="http://www.w3.org/2000/svg"
         shapeRendering="geometricPrecision"
         textRendering="geometricPrecision"
@@ -130,8 +130,8 @@ const studentPaths: PathInfo[] = [
     link: Path.PROFILE,
     icon: (
       <svg
-        height="25"
-        width="25"
+        height="23"
+        width="23"
         xmlns="http://www.w3.org/2000/svg"
         xmlnsXlink="http://www.w3.org/1999/xlink"
         viewBox="0 0 472.615 472.615"

@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <div className="max-h-screen max-w-screen h-screen w-screen flex flex-row">
       <div
-        className={`flex flex-col justify-between h-full py-2 bg-[#E4E8DB] drop-shadow-md transition-all duration-300 ease-in-out overflow-y-auto rounded-r-3xl ${
+        className={`flex flex-col justify-between h-full py-2 bg-[#E4E8DB] drop-shadow-2xl transition-all duration-300 ease-in-out overflow-y-auto rounded-r-3xl ${
           isSideBarOpen ? 'w-80 translate-x-0' : 'w-22 translate-x-0'
         }`}
       >
@@ -96,7 +96,7 @@ const Navbar = () => {
               </button>
             )}
           </div>
-          <div className="flex flex-col gap-1 overflow-hidden">
+          <div className="flex flex-col gap-1 overflow-x-hidden overflow-y-auto">
             {accessibles.map((path, index) => (
               <NavLink
                 key={index}
