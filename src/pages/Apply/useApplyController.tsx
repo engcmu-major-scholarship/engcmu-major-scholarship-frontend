@@ -136,7 +136,7 @@ const useApplyController = () => {
   };
 
   const submitApplication = () => {
-    return httpClient.patch(`${Api.APPLICATION_SUBMIT}/${id}`);
+    return httpClient.patch(`${Api.APPLICATION_SUBMIT}/${id}`); // FIXME: Id is undefined when create and submit
   };
 
   const onSave = (data: ApplyData) => {
