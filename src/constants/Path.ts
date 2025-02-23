@@ -13,6 +13,7 @@ export enum Path {
   CONSIDER = '/consider',
   RECIPIENT = '/recipient',
   CONFIG_SCHOLARSHIP = '/scholarship/config',
+  OFFICIAL_PAPER = '/officialpaper',
 
   // Auth
   SIGNIN = '/signin',
