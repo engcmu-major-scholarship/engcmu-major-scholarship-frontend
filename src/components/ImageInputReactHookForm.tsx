@@ -47,6 +47,7 @@ const ImageInputReactHookForm = <
       {watch(name) && watch(name)?.length !== 0 ? (
         <img
           src={URL.createObjectURL(watch(name)[0])}
+          alt="preview"
           className="w-full h-fit object-contain"
         />
       ) : (

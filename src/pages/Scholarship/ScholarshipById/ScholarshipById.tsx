@@ -3,6 +3,15 @@ import useScholarshipByIdController from './useScholarshipByIdController';
 const ScholarshipById = () => {
   const { scholarship, navigateBack } = useScholarshipByIdController();
 
+  const showDateOptions: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  };
+
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
       <div className="flex flex-col px-24 py-4 gap-4">
@@ -11,7 +20,7 @@ const ScholarshipById = () => {
         </div>
         <p className="flex flex-col text-gray-700">
           <span className="font-semibold">วันที่เปิดรับสมัคร</span>
-          <span>{`${scholarship?.openDate.toLocaleDateString()} - ${scholarship?.closeDate.toLocaleDateString()}`}</span>
+          <span>{`${scholarship?.openDate.toLocaleString(undefined, showDateOptions)} - ${scholarship?.closeDate.toLocaleString(undefined, showDateOptions)}`}</span>
         </p>
         {scholarship?.defaultBudget && (
           <p className="flex flex-col text-gray-700">

@@ -9,6 +9,7 @@ export enum Api {
   CURRENT_YEAR_SEMESTER = '/setting/current-year-semester',
   // STUDENT = '/student',
   STUDENT_PROFILE = '/student',
+  ADVISOR = '/advisor',
 
   // Auth
   SIGNIN = '/auth/signin',

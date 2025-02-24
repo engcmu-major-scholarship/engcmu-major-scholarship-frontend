@@ -1,4 +1,4 @@
-import DatePickerReactHookForm from '../../../components/DatePickerReactHookForm';
+import DateTimePickerReactHookForm from '../../../components/DateTimePickerReactHookForm';
 import Modal from '../../../components/Modal';
 import PDFInputReactHookForm from '../../../components/PDFInputReactHookForm';
 import useConfigScholarshipController from './useConfigScholarshipController';
@@ -51,6 +51,7 @@ const ConfigScholarship = () => {
               className="border-2 text-sm rounded-lg w-full p-2.5"
               {...register('defaultBudget', {
                 min: { value: 1, message: 'จำนวนเงินต้องมากกว่า 1' },
+                valueAsNumber: true,
               })}
             />
             {errors.defaultBudget && (
@@ -62,7 +63,7 @@ const ConfigScholarship = () => {
         </div>
         <div className="flex flex-row gap-4">
           <div className="w-1/4">
-            <DatePickerReactHookForm
+            <DateTimePickerReactHookForm
               register={register}
               registerOptions={{
                 required: 'ต้องระบุวันเปิดรับสมัคร',
@@ -75,7 +76,7 @@ const ConfigScholarship = () => {
             />
           </div>
           <div className="w-1/4">
-            <DatePickerReactHookForm
+            <DateTimePickerReactHookForm
               register={register}
               registerOptions={{
                 required: 'ต้องระบุวันปิดรับสมัคร',
@@ -176,7 +177,7 @@ const ConfigScholarship = () => {
               />
               <label
                 htmlFor="switch-component-desc"
-                className="absolute top-0 left-0 w-10 h-10 bg-white rounded-full border border-slate-300 shadow-sm transition-transform duration-300 peer-checked:translate-x-14 peer-checked:border-slate-800 cursor-pointer"
+                className="absolute top-0 left-0 w-10 h-10 bg-white rounded-full border border-slate-300 shadow-xs transition-transform duration-300 peer-checked:translate-x-14 peer-checked:border-slate-800 cursor-pointer"
               ></label>
             </div>
             <label
@@ -230,7 +231,9 @@ const ConfigScholarship = () => {
       {isSubmitModalOpen && (
         <Modal>
           <div className="w-1/3 h-1/3 p-12 bg-white rounded-lg flex flex-col items-center justify-center gap-5">
-            <div className="text-2xl">ต้องการบันทึกทุนหรือไม่</div>
+            <div className="text-2xl">
+              ต้องการ{id ? 'แก้ไข' : 'เพิ่ม'}ทุนหรือไม่
+            </div>
             <div className="flex flex-row gap-4">
               <button
                 className="border border-solid border-black py-3 px-8 text-lg rounded-2xl"
@@ -239,7 +242,7 @@ const ConfigScholarship = () => {
                 ยกเลิก
               </button>
               <button
-                className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl"
+                className="bg-[#dbe9ea] hover:bg-[#a9b3b3] text-black py-3 px-8 text-lg rounded-2xl"
                 onClick={(e) => {
                   setIsSubmitModalOpen(false);
                   handleSubmit(onSubmit)(e);

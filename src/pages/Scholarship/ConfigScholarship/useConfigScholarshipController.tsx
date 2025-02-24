@@ -96,7 +96,7 @@ const useConfigScholarshipController = () => {
           : undefined,
         scholarDoc: touchedFields.scholarDoc ? data.scholarDoc[0] : undefined,
         appDoc: touchedFields.appDoc ? data.appDoc[0] : undefined,
-      } as unknown as CreateOrEditScholarshipForm);
+      });
       httpClient
         .patch(`${Api.SCHOLARSHIP}/${id}`, formData, {
           headers: {
@@ -124,7 +124,7 @@ const useConfigScholarshipController = () => {
             : data.defaultBudget,
         scholarDoc: data.scholarDoc[0],
         appDoc: data.appDoc[0],
-      } as unknown as CreateOrEditScholarshipForm);
+      });
       httpClient
         .post(Api.SCHOLARSHIP, formData, {
           headers: {
