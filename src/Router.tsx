@@ -17,7 +17,7 @@ import Apply from './pages/Apply/Apply';
 import Scholarship from './pages/Scholarship/Scholarship';
 import Profile from './pages/Profile/Profile';
 import Status from './pages/Status/Status';
-import ConsiderScholarship from './pages/Scholarship/ConsiderScholarship/ConsiderScholarship';
+import ConsiderScholarship from './pages/ConsiderScholarship/ConsiderScholarship';
 
 const providersGiver = ([...providers]: (({
   children,
