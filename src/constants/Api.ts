@@ -10,6 +10,7 @@ export enum Api {
   // STUDENT = '/student',
   STUDENT_PROFILE = '/student',
   ADVISOR = '/advisor',
+  RECIPIENT = '/application/recipient',
 
   // Auth
   SIGNIN = '/auth/signin',
