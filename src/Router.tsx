@@ -17,7 +17,7 @@ import Apply from './pages/Apply/Apply';
 import Scholarship from './pages/Scholarship/Scholarship';
 import Profile from './pages/Profile/Profile';
 import Status from './pages/Status/Status';
-import ScholarRecipient from './pages/ScholarRecipient/ScholarRecipient';
+import Recipient from './pages/Recipient/Recipient';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -74,7 +74,7 @@ const Router = () => {
               <Route path={Path.PROFILE} element={<Profile />} />
               <Route path={Path.STATUS} element={<Status />} />
               <Route path={Path.HISTORY} element={<History />} />
-              <Route path={Path.RECIPIENT} element={<ScholarRecipient />} />
+              <Route path={Path.RECIPIENT} element={<Recipient />} />
               <Route
                 path={`${Path.CONFIG_SCHOLARSHIP}/:id?`}
                 element={<ConfigScholarship />}

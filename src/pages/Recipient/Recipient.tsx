@@ -1,6 +1,6 @@
-import useSRController from './useSRController';
+import useRecipientController from './useRecipientController';
 
-const Something = () => {
+const Recipient = () => {
   const {
     recipientData,
     YAS,
@@ -8,7 +8,7 @@ const Something = () => {
     selectedYear,
     onYearChange,
     onSemChange,
-  } = useSRController();
+  } = useRecipientController();
 
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
@@ -99,4 +99,5 @@ const Something = () => {
     </div>
   );
 };
-export default Something;
+
+export default Recipient;
