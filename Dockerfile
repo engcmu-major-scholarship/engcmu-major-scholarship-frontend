@@ -44,9 +44,9 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 COPY . .
 # Run the build script.
 RUN --mount=type=secret,id=dotenv_key,env=DOTENV_KEY \
-    npx dotenv-vault@latest local decrypt $DOTENV_KEY > .env && \
-    npm run build && \
-    rm .env
+    npx dotenv-vault@latest local decrypt $DOTENV_KEY > .env
+RUN npm run build
+RUN rm .env
 
 ################################################################################
 # Create new stage for run the application using NGINX
