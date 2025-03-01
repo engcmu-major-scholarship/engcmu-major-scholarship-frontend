@@ -13,17 +13,27 @@ interface Student {
 
 export function useOfficialPaperController() {
   const [formData, setFormData] = useState({
-    title: "",
-    detail: "",
-    semester: "",
-    description: "",
-    totalAmount: "",
-    totalText: "",
+    title: '',
+    detail: '',
+    semester: '',
+    year: '',
+    description: '',
+    totalAmount: '',
+    totalText: '',
     date: new Date().toISOString().split("T")[0],
     students: [] as Student[],
-    approver: "",
-    additionalNotes: "",
-    doclink: ""
+    approverName: '',
+    approverPosition: '',
+    additionalNotes: '',
+    facultySection: '',
+    tel: '',
+    documentNumber: '',
+    documentDate: '',
+    topic: '',
+    toApprover: '',
+    memoDetail: '',
+    memoApproverName: '',
+    memoApproverPosition: '',
   });
 
   const httpClient = useHttpClient();
