@@ -1,7 +1,14 @@
 import useSRController from './useSRController';
 
 const Something = () => {
-  const { recipientData } = useSRController();
+  const {
+    recipientData,
+    YAS,
+    selectedSemester,
+    selectedYear,
+    onYearChange,
+    onSemChange,
+  } = useSRController();
 
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto">
@@ -18,6 +25,44 @@ const Something = () => {
             </svg>
           </span>
           <span>รายชื่อผู้รับทุน</span>
+        </div>
+        <div className="flex flex-row gap-4">
+          <div className="flex flex-col w-1/4 gap-2">
+            <label htmlFor="year" className="text-sm font-medium">
+              ปีการศึกษา
+            </label>
+            <select
+              id="year"
+              className="border rounded-md p-2.5"
+              value={selectedYear}
+              onChange={onYearChange}
+            >
+              {YAS.map((yasmap) => (
+                <option key={yasmap.year} value={yasmap.year}>
+                  {yasmap.year}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col w-1/4 gap-2">
+            <label htmlFor="semester" className="text-sm font-medium">
+              เทอมการศึกษา
+            </label>
+            <select
+              id="semester"
+              className="border rounded-md p-2.5"
+              value={selectedSemester}
+              onChange={onSemChange}
+            >
+              {YAS.find((yas) => yas.year == selectedYear)?.semesters.map(
+                (sem) => (
+                  <option key={sem} value={sem}>
+                    {sem}
+                  </option>
+                ),
+              )}
+            </select>
+          </div>
         </div>
         {recipientData.length !== 0 ? (
           <table>
