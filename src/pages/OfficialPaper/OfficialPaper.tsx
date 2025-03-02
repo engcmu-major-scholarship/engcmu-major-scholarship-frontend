@@ -41,7 +41,7 @@ export default function DocumentForm() {
   };
 
   return (
-    <div className="h-full w-full flex flex-col overflow-y-auto font-sarabunTH">
+    <div className="h-full w-full flex flex-col overflow-y-auto font-sarabunTH -mt-4">
       <div className="flex flex-col items-center p-6 max-w-7xl mx-auto space-y-6">
         <div className="w-full bg-white p-6 shadow-lg rounded-lg">
           <div className="flex space-x-8">
@@ -324,10 +324,10 @@ export default function DocumentForm() {
         </div>
 
         {/* Download PDF Button */}
-        <div className="mt-6">
+        <div className="mt-6 w-full flex justify-end">
           <button 
             onClick={downloadPDF}
-            className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl">
+            className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl mr-8">
             ดาวน์โหลด PDF
           </button>
         </div>
