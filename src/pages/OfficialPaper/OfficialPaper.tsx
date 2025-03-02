@@ -5,38 +5,22 @@ import html2canvas from 'html2canvas';
 import { useRef } from "react";
 
 export default function DocumentForm() {
-  const { formData, handleChange } = useOfficialPaperController();
-  const pdfRef = useRef<HTMLDivElement | null>(null);
+  const { formData, handleChange, loading, error, formatCurrency } = useOfficialPaperController();
+  const documentRef = useRef<HTMLDivElement | null>(null);
+  const memoRef = useRef<HTMLDivElement | null>(null);
 
-  const downloadPDF = () => {
-    const input = pdfRef.current;
-    if (!input) {
-      console.log("pdfRef is not available");
+  const downloadPDF = (ref: React.RefObject<HTMLDivElement>, filename: string) => {
+    if (!ref.current) {
+      console.error('Ref is null');
       return;
     }
-    
-    html2canvas(input).then((canvas) => {
+    html2canvas(ref.current).then((canvas) => {
       const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4'); // 'mm' for millimeters, 'a4' for the page size
-  
-      // Get the dimensions of the A4 page
-      const pdfWidth = pdf.internal.pageSize.getWidth();
-      const pdfHeight = pdf.internal.pageSize.getHeight();
-  
-      // Calculate the scaling factor
-      const canvasWidth = canvas.width;
-      const canvasHeight = canvas.height;
-      const ratio = Math.min(pdfWidth / canvasWidth, pdfHeight / canvasHeight);
-  
-      // Calculate the X and Y position for centering the image on the page
-      const imgX = (pdfWidth - canvasWidth * ratio) / 2;
-      const imgY = (pdfHeight - canvasHeight * ratio) / 2;
-  
-      // Add the image to the PDF with the correct dimensions
-      pdf.addImage(imgData, 'PNG', imgX, imgY, canvasWidth * ratio, canvasHeight * ratio);
-  
-      // Save the PDF
-      pdf.save('เบิกเงินโครงการ');
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const imgWidth = 210;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+      pdf.save(filename);
     });
   };
 
@@ -44,9 +28,9 @@ export default function DocumentForm() {
     <div className="h-full w-full flex flex-col overflow-y-auto font-sarabunTH -mt-4">
       <div className="flex flex-col items-center p-6 max-w-7xl mx-auto space-y-6">
         <div className="w-full bg-white p-6 shadow-lg rounded-lg">
-          <div className="flex space-x-8">
+          <div className="flex flex-col md:flex-row md:space-x-8">
             {/* Left Section: แก้ไขเอกสาร */}
-            <div className="w-1/2">
+            <div className="w-full md:w-1/2 mb-6 md:mb-0">
               <h2 className="text-xl font-bold mb-4">แก้ไขเอกสาร</h2>
               <div className="space-y-4">
                 <input
@@ -115,7 +99,7 @@ export default function DocumentForm() {
               </div>
             </div>
             {/* Right Section: แก้ไขบันทึกข้อความ */}
-            <div className="w-1/2">
+            <div className="w-full md:w-1/2">
               <h2 className="text-xl font-bold mb-4">แก้ไขบันทึกข้อความ</h2>
               <div className="space-y-4">
                 <input
@@ -164,7 +148,7 @@ export default function DocumentForm() {
                   name="memoDetail"
                   value={formData.memoDetail}
                   onChange={handleChange}
-                  className="w-full border rounded p-2"
+                  className="w-full border rounded p-2 h-24"
                   placeholder="รายละเอียดเอกสาร"
                 />
                 <input
@@ -185,17 +169,31 @@ export default function DocumentForm() {
             </div>
           </div>
         </div>
+
+        {/* Loading and Error States */}
+        {loading && (
+          <div className="w-full text-center p-4 bg-blue-50 rounded-lg">
+            <p className="text-blue-600">กำลังโหลดข้อมูลนักศึกษา...</p>
+          </div>
+        )}
+        
+        {error && (
+          <div className="w-full text-center p-4 bg-red-50 rounded-lg">
+            <p className="text-red-600">{error}</p>
+          </div>
+        )}
+
         {/* Official Document Preview */}
         <div 
           className="w-full bg-white p-8 shadow-lg rounded-lg" 
-          ref={pdfRef}
+          ref={documentRef}
           style={{
             width: '210mm', 
             height: '297mm', 
             padding: '10mm', 
           }}>
           <div className="flex justify-center items-center">
-              <img src={garuda} className="w-24 h-24" />
+              <img src={garuda} className="w-24 h-24" alt="ครุฑ" />
           </div>
           <div className="mt-4">
             <h1 className="text-xl font-bold text-center">{formData.title || "ประกาศ"}</h1>
@@ -219,18 +217,21 @@ export default function DocumentForm() {
                   </tr>
                 </thead>
                 <tbody>
-                  {formData.students && formData.students.map((student, index) => (
-                    <tr key={student.id || index}>
-                      <td className="border border-gray-400 p-2 text-center">{index + 1}</td>
-                      <td className="border border-gray-400 p-2">{student.name}</td>
-                      <td className="border border-gray-400 p-2 text-center">{student.studentId}</td>
-                      <td className="border border-gray-400 p-2 text-center">{student.amount}</td>
-                      <td className="border border-gray-400 p-2 text-center">{student.degree}</td>
-                    </tr>
-                  ))}
-                  {(!formData.students || formData.students.length === 0) && (
+                  {formData.students && formData.students.length > 0 ? (
+                    formData.students.map((student, index) => (
+                      <tr key={student.id || index}>
+                        <td className="border border-gray-400 p-2 text-center">{index + 1}</td>
+                        <td className="border border-gray-400 p-2">{student.name}</td>
+                        <td className="border border-gray-400 p-2 text-center">{student.studentId}</td>
+                        <td className="border border-gray-400 p-2 text-right">{formatCurrency(student.amount)}</td>
+                        <td className="border border-gray-400 p-2">{student.degree}</td>
+                      </tr>
+                    ))
+                  ) : (
                     <tr>
-                      <td colSpan={5} className="border border-gray-400 p-2 text-center">ไม่มีข้อมูล</td>
+                      <td colSpan={5} className="border border-gray-400 p-2 text-center">
+                        {loading ? "กำลังโหลดข้อมูล..." : "ไม่มีข้อมูลนักศึกษาที่ได้รับการอนุมัติ"}
+                      </td>
                     </tr>
                   )}
                 </tbody>
@@ -239,8 +240,8 @@ export default function DocumentForm() {
                     <td colSpan={3} className="border border-gray-400 p-2 text-right font-bold">
                       รวมทั้งสิ้น
                     </td>
-                    <td className="border border-gray-400 p-2 text-center font-bold">
-                      {formData.totalAmount || 0}
+                    <td className="border border-gray-400 p-2 text-right font-bold">
+                      {formatCurrency(formData.totalAmount)}
                     </td>
                     <td className="border border-gray-400 p-2"></td>
                   </tr>
@@ -254,8 +255,8 @@ export default function DocumentForm() {
             <div className="mt-12 text-center">
               <div className="flex justify-end mr-16">
                 <div className="text-center">
-                  <div>({formData.approverName})</div>
-                  <div>{formData.approverPosition}</div>
+                  <div>({formData.approverName || "..."})</div>
+                  <div>{formData.approverPosition || "..."}</div>
                 </div>
               </div>
             </div>
@@ -265,70 +266,75 @@ export default function DocumentForm() {
         {/* Memo Document Preview */}
         <div 
           className="w-full bg-white p-8 shadow-lg rounded-lg" 
-          ref={pdfRef}
+          ref={memoRef}
           style={{
             width: '210mm', 
             height: '297mm', 
             padding: '10mm', 
           }}>
           <div className="ml-5 mt-5">
-            <img src={garuda} className="w-20 h-20" />
+            <img src={garuda} className="w-20 h-20" alt="ครุฑ" />
             <h1 className="text-2xl font-semi-bold text-center -mt-7">บันทึกข้อความ</h1>
           </div>
           <div className="flex justify-between items-baseline w-full">
             <div className="flex items-baseline flex-1">
               <h1 className="text-l font-semi-bold whitespace-nowrap">ส่วนงาน</h1>
-              <div className="flex-grow border-b border-dotted border-black "></div>
-              <h1 className="text-l whitespace-nowrap flex">{formData.facultySection}</h1>
-              <div className="flex-grow border-b border-dotted border-black "></div>
+              <div className="flex-grow border-b border-dotted border-black mx-1"></div>
+              <h1 className="text-l whitespace-nowrap flex">{formData.facultySection || "..."}</h1>
+              <div className="flex-grow border-b border-dotted border-black mx-1"></div>
             </div>
             <div className="flex items-baseline ml-4">
               <h1 className="text-l font-extralight whitespace-nowrap">โทร</h1>
-                <h1 className="text-l whitespace-nowrap ml-1">{formData.tel}</h1>
+                <h1 className="text-l whitespace-nowrap ml-1">{formData.tel || "..."}</h1>
               <div className="border-b border-dotted border-black w-32"></div>
             </div>
           </div>
           <div className="flex items-baseline w-full mb-4">
             <div className="flex items-baseline flex-1">
               <h1 className="text-l font-semi-bold whitespace-nowrap">ที่</h1>
-                <h1 className="text-l ml-1">{formData.documentNumber}</h1>
+                <h1 className="text-l ml-1">{formData.documentNumber || "..."}</h1>
               <div className="flex-grow border-b border-dotted border-black"></div>
             </div>
             <div className="flex items-baseline">
               <h1 className="text-l font-semi-bold whitespace-nowrap">วันที่</h1>
-                <h1 className="text-l ml-1">{formData.documentDate}</h1>
+                <h1 className="text-l ml-1">{formData.documentDate || "..."}</h1>
               <div className="border-b border-dotted border-black w-32"></div>
             </div>
           </div>
             <div className="flex items-baseline mb-4">
               <span className="font-semi-bold whitespace-nowrap mr-1">เรื่อง</span>
-                <span className="px-1">{formData.topic}</span>
+                <span className="px-1">{formData.topic || "..."}</span>
             </div>
             <div className="w-full border-t border-dashed border-black my-4" />
             <div className="flex items-baseline mb-6">
               <span className="font-semibold whitespace-nowrap mr-1">เรียน</span>
-                <span className="px-1">{formData.toApprover}</span>
+                <span className="px-1">{formData.toApprover || "..."}</span>
             </div>
             <div className="text-justify whitespace-pre-wrap break-words max-w-full overflow-hidden mb-8">
-              {formData.memoDetail }
+              {formData.memoDetail || "..."}
             </div>
             <div className="mt-12 text-center">
               <div className="flex justify-end mr-16">
                 <div className="text-center">
-                  <div>({formData.memoApproverName})</div>
-                  <div>{formData.memoApproverPosition}</div>
+                  <div>({formData.memoApproverName || "..."})</div>
+                  <div>{formData.memoApproverPosition || "..."}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Download PDF Button */}
-        <div className="mt-6 w-full flex justify-end">
+        {/* Download PDF Buttons */}
+        <div className="mt-6 w-full flex justify-end space-x-4">
           <button 
-            onClick={downloadPDF}
+            onClick={() => downloadPDF(documentRef, 'ประกาศทุนการศึกษา.pdf')}
+            className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl">
+            ดาวน์โหลดประกาศ
+          </button>
+          <button 
+            onClick={() => downloadPDF(memoRef, 'บันทึกข้อความ.pdf')}
             className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl mr-8">
-            ดาวน์โหลด PDF
+            ดาวน์โหลดบันทึกข้อความ
           </button>
         </div>
       </div>
