@@ -2,6 +2,7 @@ export enum Path {
   // Public
   HOME = '/',
   SCHOLARSHIP = '/scholarship',
+  ANNOUNCEMENT = '/announcement',
 
   // Student
   PROFILE = '/profile',
@@ -13,6 +14,7 @@ export enum Path {
   CONSIDER = '/consider',
   RECIPIENT = '/recipient',
   CONFIG_SCHOLARSHIP = '/scholarship/config',
+  CONFIG_ANNOUNCEMENT = '/announcement/config',
 
   // Auth
   SIGNIN = '/signin',
