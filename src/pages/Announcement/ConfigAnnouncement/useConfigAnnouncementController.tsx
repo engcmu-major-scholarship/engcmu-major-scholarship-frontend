@@ -46,15 +46,19 @@ const useConfigAnnouncementController = () => {
         .get<GetScholarship>(`${Api.ANNOUNCEMENT}/admin/${id}`)
         .then((response) => {
           reset(response);
-          fetch(response.docLink).then((blobResponse) => {
-            blobResponse.blob().then((blob) => {
-              const doc = new File([blob], response.name, {
-                type: blob.type,
+          if (response.docLink) {
+            fetch(response.docLink).then((blobResponse) => {
+              blobResponse.blob().then((blob) => {
+                const doc = new File([blob], response.name, {
+                  type: blob.type,
+                });
+                resetField('doc', { defaultValue: [doc] });
+                setIsDocLoading(false);
               });
-              resetField('doc', { defaultValue: [doc] });
-              setIsDocLoading(false);
             });
-          });
+          } else {
+            setIsDocLoading(false);
+          }
         });
     }
   }, [httpClient, id, reset, resetField, roles]);

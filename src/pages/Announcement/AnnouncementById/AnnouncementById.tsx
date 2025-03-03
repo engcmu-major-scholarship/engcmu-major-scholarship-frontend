@@ -69,7 +69,8 @@ const AnnouncementById = () => {
         )}
         <div className="flex justify-end">
           <button
-            className=" text-black font-bold border border-solid border-black py-4 px-6 rounded-2xl"
+            type="button"
+            className=" text-black font-bold border border-solid border-black py-4 px-6 rounded-2xl cursor-pointer"
             onClick={navigateBack}
           >
             กลับหน้าข่าวประชาสัมพันธ์ทั้งหมด
