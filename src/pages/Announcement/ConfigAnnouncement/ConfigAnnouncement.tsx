@@ -1,4 +1,3 @@
-import DateTimePickerReactHookForm from '../../../components/DateTimePickerReactHookForm';
 import Modal from '../../../components/Modal';
 import PDFInputReactHookForm from '../../../components/PDFInputReactHookForm';
 import useConfigAnnouncementController from './useConfigAnnouncementController';
@@ -9,8 +8,7 @@ const ConfigAnnouncement = () => {
     register,
     watch,
     errors,
-    isScholarDocLoading,
-    isAppDocLoading,
+    isDocLoading,
     isCancelModalOpen,
     setIsCancelModalOpen,
     isSubmitModalOpen,
@@ -24,82 +22,36 @@ const ConfigAnnouncement = () => {
     <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
       <div className="flex flex-col px-24 py-4 gap-4">
         <div className="w-full text-xl text-center">
-          {id ? 'แก้ไขทุน' : 'สร้างทุน'}
+          {id ? 'แก้ไข' : 'สร้าง'}ข่าวประชาสัมพันธ์
         </div>
         <div className="flex flex-row gap-4">
-          <div className="flex flex-col w-3/4 gap-2">
-            <label htmlFor="scholarName" className="text-sm font-medium">
-              ชื่อทุน
+          <div className="flex flex-col w-2/4 gap-2">
+            <label htmlFor="announcementName" className="text-sm font-medium">
+              ชื่อข่าวประชาสัมพันธ์
             </label>
             <input
-              id="scholarName"
+              id="announcementName"
               type="text"
               className="border-2 text-sm rounded-lg w-full p-2.5"
-              {...register('name', { required: 'ต้องระบุชื่อทุน' })}
+              {...register('name', {
+                required: 'ต้องระบุชื่อข่าวประชาสัมพันธ์',
+              })}
             />
             {errors.name && (
               <div className="text-red-500 text-sm">{errors.name.message}</div>
             )}
           </div>
-          <div className="flex flex-col w-1/4 gap-2">
-            <label htmlFor="budget" className="text-sm font-medium">
-              จำนวนเงินทุน
-            </label>
-            <input
-              id="budget"
-              type="number"
-              className="border-2 text-sm rounded-lg w-full p-2.5"
-              {...register('defaultBudget', {
-                min: { value: 1, message: 'จำนวนเงินต้องมากกว่า 1' },
-                valueAsNumber: true,
-              })}
-            />
-            {errors.defaultBudget && (
-              <div className="text-red-500 text-sm">
-                {errors.defaultBudget.message}
-              </div>
-            )}
-          </div>
-        </div>
-        <div className="flex flex-row gap-4">
-          <div className="w-1/4">
-            <DateTimePickerReactHookForm
-              register={register}
-              registerOptions={{
-                required: 'ต้องระบุวันเปิดรับสมัคร',
-                valueAsDate: true,
-              }}
-              watch={watch}
-              error={errors.openDate?.message}
-              name="openDate"
-              label="วันเปิดรับสมัคร"
-            />
-          </div>
-          <div className="w-1/4">
-            <DateTimePickerReactHookForm
-              register={register}
-              registerOptions={{
-                required: 'ต้องระบุวันปิดรับสมัคร',
-                validate: (value) =>
-                  value > watch('openDate') ||
-                  'วันปิดรับสมัครต้องมากกว่าวันเปิดรับสมัคร',
-                valueAsDate: true,
-              }}
-              watch={watch}
-              error={errors.closeDate?.message}
-              name="closeDate"
-              label="วันปิดรับสมัคร"
-            />
-          </div>
         </div>
         <div className="flex flex-col w-full gap-2">
           <label htmlFor="description" className="text-sm font-medium">
-            รายละเอียดทุน
+            รายละเอียดข่าวประชาสัมพันธ์
           </label>
           <textarea
             id="description"
             className="border-2 text-sm rounded-lg w-full h-40 p-2.5"
-            {...register('description', { required: 'ต้องระบุรายละเอียดทุน' })}
+            {...register('description', {
+              required: 'ต้องระบุรายละเอียดข่าวประชาสัมพันธ์',
+            })}
           />
           {errors.description && (
             <div className="text-red-500 text-sm">
@@ -107,64 +59,23 @@ const ConfigAnnouncement = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col w-full gap-2">
-          <label htmlFor="requirement" className="text-sm font-medium">
-            เงื่อนไขการสมัคร
-          </label>
-          <textarea
-            id="requirement"
-            className="border-2 text-sm rounded-lg w-full h-40 p-2.5"
-            {...register('requirement', {
-              required: 'ต้องระบุเงื่อนไขการสมัคร',
-            })}
-          />
-          {errors.requirement && (
-            <div className="text-red-500 text-sm">
-              {errors.requirement.message}
-            </div>
-          )}
-        </div>
         <PDFInputReactHookForm
           register={register}
           registerOptions={{
-            required: { value: !id, message: 'ต้องแนบเอกสารรายละเอียดทุน' },
             validate: (value) => {
               if (value[0]) {
                 return (
                   value[0].type === 'application/pdf' ||
                   'เอกสารต้องเป็นไฟล์ PDF'
                 );
-              } else {
-                return 'ต้องแนบเอกสารรายละเอียดทุน';
               }
             },
           }}
           watch={watch}
-          name="scholarDoc"
-          label="เอกสารรายละเอียดทุน"
-          error={errors.scholarDoc?.message}
-          isLoading={isScholarDocLoading}
-        />
-        <PDFInputReactHookForm
-          register={register}
-          registerOptions={{
-            required: { value: !id, message: 'ต้องแนบเอกสารการสมัคร' },
-            validate: (value) => {
-              if (value[0]) {
-                return (
-                  value[0].type === 'application/pdf' ||
-                  'เอกสารต้องเป็นไฟล์ PDF'
-                );
-              } else {
-                return 'ต้องแนบเอกสารการสมัคร';
-              }
-            },
-          }}
-          watch={watch}
-          name="appDoc"
-          label="เอกสารการสมัคร"
-          error={errors.appDoc?.message}
-          isLoading={isAppDocLoading}
+          name="doc"
+          label="เอกสารรายละเอียดข่าวประชาสัมพันธ์"
+          error={errors.doc?.message}
+          isLoading={isDocLoading}
         />
         <div className="flex flex-row gap-4">
           <div className="flex flex-row gap-2">
@@ -209,7 +120,7 @@ const ConfigAnnouncement = () => {
         <Modal>
           <div className="w-1/3 h-1/3 p-12 bg-white rounded-lg flex flex-col items-center justify-center gap-5">
             <div className="text-2xl">
-              ต้องการยกเลิกการ{id ? 'แก้ไข' : 'เพิ่ม'}ทุนหรือไม่
+              ต้องการยกเลิกการ{id ? 'แก้ไข' : 'เพิ่ม'}ข่าวประชาสัมพันธ์หรือไม่
             </div>
             <div className="flex flex-row gap-4">
               <button
@@ -232,7 +143,7 @@ const ConfigAnnouncement = () => {
         <Modal>
           <div className="w-1/3 h-1/3 p-12 bg-white rounded-lg flex flex-col items-center justify-center gap-5">
             <div className="text-2xl">
-              ต้องการ{id ? 'แก้ไข' : 'เพิ่ม'}ทุนหรือไม่
+              ต้องการ{id ? 'แก้ไข' : 'เพิ่ม'}ข่าวประชาสัมพันธ์หรือไม่
             </div>
             <div className="flex flex-row gap-4">
               <button

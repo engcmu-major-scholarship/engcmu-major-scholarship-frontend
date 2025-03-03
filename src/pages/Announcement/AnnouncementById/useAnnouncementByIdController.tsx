@@ -5,15 +5,10 @@ import { Api } from '../../../constants/Api';
 import { useAuth } from '../../../hooks/useAuth';
 import { Role } from '../../../types/Roles';
 
-export interface Scholarship {
+export interface Announcement {
   name: string;
   description: string;
-  requirement: string;
-  defaultBudget: number | null;
-  openDate: Date;
-  closeDate: Date;
-  docLink: string;
-  appDocLink: string;
+  docLink: string | null;
   published: boolean;
 }
 
@@ -22,24 +17,24 @@ const useAnnouncementByIdController = () => {
   const httpClient = useHttpClient();
   const { id } = useParams();
   const navigate = useNavigate();
-  const [scholarship, setScholarship] = useState<Scholarship | null>(null);
+  const [announcement, setAnnouncement] = useState<Announcement | null>(null);
 
   const navigateBack = () => {
     navigate(-1);
   };
 
   useEffect(() => {
-    let endpoint: string = `${Api.SCHOLARSHIP}/${id}`;
+    let endpoint: string = `${Api.ANNOUNCEMENT}/${id}`;
     if (roles.includes(Role.ADMIN)) {
-      endpoint = `${Api.SCHOLARSHIP}/admin/${id}`;
+      endpoint = `${Api.ANNOUNCEMENT}/admin/${id}`;
     }
-    httpClient.get<Scholarship>(endpoint).then((response) => {
-      setScholarship(response);
+    httpClient.get<Announcement>(endpoint).then((response) => {
+      setAnnouncement(response);
     });
   }, [id, httpClient, roles]);
 
   return {
-    scholarship,
+    announcement,
     navigateBack,
   };
 };
