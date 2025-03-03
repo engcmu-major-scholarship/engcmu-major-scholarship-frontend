@@ -109,7 +109,7 @@ const useApplyController = () => {
         : data.amount,
       doc: data.documents[0],
     });
-    return httpClient.post(Api.APPLICATION, formData, {
+    return httpClient.post<number>(Api.APPLICATION, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -127,7 +127,6 @@ const useApplyController = () => {
         : undefined,
       doc: touchedFields.documents ? data.documents[0] : undefined,
     });
-    console.log('formData', formData);
     return httpClient.patch(`${Api.APPLICATION}/${id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -136,7 +135,11 @@ const useApplyController = () => {
   };
 
   const submitApplication = () => {
-    return httpClient.patch(`${Api.APPLICATION_SUBMIT}/${id}`); // FIXME: Id is undefined when create and submit
+    return submitApplicationById(Number(id));
+  };
+
+  const submitApplicationById = (appId: number) => {
+    return httpClient.patch(`${Api.APPLICATION_SUBMIT}/${appId}`);
   };
 
   const onSave = (data: ApplyData) => {
@@ -200,8 +203,8 @@ const useApplyController = () => {
         });
     } else {
       saveApplication(data)
-        .then(() => {
-          submitApplication()
+        .then((appId) => {
+          submitApplicationById(appId)
             .then(() => {
               navigateBack();
             })
