@@ -18,6 +18,8 @@ import Scholarship from './pages/Scholarship/Scholarship';
 import Profile from './pages/Profile/Profile';
 import Status from './pages/Status/Status';
 import Recipient from './pages/Recipient/Recipient';
+import Announcement from './pages/Announcement/Announcement';
+import ConfigAnnouncement from './pages/Announcement/ConfigAnnouncement/ConfigAnnouncement';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -63,6 +65,10 @@ const Router = () => {
               path={`${Path.SCHOLARSHIP}/:id?`}
               element={<Scholarship />}
             />
+            <Route
+              path={`${Path.ANNOUNCEMENT}/:id?`}
+              element={<Announcement />}
+            />
           </Route>
           <Route path={Path.SIGNOUT} element={<Signout />} />
           <Route element={<UnprotectedRoute />}>
@@ -79,10 +85,16 @@ const Router = () => {
                 path={`${Path.CONFIG_SCHOLARSHIP}/:id?`}
                 element={<ConfigScholarship />}
               />
+              <Route
+                path={`${Path.CONFIG_ANNOUNCEMENT}/:id?`}
+                element={<ConfigAnnouncement />}
+              />
               <Route path={`${Path.APPLY}/:id?`} element={<Apply />} />
             </Route>
           </Route>
-          <Route path="*" element={<Error404 />} />
+          <Route element={<Navbar />}>
+            <Route path="*" element={<Error404 />} />
+          </Route>
         </Route>
       </Routes>
     </BrowserRouter>

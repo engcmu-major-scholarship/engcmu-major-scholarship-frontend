@@ -38,7 +38,7 @@ const basePaths: PathInfo[] = [
   },
   {
     label: 'ข่าวประชาสัมพันธ์',
-    link: Path.SCHOLARSHIP,
+    link: Path.ANNOUNCEMENT,
     icon: (
       <svg
         width="25"
