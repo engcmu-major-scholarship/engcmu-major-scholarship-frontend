@@ -3,15 +3,15 @@ import { useHttpClient } from '../../hooks/useHttpClient';
 import { Api } from "../../constants/Api";
 
 interface Student {
-  id: number;
-  name: string;
-  studentId: string;
-  amount: string;
-  degree: string;
-  adminApprovalTime?: string;
+  appId: number,
+	studentId: string,
+	firstName: string,
+	lastName: string,
+	scholarName: string,
+	requestAmount: number,
 }
 
-export function useOfficialPaperController() {
+const useOfficialPaperController = () => {
   const [formData, setFormData] = useState({
     title: '',
     detail: '',
@@ -39,37 +39,21 @@ export function useOfficialPaperController() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const httpClient = useHttpClient();
+  const [recipient,setRecipient] = useState<Student[]>([]);
 
   useEffect(() => {
-    setLoading(true);
-    httpClient
-      .get<{ students?: Student[], doclink?: string }>(Api.SCHOLARSHIP)
-      .then((response) => {
-        console.log("API Response:", response);
-        const students = response.students ?? [];
-        const doclink = response.doclink ?? "";
-        
-
-        const approvedStudents = students.filter((s) => s.adminApprovalTime);
-        
-        const total = approvedStudents.reduce((sum, student) => {
-          return sum + (parseFloat(student.amount) || 0);
-        }, 0);
-        
-        setFormData((prev) => ({
-          ...prev,
-          students: approvedStudents,
-          totalAmount: total.toString(),
-          doclink: doclink,
-        }));
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching students:", error);
-        setError("ไม่สามารถดึงข้อมูลนักศึกษาได้");
-        setLoading(false);
-      });
-  }, []);
+    const fetchRecipient = async () => {
+      try{
+        const response = await httpClient.get<Student[]>(
+          `${Api.APPLICATION}/recipient/2567/2`
+        );
+        setRecipient(response);
+      }catch(error){
+          console.error("ไม่สามารถดึงข้อมูลนักศึกษาได้");
+        }
+      };
+      fetchRecipient();
+  }, [httpClient]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -80,5 +64,7 @@ export function useOfficialPaperController() {
     return num.toLocaleString('th-TH', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
 
-  return { formData, handleChange, loading, error, formatCurrency };
+  return { formData, handleChange, loading, error, formatCurrency, recipient,};
 }
+
+export default useOfficialPaperController;

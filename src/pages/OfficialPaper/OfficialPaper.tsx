@@ -1,11 +1,11 @@
-import { useOfficialPaperController } from "./useOfficialPaperController";
+import useOfficialPaperController from './useOfficialPaperController';
 import garuda from '/garuda_emblem.png';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { useRef } from "react";
 
 export default function DocumentForm() {
-  const { formData, handleChange, loading, error, formatCurrency } = useOfficialPaperController();
+  const { formData, handleChange, loading, error, formatCurrency, recipient } = useOfficialPaperController();
   const documentRef = useRef<HTMLDivElement | null>(null);
   const memoRef = useRef<HTMLDivElement | null>(null);
 
@@ -170,19 +170,6 @@ export default function DocumentForm() {
           </div>
         </div>
 
-        {/* Loading and Error States */}
-        {loading && (
-          <div className="w-full text-center p-4 bg-blue-50 rounded-lg">
-            <p className="text-blue-600">กำลังโหลดข้อมูลนักศึกษา...</p>
-          </div>
-        )}
-        
-        {error && (
-          <div className="w-full text-center p-4 bg-red-50 rounded-lg">
-            <p className="text-red-600">{error}</p>
-          </div>
-        )}
-
         {/* Official Document Preview */}
         <div 
           className="w-full bg-white p-8 shadow-lg rounded-lg" 
@@ -217,23 +204,21 @@ export default function DocumentForm() {
                   </tr>
                 </thead>
                 <tbody>
-                  {formData.students && formData.students.length > 0 ? (
-                    formData.students.map((student, index) => (
-                      <tr key={student.id || index}>
+                  {recipient.map((student, index) => (
+                      <tr key={student.studentId || index}>
                         <td className="border border-gray-400 p-2 text-center">{index + 1}</td>
-                        <td className="border border-gray-400 p-2">{student.name}</td>
+                        <td className="border border-gray-400 p-2">{student.firstName} {student.lastName}</td>
                         <td className="border border-gray-400 p-2 text-center">{student.studentId}</td>
-                        <td className="border border-gray-400 p-2 text-right">{formatCurrency(student.amount)}</td>
-                        <td className="border border-gray-400 p-2">{student.degree}</td>
+                        {<td className="border border-gray-400 p-2 text-right">{formatCurrency(student.requestAmount)}</td>}
+                        {/* <td className="border border-gray-400 p-2">{student.degree}</td> */}
                       </tr>
                     ))
-                  ) : (
+                  } 
                     <tr>
                       <td colSpan={5} className="border border-gray-400 p-2 text-center">
                         {loading ? "กำลังโหลดข้อมูล..." : "ไม่มีข้อมูลนักศึกษาที่ได้รับการอนุมัติ"}
                       </td>
                     </tr>
-                  )}
                 </tbody>
                 <tfoot>
                   <tr>
