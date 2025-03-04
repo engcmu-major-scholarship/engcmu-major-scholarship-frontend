@@ -6,47 +6,6 @@ import autoTable from 'jspdf-autotable';
 export default function DocumentForm() {
   const { formData, handleChange, formatCurrency, recipient } = useOfficialPaperController();
   
-  const generatePDF = (filename: string) => {
-    const pdf = new jsPDF('p', 'mm', 'a4');
-
-    // เพิ่มโลโก้ครุฑ
-    const img = new Image();
-    img.src = garuda;
-    pdf.addImage(img, 'PNG', 90, 10, 30, 30);
-
-    pdf.setFont('THSarabunNew');
-    pdf.setFontSize(16);
-
-    pdf.text(formData.title || 'ประกาศ', 105, 50, { align: 'center' });
-    pdf.text(`เรื่อง: ${formData.detail || '...'}`, 105, 60, { align: 'center' });
-    pdf.text(`ประจำภาคการศึกษาที่ ${formData.semester || '...'} ปีการศึกษา ${formData.year || '...'}`, 105, 70, { align: 'center' });
-    pdf.line(20, 75, 190, 75);
-
-    pdf.setFontSize(14);
-    pdf.text(formData.description || 'เนื้อหาประกาศ...', 20, 85, { maxWidth: 170 });
-
-    // ใช้ autoTable และเก็บค่าตำแหน่ง Y ล่าสุด
-    const table = autoTable(pdf, {
-      startY: 100,
-      head: [['ที่', 'ชื่อ-สกุล', 'รหัสประจำตัว', 'ทุนละ (บาท)']],
-      body: recipient.map((student, index) => [
-        index + 1,
-        `${student.firstName} ${student.lastName}`,
-        student.studentId,
-        formatCurrency(student.requestAmount),
-      ]),
-      theme: 'grid',
-      margin: { top: 10 },
-    });
-
-    const finalY = (table as any).lastAutoTable?.finalY || 120;
-
-    pdf.text(`รวมทั้งสิ้น: ${formatCurrency(recipient.reduce((sum, s) => sum + s.requestAmount, 0))} บาท`, 20, finalY + 10);
-    
-    pdf.text(`ลงชื่อ: ${formData.approverName || '...'} (${formData.approverPosition || '...'})`, 130, finalY + 30);
-    
-    pdf.save(filename);
-  };
   
   const toThaiNumber = (num: number | string) => {
     const thaiDigits = ['๐', '๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙'];
@@ -343,13 +302,6 @@ export default function DocumentForm() {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Download PDF Buttons */}
-        <div className="mt-6 w-full flex justify-end space-x-4">
-          <button onClick={() => generatePDF('ประกาศ.pdf')} className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl">
-            ดาวน์โหลด PDF
-          </button>
         </div>
       </div>
   );

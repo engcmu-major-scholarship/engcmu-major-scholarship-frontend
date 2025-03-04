@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useHttpClient } from '../../hooks/useHttpClient';
 import { Api } from "../../constants/Api";
+import { useAuth } from "../../hooks/useAuth";
+import { Role } from "../../types/Roles";
 
 interface Student {
   appId: number,
@@ -41,8 +43,10 @@ const useOfficialPaperController = () => {
   const [error, setError] = useState('');
   const httpClient = useHttpClient();
   const [recipient,setRecipient] = useState<Student[]>([]);
+  const {roles} = useAuth();
 
   useEffect(() => {
+    if (roles.includes(Role.ADMIN)){
     const fetchRecipient = async () => {
         setLoading(true); // เพิ่ม loading state
         try {
@@ -58,7 +62,8 @@ const useOfficialPaperController = () => {
         }
     };
     fetchRecipient();
-}, [httpClient]);
+  }
+}, [httpClient, roles]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
