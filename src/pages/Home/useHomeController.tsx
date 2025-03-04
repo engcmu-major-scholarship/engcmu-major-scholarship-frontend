@@ -1,5 +1,11 @@
+import { useAuth } from '../../hooks/useAuth';
+
 const useHomeController = () => {
-  return;
+  const { token, roles } = useAuth();
+  return {
+    token,
+    roles,
+  };
 };
 
 export default useHomeController;

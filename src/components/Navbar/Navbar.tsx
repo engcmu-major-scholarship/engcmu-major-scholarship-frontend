@@ -147,7 +147,9 @@ const Navbar = () => {
           </button>
         </div>
       </div>
-      <Outlet />
+      <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
+        <Outlet />
+      </div>
     </div>
   );
 };
