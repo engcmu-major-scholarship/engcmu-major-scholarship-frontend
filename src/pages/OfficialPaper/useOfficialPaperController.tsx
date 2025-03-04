@@ -9,6 +9,7 @@ interface Student {
 	lastName: string,
 	scholarName: string,
 	requestAmount: number,
+  degress: string,
 }
 
 const useOfficialPaperController = () => {
@@ -43,17 +44,21 @@ const useOfficialPaperController = () => {
 
   useEffect(() => {
     const fetchRecipient = async () => {
-      try{
-        const response = await httpClient.get<Student[]>(
-          `${Api.APPLICATION}/recipient/2567/2`
-        );
-        setRecipient(response);
-      }catch(error){
-          console.error("ไม่สามารถดึงข้อมูลนักศึกษาได้");
+        setLoading(true); // เพิ่ม loading state
+        try {
+            const response = await httpClient.get<Student[]>(
+                `${Api.APPLICATION}/recipient/2567/2`
+            );
+            setRecipient(response);
+            setLoading(false); // ดึงข้อมูลเสร็จสิ้น
+        } catch (error) {
+            console.error("ไม่สามารถดึงข้อมูลนักศึกษาได้:", error);
+            setError("ไม่สามารถดึงข้อมูลนักศึกษาได้"); // ตั้งค่า error state
+            setLoading(false); // สิ้นสุดการโหลดแม้จะเกิดข้อผิดพลาด
         }
-      };
-      fetchRecipient();
-  }, [httpClient]);
+    };
+    fetchRecipient();
+}, [httpClient]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

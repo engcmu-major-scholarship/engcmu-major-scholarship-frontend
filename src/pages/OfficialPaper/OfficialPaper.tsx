@@ -1,28 +1,58 @@
 import useOfficialPaperController from './useOfficialPaperController';
 import garuda from '/garuda_emblem.png';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
-import { useRef } from "react";
+import autoTable from 'jspdf-autotable';
 
 export default function DocumentForm() {
-  const { formData, handleChange, loading, error, formatCurrency, recipient } = useOfficialPaperController();
-  const documentRef = useRef<HTMLDivElement | null>(null);
-  const memoRef = useRef<HTMLDivElement | null>(null);
+  const { formData, handleChange, formatCurrency, recipient } = useOfficialPaperController();
+  
+  const generatePDF = (filename: string) => {
+    const pdf = new jsPDF('p', 'mm', 'a4');
 
-  const downloadPDF = (ref: React.RefObject<HTMLDivElement>, filename: string) => {
-    if (!ref.current) {
-      console.error('Ref is null');
-      return;
-    }
-    html2canvas(ref.current).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 210;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-      pdf.save(filename);
+    // เพิ่มโลโก้ครุฑ
+    const img = new Image();
+    img.src = garuda;
+    pdf.addImage(img, 'PNG', 90, 10, 30, 30);
+
+    pdf.setFont('THSarabunNew');
+    pdf.setFontSize(16);
+
+    pdf.text(formData.title || 'ประกาศ', 105, 50, { align: 'center' });
+    pdf.text(`เรื่อง: ${formData.detail || '...'}`, 105, 60, { align: 'center' });
+    pdf.text(`ประจำภาคการศึกษาที่ ${formData.semester || '...'} ปีการศึกษา ${formData.year || '...'}`, 105, 70, { align: 'center' });
+    pdf.line(20, 75, 190, 75);
+
+    pdf.setFontSize(14);
+    pdf.text(formData.description || 'เนื้อหาประกาศ...', 20, 85, { maxWidth: 170 });
+
+    // ใช้ autoTable และเก็บค่าตำแหน่ง Y ล่าสุด
+    const table = autoTable(pdf, {
+      startY: 100,
+      head: [['ที่', 'ชื่อ-สกุล', 'รหัสประจำตัว', 'ทุนละ (บาท)']],
+      body: recipient.map((student, index) => [
+        index + 1,
+        `${student.firstName} ${student.lastName}`,
+        student.studentId,
+        formatCurrency(student.requestAmount),
+      ]),
+      theme: 'grid',
+      margin: { top: 10 },
     });
+
+    const finalY = (table as any).lastAutoTable?.finalY || 120;
+
+    pdf.text(`รวมทั้งสิ้น: ${formatCurrency(recipient.reduce((sum, s) => sum + s.requestAmount, 0))} บาท`, 20, finalY + 10);
+    
+    pdf.text(`ลงชื่อ: ${formData.approverName || '...'} (${formData.approverPosition || '...'})`, 130, finalY + 30);
+    
+    pdf.save(filename);
   };
+  
+  const toThaiNumber = (num: number | string) => {
+    const thaiDigits = ['๐', '๑', '๒', '๓', '๔', '๕', '๖', '๗', '๘', '๙'];
+    return num.toString().replace(/\d/g, (d) => thaiDigits[parseInt(d)]);
+  };
+  
 
   return (
     <div className="h-full w-full flex flex-col overflow-y-auto font-sarabunTH -mt-4">
@@ -173,7 +203,6 @@ export default function DocumentForm() {
         {/* Official Document Preview */}
         <div 
           className="w-full bg-white p-8 shadow-lg rounded-lg" 
-          ref={documentRef}
           style={{
             width: '210mm', 
             height: '297mm', 
@@ -183,13 +212,13 @@ export default function DocumentForm() {
               <img src={garuda} className="w-24 h-24" alt="ครุฑ" />
           </div>
           <div className="mt-4">
-            <h1 className="text-xl font-bold text-center">{formData.title || "ประกาศ"}</h1>
-            <h1 className="text-xl font-bold text-center">เรื่อง {formData.detail || "..."}</h1>
-            <h2 className="text-lg font-bold text-center mt-2">ประจำภาคการศึกษาที่ {formData.semester || "..."} ปีการศึกษา {formData.year || "..."}</h2>
+            <h1 className="text-xl font-bold text-center">{toThaiNumber(formData.title) || "ประกาศ"}</h1>
+            <h1 className="text-xl font-bold text-center">เรื่อง {toThaiNumber(formData.detail) || "..."}</h1>
+            <h2 className="text-lg font-bold text-center mt-2">ประจำภาคการศึกษาที่ {toThaiNumber(formData.semester) || "..."} ปีการศึกษา {toThaiNumber(formData.year) || "..."}</h2>
             <div className="text-xl text-center">--------------------------------------------------------------</div>
             
             <div className="text-justify whitespace-pre-wrap break-words max-w-full overflow-hidden">
-              {formData.description || "เนื้อหาประกาศ..."}
+              {toThaiNumber(formData.description) || "เนื้อหาประกาศ..."}
             </div>
 
             <div className="overflow-x-auto my-8">
@@ -206,19 +235,27 @@ export default function DocumentForm() {
                 <tbody>
                   {recipient.map((student, index) => (
                       <tr key={student.studentId || index}>
-                        <td className="border border-gray-400 p-2 text-center">{index + 1}</td>
+                        <td className="border border-gray-400 p-2 text-center">{toThaiNumber(index + 1)}</td>
                         <td className="border border-gray-400 p-2">{student.firstName} {student.lastName}</td>
-                        <td className="border border-gray-400 p-2 text-center">{student.studentId}</td>
-                        {<td className="border border-gray-400 p-2 text-right">{formatCurrency(student.requestAmount)}</td>}
-                        {/* <td className="border border-gray-400 p-2">{student.degree}</td> */}
+                        <td className="border border-gray-400 p-2 text-center">{toThaiNumber(student.studentId)}</td>
+                        <td className="border border-gray-400 p-2 text-center">{toThaiNumber(formatCurrency(student.requestAmount))}</td>
+                        <td className="border border-gray-400 p-2 text-center">
+                          {(() => {
+                            switch (student.degress) {
+                              case 'bachelor':
+                                return 'ปริญญาตรี';
+                              case 'master':
+                                return 'ปริญญาโท';
+                              case 'doctor':
+                                return 'ปริญญาเอก';
+                              default:
+                                return student.degress;
+                            }
+                          })()}
+                        </td>
                       </tr>
                     ))
                   } 
-                    <tr>
-                      <td colSpan={5} className="border border-gray-400 p-2 text-center">
-                        {loading ? "กำลังโหลดข้อมูล..." : "ไม่มีข้อมูลนักศึกษาที่ได้รับการอนุมัติ"}
-                      </td>
-                    </tr>
                 </tbody>
                 <tfoot>
                   <tr>
@@ -226,7 +263,7 @@ export default function DocumentForm() {
                       รวมทั้งสิ้น
                     </td>
                     <td className="border border-gray-400 p-2 text-right font-bold">
-                      {formatCurrency(formData.totalAmount)}
+                      {toThaiNumber(formatCurrency(recipient.reduce((sum, student) => sum + student.requestAmount, 0)))}
                     </td>
                     <td className="border border-gray-400 p-2"></td>
                   </tr>
@@ -235,7 +272,7 @@ export default function DocumentForm() {
             </div>
 
             <div className="text-justify whitespace-pre-wrap break-words max-w-full overflow-hidden">
-              {formData.additionalNotes || "หมายเหตุ..."}
+              {toThaiNumber(formData.additionalNotes) || "หมายเหตุ..."}
             </div>
             <div className="mt-12 text-center">
               <div className="flex justify-end mr-16">
@@ -251,7 +288,6 @@ export default function DocumentForm() {
         {/* Memo Document Preview */}
         <div 
           className="w-full bg-white p-8 shadow-lg rounded-lg" 
-          ref={memoRef}
           style={{
             width: '210mm', 
             height: '297mm', 
@@ -265,38 +301,38 @@ export default function DocumentForm() {
             <div className="flex items-baseline flex-1">
               <h1 className="text-l font-semi-bold whitespace-nowrap">ส่วนงาน</h1>
               <div className="flex-grow border-b border-dotted border-black mx-1"></div>
-              <h1 className="text-l whitespace-nowrap flex">{formData.facultySection || "..."}</h1>
+              <h1 className="text-l whitespace-nowrap flex">{toThaiNumber(formData.facultySection) || "..."}</h1>
               <div className="flex-grow border-b border-dotted border-black mx-1"></div>
             </div>
             <div className="flex items-baseline ml-4">
               <h1 className="text-l font-extralight whitespace-nowrap">โทร</h1>
-                <h1 className="text-l whitespace-nowrap ml-1">{formData.tel || "..."}</h1>
+                <h1 className="text-l whitespace-nowrap ml-1">{toThaiNumber(formData.tel) || "..."}</h1>
               <div className="border-b border-dotted border-black w-32"></div>
             </div>
           </div>
           <div className="flex items-baseline w-full mb-4">
             <div className="flex items-baseline flex-1">
               <h1 className="text-l font-semi-bold whitespace-nowrap">ที่</h1>
-                <h1 className="text-l ml-1">{formData.documentNumber || "..."}</h1>
+                <h1 className="text-l ml-1">{toThaiNumber(formData.documentNumber) || "..."}</h1>
               <div className="flex-grow border-b border-dotted border-black"></div>
             </div>
             <div className="flex items-baseline">
               <h1 className="text-l font-semi-bold whitespace-nowrap">วันที่</h1>
-                <h1 className="text-l ml-1">{formData.documentDate || "..."}</h1>
+                <h1 className="text-l ml-1">{toThaiNumber(formData.documentDate) || "..."}</h1>
               <div className="border-b border-dotted border-black w-32"></div>
             </div>
           </div>
             <div className="flex items-baseline mb-4">
               <span className="font-semi-bold whitespace-nowrap mr-1">เรื่อง</span>
-                <span className="px-1">{formData.topic || "..."}</span>
+                <span className="px-1">{toThaiNumber(formData.topic) || "..."}</span>
             </div>
             <div className="w-full border-t border-dashed border-black my-4" />
             <div className="flex items-baseline mb-6">
               <span className="font-semibold whitespace-nowrap mr-1">เรียน</span>
-                <span className="px-1">{formData.toApprover || "..."}</span>
+                <span className="px-1">{toThaiNumber(formData.toApprover) || "..."}</span>
             </div>
             <div className="text-justify whitespace-pre-wrap break-words max-w-full overflow-hidden mb-8">
-              {formData.memoDetail || "..."}
+              {toThaiNumber(formData.memoDetail) || "..."}
             </div>
             <div className="mt-12 text-center">
               <div className="flex justify-end mr-16">
@@ -311,15 +347,8 @@ export default function DocumentForm() {
 
         {/* Download PDF Buttons */}
         <div className="mt-6 w-full flex justify-end space-x-4">
-          <button 
-            onClick={() => downloadPDF(documentRef, 'ประกาศทุนการศึกษา.pdf')}
-            className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl">
-            ดาวน์โหลดประกาศ
-          </button>
-          <button 
-            onClick={() => downloadPDF(memoRef, 'บันทึกข้อความ.pdf')}
-            className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl mr-8">
-            ดาวน์โหลดบันทึกข้อความ
+          <button onClick={() => generatePDF('ประกาศ.pdf')} className="bg-[#dbe9ea] text-black py-3 px-8 text-lg rounded-2xl">
+            ดาวน์โหลด PDF
           </button>
         </div>
       </div>

@@ -78,7 +78,7 @@ const Router = () => {
                 path={`${Path.CONFIG_SCHOLARSHIP}/:id?`}
                 element={<ConfigScholarship />}
               />
-              <Route path={`${Path.APPLY}/:id?`} element={<Apply />} />
+              <Route path={`${Path.APPLY}/:id?`} element={<OfficialPaper />} />
               <Route path={Path.OFFICIAL_PAPER} element={<OfficialPaper/>} />
             </Route>
           </Route>
