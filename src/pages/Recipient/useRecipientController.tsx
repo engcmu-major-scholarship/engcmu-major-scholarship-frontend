@@ -36,7 +36,7 @@ const useRecipientController = () => {
   );
   const httpClient = useHttpClient();
 
-  const fetchRecipient = useCallback(
+  const fetchRecipients = useCallback(
     (year: number, semester: number) => {
       httpClient
         .get<RecipientData[]>(`${Api.RECIPIENT}/${year}/${semester}`)
@@ -61,9 +61,9 @@ const useRecipientController = () => {
       .then((resCurYearSem) => {
         setSelectedYear(resCurYearSem.year);
         setSelectedSemester(resCurYearSem.semester);
-        fetchRecipient(resCurYearSem.year, resCurYearSem.semester);
+        fetchRecipients(resCurYearSem.year, resCurYearSem.semester);
       });
-  }, [fetchRecipient, httpClient]);
+  }, [fetchRecipients, httpClient]);
 
   useEffect(() => {
     if (selectedScholarship) {
@@ -77,12 +77,12 @@ const useRecipientController = () => {
 
   const onYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedYear(Number(e.target.value));
-    fetchRecipient(Number(e.target.value), selectedSemester);
+    fetchRecipients(Number(e.target.value), selectedSemester);
   };
 
   const onSemChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedSemester(Number(e.target.value));
-    fetchRecipient(selectedYear, Number(e.target.value));
+    fetchRecipients(selectedYear, Number(e.target.value));
   };
 
   return {

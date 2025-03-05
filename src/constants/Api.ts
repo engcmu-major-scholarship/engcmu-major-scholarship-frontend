@@ -4,6 +4,8 @@ export enum Api {
   APPLICATION_HISTORY = '/application/history',
   CURRENT_YEAR_APPLICATION = '/application/current-year',
   RECIPIENT = '/application/recipient',
+  CONSIDER = '/application/consider',
+  APPROVE = '/application/approve',
 
   SCHOLARSHIP = '/scholarship',
   APPLYABLE_SCHOLARSHIP = '/scholarship/applyable',
