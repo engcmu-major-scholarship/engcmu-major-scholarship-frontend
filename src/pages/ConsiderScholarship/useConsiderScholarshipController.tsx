@@ -2,10 +2,6 @@ import { useEffect, useState } from 'react';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import { Api } from '../../constants/Api';
 import { useNavigate } from 'react-router';
-import { Path } from '../../constants/Path';
-import { useAuth } from '../../hooks/useAuth';
-import { Role } from '../../types/Roles';
-import axios from 'axios';
 
 //import { Application } from '../../../types/ModelType.ts';
 export interface ApplicationInfo {
@@ -19,6 +15,11 @@ export interface ApplicationInfo {
   isFirstTime: boolean;
   approvalComment: string | null;
   docLink: string | null;
+}
+export interface GetApplication {
+  scholarId: number;
+  budget: number | null;
+  doc: string;
 }
 export interface BasicScholarshipInfo {
   id: number;
@@ -37,7 +38,6 @@ export interface YearSemesterGroup {
 const useConsiderScholarshipController = () => {
   const httpClient = useHttpClient();
   const navigate = useNavigate();
-  const { roles } = useAuth();
 
   const [applications, setApplications] = useState<ApplicationInfo[]>([]);
   const [filterResults, setFilterResults] = useState<ApplicationInfo[]>([]);
@@ -128,12 +128,12 @@ const useConsiderScholarshipController = () => {
         const applicationsWithDocLink = await Promise.all(
           response.map(async (application) => {
             try {
-              const docResponse = await httpClient.get<{ docLink: string }>(
-                `${Api.APPLICATION}/document/${application.appId}`,
+              const docResponse = await httpClient.get<GetApplication>(
+                `${Api.APPLICATION}/${application.appId}`,
               );
               return {
                 ...application,
-                docLink: docResponse.docLink, // เพิ่ม docLink เข้าไปในแต่ละ Application
+                docLink: docResponse.doc, // เพิ่ม docLink เข้าไปในแต่ละ Application
               };
             } catch (error) {
               console.error(

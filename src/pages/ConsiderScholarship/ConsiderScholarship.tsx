@@ -1,11 +1,5 @@
-import { useContext } from 'react';
 import useConsiderScholarshipController from './useConsiderScholarshipController';
-import { RolesBaseAccessContext } from '../../contexts/RolesBaseAccessContext';
-import { useNavigate } from 'react-router';
-import { Path } from '../../constants/Path';
-import { createCMUAccountSignInUrl } from '../../utils/handleCMUAccountSignIn';
 import './toggle.css';
-// import { filterApplicationsByScholarshipName } from './useConsiderScholarshipController';
 import React, { useState } from 'react';
 import { ApplicationInfo } from './useConsiderScholarshipController';
 
@@ -21,11 +15,6 @@ const ConsiderScholarship = () => {
     setSelectedYearSemester,
     approveApplication,
   } = useConsiderScholarshipController();
-
-  const { accessibles } = useContext(RolesBaseAccessContext);
-  const navigate = useNavigate();
-
-  const [selectedScholarship, setSelectedScholarship] = useState('');
 
   const [popupApplication, setPopupApplication] =
     useState<ApplicationInfo | null>(null);
@@ -51,19 +40,6 @@ const ConsiderScholarship = () => {
     currentYearSemester?.semester ?? 2,
   );
 
-  const handleYearChange = (year: number) => {
-    setSelectedYear(year);
-    const defaultSemester =
-      yearSemesters.find((ys) => ys.year === year)?.semesters[0] ?? 1;
-    setSelectedSemester(defaultSemester);
-    setSelectedYearSemester({ year, semester: defaultSemester });
-  };
-
-  const handleSemesterChange = (semester: number) => {
-    setSelectedSemester(semester);
-    setSelectedYearSemester({ year: selectedYear, semester });
-  };
-
   const handleApproveWithConfirmation = () => {
     const isConfirmed = window.confirm(
       'Are you sure you want to approve this application?',
@@ -74,7 +50,7 @@ const ConsiderScholarship = () => {
   };
 
   const handleApprove = async () => {
-    if (popupApplication && popupApplication.appId && comment.trim() !== '') {
+    if (popupApplication && popupApplication.appId) {
       try {
         togglePopup(null); // ปิด popup เมื่ออนุมัติสำเร็จ
         await approveApplication(popupApplication.appId, comment);
@@ -83,7 +59,7 @@ const ConsiderScholarship = () => {
         window.alert('❌ Failed to approve application'); // ถ้า error
       }
     } else {
-      window.alert('⚠️ Please enter a comment before approving'); // ถ้าคอมเมนต์ว่าง
+      window.alert('no application'); // ถ้าคอมเมนต์ว่าง
     }
   };
 
