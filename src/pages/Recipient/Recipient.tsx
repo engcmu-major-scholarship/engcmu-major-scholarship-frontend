@@ -2,10 +2,13 @@ import useRecipientController from './useRecipientController';
 
 const Recipient = () => {
   const {
-    recipientData,
+    filteredRecipients,
     YAS,
     selectedSemester,
     selectedYear,
+    allScholarships,
+    selectedScholarship,
+    setSelectedScholarship,
     onYearChange,
     onSemChange,
   } = useRecipientController();
@@ -26,6 +29,28 @@ const Recipient = () => {
         <span>รายชื่อผู้รับทุน</span>
       </div>
       <div className="flex flex-row gap-4">
+        <div className="flex flex-col w-1/4 gap-2">
+          <label htmlFor="scholar" className="text-sm font-medium">
+            ทุนการศึกษา
+          </label>
+          <select
+            id="scholar"
+            className="border rounded-md p-2.5"
+            value={selectedScholarship ?? '-'}
+            onChange={(e) =>
+              setSelectedScholarship(
+                e.target.value === '-' ? null : e.target.value,
+              )
+            }
+          >
+            <option value="-">-</option>
+            {allScholarships.map((scholarship) => (
+              <option key={scholarship} value={scholarship}>
+                {scholarship}
+              </option>
+            ))}
+          </select>
+        </div>
         <div className="flex flex-col w-1/4 gap-2">
           <label htmlFor="year" className="text-sm font-medium">
             ปีการศึกษา
@@ -63,7 +88,7 @@ const Recipient = () => {
           </select>
         </div>
       </div>
-      {recipientData.length !== 0 ? (
+      {filteredRecipients.length !== 0 ? (
         <table>
           <thead>
             <tr>
@@ -71,19 +96,26 @@ const Recipient = () => {
                 รหัสนักศึกษา
               </th>
               <th className="p-2 bg-[#E4E8DB] text-center">ชื่อ-นามสกุล</th>
+              <th className="p-2 bg-[#E4E8DB] text-center">ชื่อทุนการศึกษา</th>
               <th className="p-2 bg-[#E4E8DB] text-center rounded-tr-2xl">
-                ชื่อทุนการศึกษา
+                จำนวนเงินทุนที่ได้รับ
               </th>
             </tr>
           </thead>
           <tbody>
-            {recipientData.map((rec, index) => (
+            {filteredRecipients.map((rec, index) => (
               <tr key={index} className={index % 2 === 0 ? '' : 'bg-[#F0F2ED]'}>
                 <td className="p-2 text-center">{rec.studentId}</td>
                 <td className="p-2 text-center">
                   {rec.firstName + ' ' + rec.lastName}
                 </td>
                 <td className="p-2 text-center">{rec.scholarName}</td>
+                <td className="p-2 text-center">
+                  {(rec.defaultAmount
+                    ? rec.defaultAmount
+                    : rec.requestAmount
+                  )?.toLocaleString()}
+                </td>
               </tr>
             ))}
           </tbody>

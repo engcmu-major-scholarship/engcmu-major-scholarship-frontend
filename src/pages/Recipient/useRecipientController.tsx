@@ -8,7 +8,8 @@ export interface RecipientData {
   firstName: string;
   lastName: string;
   scholarName: string;
-  requestAmount: string;
+  defaultAmount: number | null;
+  requestAmount: number | null;
 }
 
 export interface YearAndSemesters {
@@ -22,10 +23,17 @@ export interface CurrentYearAndSem {
 }
 
 const useRecipientController = () => {
-  const [recipientData, setRecipientData] = useState<RecipientData[]>([]);
+  const [recipients, setRecipients] = useState<RecipientData[]>([]);
+  const [filteredRecipients, setFilteredRecipients] = useState<RecipientData[]>(
+    [],
+  );
   const [YAS, setYAS] = useState<YearAndSemesters[]>([]);
   const [selectedYear, setSelectedYear] = useState<number>(0);
   const [selectedSemester, setSelectedSemester] = useState<number>(0);
+  const [allScholarships, setAllScholarships] = useState<string[]>([]);
+  const [selectedScholarship, setSelectedScholarship] = useState<string | null>(
+    null,
+  );
   const httpClient = useHttpClient();
 
   const fetchRecipient = useCallback(
@@ -33,7 +41,12 @@ const useRecipientController = () => {
       httpClient
         .get<RecipientData[]>(`${Api.RECIPIENT}/${year}/${semester}`)
         .then((response) => {
-          setRecipientData(response);
+          setRecipients(response);
+          setFilteredRecipients(response);
+          setSelectedScholarship(null);
+          setAllScholarships(
+            Array.from(new Set(response.map((rec) => rec.scholarName))),
+          );
         });
     },
     [httpClient],
@@ -52,6 +65,16 @@ const useRecipientController = () => {
       });
   }, [fetchRecipient, httpClient]);
 
+  useEffect(() => {
+    if (selectedScholarship) {
+      setFilteredRecipients(
+        recipients.filter((rec) => rec.scholarName === selectedScholarship),
+      );
+    } else {
+      setFilteredRecipients(recipients);
+    }
+  }, [recipients, selectedScholarship]);
+
   const onYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedYear(Number(e.target.value));
     fetchRecipient(Number(e.target.value), selectedSemester);
@@ -63,10 +86,13 @@ const useRecipientController = () => {
   };
 
   return {
-    recipientData,
+    filteredRecipients,
     YAS,
     selectedSemester,
     selectedYear,
+    allScholarships,
+    selectedScholarship,
+    setSelectedScholarship,
     onYearChange,
     onSemChange,
   };
