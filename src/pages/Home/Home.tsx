@@ -1,7 +1,7 @@
 import useHomeController from './useHomeController';
 
 const Home = () => {
-  const { token, roles } = useHomeController();
+  const { token, announcements } = useHomeController();
   return (
     <div className="flex flex-col px-24 py-4 gap-4">
       <div className="flex flex-row gap-2 w-full my-4 text-xl">
@@ -16,6 +16,20 @@ const Home = () => {
           </svg>
         </span>
         <span>หน้าหลัก</span>
+      </div>
+      {token
+        ? 'ยินดีต้อนรับ'
+        : 'ยินดีต้อนรับ! กรุณาเข้าสู่ระบบก่อนดำเนินการสมัครทุน'}
+      <div className="h-60 w-full flex flex-col p-5 shadow-full-2xl rounded-2xl">
+        <div className="text-lg">ข่าวประชาสัมพันธ์</div>
+        <div className="flex flex-col h-full w-full overflow-y-auto">
+          {announcements.map((announcement, index) => (
+            <div key={index} className="flex flex-col p-4 gap-2">
+              <div className="text-lg font-bold">{announcement.name}</div>
+              <div>{announcement.description}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
