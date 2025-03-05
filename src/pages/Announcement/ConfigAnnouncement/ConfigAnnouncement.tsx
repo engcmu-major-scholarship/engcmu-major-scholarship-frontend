@@ -96,7 +96,7 @@ const ConfigAnnouncement = () => {
               className="flex text-slate-600 text-sm cursor-pointer"
             >
               <div className="justify-center items-center flex">
-                <div className="text-2xl">เผยแพร่ทุน</div>
+                <div className="text-2xl">เผยแพร่ข่าวประชาสัมพันธ์</div>
               </div>
             </label>
           </div>

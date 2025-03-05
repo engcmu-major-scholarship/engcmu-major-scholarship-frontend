@@ -20,11 +20,11 @@ const Home = () => {
       {token
         ? 'ยินดีต้อนรับ'
         : 'ยินดีต้อนรับ! กรุณาเข้าสู่ระบบก่อนดำเนินการสมัครทุน'}
-      <div className="h-60 w-full flex flex-col p-5 shadow-full-2xl rounded-2xl">
+      <div className="h-60 w-full flex flex-col gap-2 p-5 shadow-full-2xl rounded-2xl">
         <div className="text-lg">ข่าวประชาสัมพันธ์</div>
-        <div className="flex flex-col h-full w-full overflow-y-auto">
+        <div className="flex flex-col h-full w-full gap-4 overflow-y-auto">
           {announcements.map((announcement, index) => (
-            <div key={index} className="flex flex-col p-4 gap-2">
+            <div key={index} className="flex flex-col gap-2">
               <div className="text-lg font-bold">{announcement.name}</div>
               <div>{announcement.description}</div>
             </div>
