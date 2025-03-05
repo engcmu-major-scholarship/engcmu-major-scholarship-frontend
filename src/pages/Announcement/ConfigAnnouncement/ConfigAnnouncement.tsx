@@ -19,7 +19,7 @@ const ConfigAnnouncement = () => {
   } = useConfigAnnouncementController();
 
   return (
-    <div className="h-full w-full flex flex-col overflow-auto overflow-y-auto">
+    <>
       <div className="flex flex-col px-24 py-4 gap-4">
         <div className="w-full text-xl text-center">
           {id ? 'แก้ไข' : 'สร้าง'}ข่าวประชาสัมพันธ์
@@ -165,7 +165,7 @@ const ConfigAnnouncement = () => {
           </div>
         </Modal>
       )}
-    </div>
+    </>
   );
 };
 
