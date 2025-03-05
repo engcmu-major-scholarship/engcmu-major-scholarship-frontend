@@ -1,6 +1,8 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Api } from '../../constants/Api';
 import { useHttpClient } from '../../hooks/useHttpClient';
+import { useAuth } from '../../hooks/useAuth';
+import { Role } from '../../types/Roles';
 
 export interface RecipientData {
   appId: number;
@@ -34,6 +36,7 @@ const useRecipientController = () => {
   const [selectedScholarship, setSelectedScholarship] = useState<string | null>(
     null,
   );
+  const { roles } = useAuth();
   const httpClient = useHttpClient();
 
   const fetchRecipients = useCallback(
@@ -53,17 +56,19 @@ const useRecipientController = () => {
   );
 
   useEffect(() => {
-    httpClient
-      .get<YearAndSemesters[]>(Api.YEARS_SEMESTERS)
-      .then((resyas) => setYAS(resyas));
-    httpClient
-      .get<CurrentYearAndSem>(Api.CURRENT_YEAR_SEMESTER)
-      .then((resCurYearSem) => {
-        setSelectedYear(resCurYearSem.year);
-        setSelectedSemester(resCurYearSem.semester);
-        fetchRecipients(resCurYearSem.year, resCurYearSem.semester);
-      });
-  }, [fetchRecipients, httpClient]);
+    if (roles.includes(Role.ADMIN)) {
+      httpClient
+        .get<YearAndSemesters[]>(Api.YEARS_SEMESTERS)
+        .then((resyas) => setYAS(resyas));
+      httpClient
+        .get<CurrentYearAndSem>(Api.CURRENT_YEAR_SEMESTER)
+        .then((resCurYearSem) => {
+          setSelectedYear(resCurYearSem.year);
+          setSelectedSemester(resCurYearSem.semester);
+          fetchRecipients(resCurYearSem.year, resCurYearSem.semester);
+        });
+    }
+  }, [fetchRecipients, httpClient, roles]);
 
   useEffect(() => {
     if (selectedScholarship) {

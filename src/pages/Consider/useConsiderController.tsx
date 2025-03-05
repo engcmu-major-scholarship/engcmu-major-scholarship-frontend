@@ -5,6 +5,8 @@ import {
 } from '../Recipient/useRecipientController';
 import { Api } from '../../constants/Api';
 import { useHttpClient } from '../../hooks/useHttpClient';
+import { useAuth } from '../../hooks/useAuth';
+import { Role } from '../../types/Roles';
 
 export interface ConsiderAppData {
   appId: number;
@@ -29,6 +31,7 @@ const useConsiderController = () => {
   const [selectedScholarship, setSelectedScholarship] = useState<string | null>(
     null,
   );
+  const { roles } = useAuth();
   const httpClient = useHttpClient();
 
   const fetchConsiders = useCallback(
@@ -48,17 +51,19 @@ const useConsiderController = () => {
   );
 
   useEffect(() => {
-    httpClient
-      .get<YearAndSemesters[]>(Api.YEARS_SEMESTERS)
-      .then((resyas) => setYAS(resyas));
-    httpClient
-      .get<CurrentYearAndSem>(Api.CURRENT_YEAR_SEMESTER)
-      .then((resCurYearSem) => {
-        setSelectedYear(resCurYearSem.year);
-        setSelectedSemester(resCurYearSem.semester);
-        fetchConsiders(resCurYearSem.year, resCurYearSem.semester);
-      });
-  }, [fetchConsiders, httpClient]);
+    if (roles.includes(Role.ADMIN)) {
+      httpClient
+        .get<YearAndSemesters[]>(Api.YEARS_SEMESTERS)
+        .then((resyas) => setYAS(resyas));
+      httpClient
+        .get<CurrentYearAndSem>(Api.CURRENT_YEAR_SEMESTER)
+        .then((resCurYearSem) => {
+          setSelectedYear(resCurYearSem.year);
+          setSelectedSemester(resCurYearSem.semester);
+          fetchConsiders(resCurYearSem.year, resCurYearSem.semester);
+        });
+    }
+  }, [fetchConsiders, httpClient, roles]);
 
   useEffect(() => {
     if (selectedScholarship) {
