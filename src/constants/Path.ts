@@ -13,6 +13,7 @@ export enum Path {
   // Admin
   CONSIDER = '/consider',
   RECIPIENT = '/recipient',
+  RECIPIENTHISTORY = '/recipientHistory',
   CONFIG_SCHOLARSHIP = '/scholarship/config',
   CONFIG_ANNOUNCEMENT = '/announcement/config',
   DOCUMENT = '/recipient/document',

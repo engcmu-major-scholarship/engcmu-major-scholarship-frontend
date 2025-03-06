@@ -22,6 +22,7 @@ import Announcement from './pages/Announcement/Announcement';
 import ConfigAnnouncement from './pages/Announcement/ConfigAnnouncement/ConfigAnnouncement';
 import Consider from './pages/Consider/Consider';
 import Document from './pages/Document/Document';
+import RecipientHistory from './pages/RecipantHistory/RecipientHistory';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -94,6 +95,10 @@ const Router = () => {
                 element={<ConfigAnnouncement />}
               />
               <Route path={`${Path.APPLY}/:id?`} element={<Apply />} />
+              <Route
+                path={Path.RECIPIENTHISTORY}
+                element={<RecipientHistory />}
+              />
             </Route>
           </Route>
           <Route element={<Navbar />}>
