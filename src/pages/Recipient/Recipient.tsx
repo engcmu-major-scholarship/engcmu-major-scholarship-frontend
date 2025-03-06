@@ -11,6 +11,7 @@ const Recipient = () => {
     setSelectedScholarship,
     onYearChange,
     onSemChange,
+    navigateToDocPage,
   } = useRecipientController();
 
   return (
@@ -123,6 +124,14 @@ const Recipient = () => {
       ) : (
         <div className="text-center">ยังไม่มีผู้ได้รับทุนในปีการศึกษานี้</div>
       )}
+      <button
+        title="go to download doc page"
+        type="button"
+        className="bg-[#E4E8DB] p-4 rounded-xl w-1/6 absolute bottom-4 right-4 cursor-pointer hover:bg-[#C4C9BC]"
+        onClick={navigateToDocPage}
+      >
+        ดาวน์โหลดรายชื่อผู้รับทุน
+      </button>
     </div>
   );
 };

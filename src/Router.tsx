@@ -21,6 +21,7 @@ import Recipient from './pages/Recipient/Recipient';
 import Announcement from './pages/Announcement/Announcement';
 import ConfigAnnouncement from './pages/Announcement/ConfigAnnouncement/ConfigAnnouncement';
 import Consider from './pages/Consider/Consider';
+import Document from './pages/Document/Document';
 
 const providersGiver = ([...providers]: (({
   children,
@@ -83,6 +84,7 @@ const Router = () => {
               <Route path={Path.HISTORY} element={<History />} />
               <Route path={Path.CONSIDER} element={<Consider />} />
               <Route path={Path.RECIPIENT} element={<Recipient />} />
+              <Route path={Path.DOCUMENT} element={<Document />} />
               <Route
                 path={`${Path.CONFIG_SCHOLARSHIP}/:id?`}
                 element={<ConfigScholarship />}

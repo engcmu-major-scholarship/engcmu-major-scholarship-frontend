@@ -15,6 +15,7 @@ export enum Path {
   RECIPIENT = '/recipient',
   CONFIG_SCHOLARSHIP = '/scholarship/config',
   CONFIG_ANNOUNCEMENT = '/announcement/config',
+  DOCUMENT = '/recipient/document',
 
   // Auth
   SIGNIN = '/signin',

@@ -1,6 +1,6 @@
 import { handleCMUAccountSignIn } from '../../utils/handleCMUAccountSignIn';
 import useSigninController from './useSigninController';
-import cmuLogo from '/cmu.png';
+import cmuLogo from '../../assets/cmu.png';
 
 const Signin = () => {
   const { error } = useSigninController();

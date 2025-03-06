@@ -3,6 +3,8 @@ import { Api } from '../../constants/Api';
 import { useHttpClient } from '../../hooks/useHttpClient';
 import { useAuth } from '../../hooks/useAuth';
 import { Role } from '../../types/Roles';
+import { useNavigate } from 'react-router';
+import { Path } from '../../constants/Path';
 
 export interface RecipientData {
   appId: number;
@@ -38,6 +40,7 @@ const useRecipientController = () => {
   );
   const { roles } = useAuth();
   const httpClient = useHttpClient();
+  const navigate = useNavigate();
 
   const fetchRecipients = useCallback(
     (year: number, semester: number) => {
@@ -90,6 +93,10 @@ const useRecipientController = () => {
     fetchRecipients(selectedYear, Number(e.target.value));
   };
 
+  const navigateToDocPage = () => {
+    navigate(Path.DOCUMENT);
+  };
+
   return {
     filteredRecipients,
     YAS,
@@ -100,6 +107,7 @@ const useRecipientController = () => {
     setSelectedScholarship,
     onYearChange,
     onSemChange,
+    navigateToDocPage,
   };
 };
 
