@@ -17,7 +17,7 @@ const Home = () => {
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-    hour12: true,
+    hour12: false,
   };
 
   return (
@@ -53,34 +53,41 @@ const Home = () => {
       </div>
       {roles.includes(Role.STUDENT) && (
         <div className="flex gap-4">
-          <div className="h-60 w-full flex flex-col gap-2 bg-white p-6 rounded-2xl shadow-full-2xl rounded-2xl">
+          <div className="h-60 w-full flex flex-col gap-2 bg-white p-6 rounded-2xl shadow-full-2xl">
             <h2 className="text-lg font-semibold text-[#7D8C6E] ">
               ทุนที่สมัครได้
             </h2>
             <div className="flex flex-col">
               {scholarships.length !== 0 ? (
-                scholarships.map((scholarship, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-row gap-2 justify-between items-center "
-                  >
-                    <span>{scholarship.name}</span>
-                    <span>
-                      {' '}
-                      {scholarship.openDate.toLocaleString(
-                        undefined,
-                        showDateOptions,
-                      )}
-                    </span>
-                    <span>
-                      {' '}
-                      {scholarship.closeDate.toLocaleString(
-                        undefined,
-                        showDateOptions,
-                      )}
-                    </span>
+                <>
+                  <div className="grid grid-cols-3 gap-4 justify-between items-center">
+                    <span>ชื่อทุน</span>
+                    <span>วันเปิดรับสมัคร</span>
+                    <span>วันปิดรับสมัคร</span>
                   </div>
-                ))
+                  {scholarships.map((scholarship, index) => (
+                    <div
+                      key={index}
+                      className="grid grid-cols-3 gap-4 justify-between items-center"
+                    >
+                      <span>{scholarship.name}</span>
+                      <span>
+                        {' '}
+                        {scholarship.openDate.toLocaleString(
+                          undefined,
+                          showDateOptions,
+                        )}
+                      </span>
+                      <span>
+                        {' '}
+                        {scholarship.closeDate.toLocaleString(
+                          undefined,
+                          showDateOptions,
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </>
               ) : (
                 <div className="text-center text-gray-700">
                   ขณะนี้ยังไม่มีทุนที่เปิดรับสมัครในช่วงเวลานี้
@@ -89,7 +96,7 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="h-60 w-full flex flex-col gap-2 bg-white p-6 rounded-2xl shadow-full-2xl rounded-2xl">
+          <div className="h-60 w-full flex flex-col gap-2 bg-white p-6 rounded-2xl shadow-full-2xl">
             <h2 className="text-lg font-semibold text-[#7D8C6E]">
               สถานะการขอทุน
             </h2>
@@ -105,9 +112,9 @@ const Home = () => {
                       className={`p-6 py-1.5 rounded-2xl mb-1 ${
                         status.submissionTime
                           ? status.adminApproveTime
-                            ? 'bg-green-200 text-green-600 border border-3 border-green-500/40'
-                            : 'bg-yellow-200 text-yellow-600 border border-3 border-yellow-500/40'
-                          : 'bg-red-200 text-red-600 border border-3 border-red-500/40'
+                            ? 'bg-green-200 text-green-600 border-3 border-green-500/40'
+                            : 'bg-yellow-200 text-yellow-600 border-3 border-yellow-500/40'
+                          : 'bg-red-200 text-red-600 border-3 border-red-500/40'
                       }`}
                     >
                       {status.submissionTime
@@ -129,7 +136,7 @@ const Home = () => {
       )}
 
       {roles.includes(Role.ADMIN) && (
-        <div className="h-60 w-full flex flex-col bg-white p-6 rounded-2xl shadow-full-2xl rounded-2xl gap-2">
+        <div className="h-60 w-full flex flex-col bg-white p-6 rounded-2xl shadow-full-2xl gap-2">
           <h2 className="text-lg font-semibold text-[#7D8C6E]">
             ผู้สมัครทุนที่รอการอนุมัติ
           </h2>
