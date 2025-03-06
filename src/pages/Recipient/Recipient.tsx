@@ -78,7 +78,7 @@ const Recipient = () => {
             value={selectedSemester}
             onChange={onSemChange}
           >
-            {YAS.find((yas) => yas.year == selectedYear)?.semesters.map(
+            {YAS.find((yas) => yas.year === selectedYear)?.semesters.map(
               (sem) => (
                 <option key={sem} value={sem}>
                   {sem}

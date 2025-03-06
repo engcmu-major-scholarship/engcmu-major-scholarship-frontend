@@ -49,7 +49,7 @@ const useProfileController = () => {
       httpClient.get<Advisor[]>(Api.ADVISOR).then((data) => {
         setAdvisors(data);
       });
-      httpClient.get<StudentProfile>(Api.STUDENT_PROFILE).then((data) => {
+      httpClient.get<StudentProfile>(Api.STUDENT).then((data) => {
         setName(data.firstName + ' ' + data.lastName);
         setProfile(data);
         resetField('advisorId', { defaultValue: data.advisorId });
@@ -86,7 +86,7 @@ const useProfileController = () => {
       bookBank: touchedFields.bookBank ? data.bookBank[0] : undefined,
     });
     httpClient
-      .patch(Api.STUDENT_PROFILE, formData, {
+      .patch(Api.STUDENT, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
