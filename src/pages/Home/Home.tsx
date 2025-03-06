@@ -1,7 +1,16 @@
+import { Role } from '../../types/Roles';
 import useHomeController from './useHomeController';
 
 const Home = () => {
-  const { token, announcements } = useHomeController();
+  const {
+    token,
+    roles,
+    announcements,
+    considers,
+    scholarships,
+    currentYearStatus,
+  } = useHomeController();
+
   return (
     <div className="flex flex-col px-24 py-4 gap-4">
       <div className="flex flex-row gap-2 w-full my-4 text-xl">
@@ -31,6 +40,74 @@ const Home = () => {
           ))}
         </div>
       </div>
+      {roles.includes(Role.STUDENT) && (
+        <div className="flex gap-4">
+          <div className="h-60 w-full flex flex-col gap-2 bg-white p-6 rounded-2xl shadow-full-2xl rounded-2xl">
+            <h2 className="text-lg font-semibold text-gray-700">
+              ทุนที่สมัครได้
+            </h2>
+            <div>
+              {scholarships.length !== 0 ? (
+                scholarships.map((scholarship) => (
+                  <option key={scholarship.id} value={scholarship.id}>
+                    {scholarship.name}
+                  </option>
+                ))
+              ) : (
+                <div className="text-center text-gray-700">
+                  ขณะนี้ยังไม่มีทุนที่เปิดรับสมัครในช่วงเวลานี้
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="h-60 w-full flex flex-col gap-2  bg-white p-6 rounded-2xl shadow-full-2xl rounded-2xl">
+            <h2 className="text-lg font-semibold text-gray-700">
+              สถานะการขอทุน
+            </h2>
+            <div>
+              {currentYearStatus.length !== 0 ? (
+                currentYearStatus.map((status) => (
+                  <div className="flex flex-row gap-2" key={status.appId}>
+                    <span>{status.scholarName}</span>
+                    {status.submissionTime
+                      ? status.adminApproveTime
+                        ? 'ได้รับการอนุมัติ'
+                        : 'ยังไม่ได้รับการอนุมัติ'
+                      : 'ยังไม่ได้ยืนยันใบสมัคร'}
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-700">
+                  ยังไม่มีการสมัครทุนในปีการศึกษานี้
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {roles.includes(Role.ADMIN) && (
+        <div className="h-60 w-full flex flex-col bg-white p-6 rounded-2xl shadow-full-2xl rounded-2xl gap-2">
+          <h2 className="text-lg font-semibold text-gray-700">
+            ผู้สมัครทุนที่รอการอนุมัติ
+          </h2>
+          <div className="">
+            {considers.length != 0 ? (
+              considers.map((consider) => (
+                <div className="flex flex-row gap-2" key={consider.appId}>
+                  <span>{consider.firstName + ' ' + consider.lastName}</span>
+                  <span>{consider.scholarName}</span>
+                </div>
+              ))
+            ) : (
+              <div className="text-center text-gray-700">
+                ยังไม่มีผู้รอการอนุมัติ
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
