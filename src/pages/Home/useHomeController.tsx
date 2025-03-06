@@ -8,6 +8,7 @@ import { CurrentYearAndSem } from '../Recipient/useRecipientController';
 import { ConsiderAppData } from '../Consider/useConsiderController';
 import { ApplyableScholarship } from '../Apply/useApplyController';
 import { CurrentYearStatus } from '../Status/useStatusController';
+import { Scholarship } from '../Scholarship/ScholarshipById/useScholarshipByIdController';
 
 const useHomeController = () => {
   const { token, roles } = useAuth();
@@ -16,7 +17,7 @@ const useHomeController = () => {
     [],
   );
   const [considers, setConsiders] = useState<ConsiderAppData[]>([]);
-  const [scholarships, setScholarships] = useState<ApplyableScholarship[]>([]);
+  const [scholarships, setScholarships] = useState<Scholarship[]>([]);
   const [currentYearStatus, setCurrentYearStatus] = useState<
     CurrentYearStatus[]
   >([]);
@@ -37,7 +38,13 @@ const useHomeController = () => {
       httpClient
         .get<ApplyableScholarship[]>(Api.APPLYABLE_SCHOLARSHIP)
         .then((response) => {
-          setScholarships(response);
+          Promise.all(
+            response.map(async (bsi) => {
+              return await httpClient.get<Scholarship>(
+                `${Api.SCHOLARSHIP}/${bsi.id}`,
+              );
+            }),
+          ).then((data) => setScholarships(data));
         });
     }
   }, [httpClient, roles]);
