@@ -96,7 +96,7 @@ const Router = () => {
               />
               <Route path={`${Path.APPLY}/:id?`} element={<Apply />} />
               <Route
-                path={Path.RECIPIENTHISTORY}
+                path={Path.RECIPIENT_HISTORY}
                 element={<RecipientHistory />}
               />
             </Route>
