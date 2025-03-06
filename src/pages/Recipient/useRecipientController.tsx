@@ -5,6 +5,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { Role } from '../../types/Roles';
 import { useNavigate } from 'react-router';
 import { Path } from '../../constants/Path';
+import { Degree } from '../../types/Degree';
 
 export interface RecipientData {
   appId: number;
@@ -14,6 +15,7 @@ export interface RecipientData {
   scholarName: string;
   defaultAmount: number | null;
   requestAmount: number | null;
+  degress: Degree;
 }
 
 export interface YearAndSemesters {
