@@ -21,7 +21,7 @@ export interface ApplyableScholarship {
 
 export interface GetApplication {
   scholarId: number;
-  budget: number | null;
+  requestAmount: number | null;
   doc: string;
 }
 
@@ -67,7 +67,8 @@ const useApplyController = () => {
               if (scholarship) {
                 resetField('scholarId', { defaultValue: scholarship.id });
                 resetField('amount', {
-                  defaultValue: scholarship.defaultBudget ?? appRes.budget,
+                  defaultValue:
+                    scholarship.defaultBudget ?? appRes.requestAmount,
                 });
               } else {
                 alert('ทุนที่ท่านได้เคยเลือกไว้ไม่สามารถสมัครได้');
@@ -80,7 +81,7 @@ const useApplyController = () => {
                   resetField('documents', { defaultValue: [file] });
                   setOldData({
                     scholarId: appRes.scholarId,
-                    amount: appRes.budget,
+                    amount: appRes.requestAmount,
                     documents: [file],
                   });
                 });

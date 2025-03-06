@@ -1,6 +1,8 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import { Api } from '../../constants/Api';
 import { useHttpClient } from '../../hooks/useHttpClient';
+import { useAuth } from '../../hooks/useAuth';
+import { Role } from '../../types/Roles';
 
 export interface RecipientData {
   appId: number;
@@ -8,7 +10,8 @@ export interface RecipientData {
   firstName: string;
   lastName: string;
   scholarName: string;
-  requestAmount: string;
+  defaultAmount: number | null;
+  requestAmount: number | null;
 }
 
 export interface YearAndSemesters {
@@ -22,51 +25,79 @@ export interface CurrentYearAndSem {
 }
 
 const useRecipientController = () => {
-  const [recipientData, setRecipientData] = useState<RecipientData[]>([]);
+  const [recipients, setRecipients] = useState<RecipientData[]>([]);
+  const [filteredRecipients, setFilteredRecipients] = useState<RecipientData[]>(
+    [],
+  );
   const [YAS, setYAS] = useState<YearAndSemesters[]>([]);
   const [selectedYear, setSelectedYear] = useState<number>(0);
   const [selectedSemester, setSelectedSemester] = useState<number>(0);
+  const [allScholarships, setAllScholarships] = useState<string[]>([]);
+  const [selectedScholarship, setSelectedScholarship] = useState<string | null>(
+    null,
+  );
+  const { roles } = useAuth();
   const httpClient = useHttpClient();
 
-  const fetchRecipient = useCallback(
+  const fetchRecipients = useCallback(
     (year: number, semester: number) => {
       httpClient
         .get<RecipientData[]>(`${Api.RECIPIENT}/${year}/${semester}`)
         .then((response) => {
-          setRecipientData(response);
+          setRecipients(response);
+          setFilteredRecipients(response);
+          setSelectedScholarship(null);
+          setAllScholarships(
+            Array.from(new Set(response.map((rec) => rec.scholarName))),
+          );
         });
     },
     [httpClient],
   );
 
   useEffect(() => {
-    httpClient
-      .get<YearAndSemesters[]>(Api.YEARS_SEMESTERS)
-      .then((resyas) => setYAS(resyas));
-    httpClient
-      .get<CurrentYearAndSem>(Api.CURRENT_YEAR_SEMESTER)
-      .then((resCurYearSem) => {
-        setSelectedYear(resCurYearSem.year);
-        setSelectedSemester(resCurYearSem.semester);
-        fetchRecipient(resCurYearSem.year, resCurYearSem.semester);
-      });
-  }, [fetchRecipient, httpClient]);
+    if (roles.includes(Role.ADMIN)) {
+      httpClient
+        .get<YearAndSemesters[]>(Api.YEARS_SEMESTERS)
+        .then((resyas) => setYAS(resyas));
+      httpClient
+        .get<CurrentYearAndSem>(Api.CURRENT_YEAR_SEMESTER)
+        .then((resCurYearSem) => {
+          setSelectedYear(resCurYearSem.year);
+          setSelectedSemester(resCurYearSem.semester);
+          fetchRecipients(resCurYearSem.year, resCurYearSem.semester);
+        });
+    }
+  }, [fetchRecipients, httpClient, roles]);
+
+  useEffect(() => {
+    if (selectedScholarship) {
+      setFilteredRecipients(
+        recipients.filter((rec) => rec.scholarName === selectedScholarship),
+      );
+    } else {
+      setFilteredRecipients(recipients);
+    }
+  }, [recipients, selectedScholarship]);
 
   const onYearChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedYear(Number(e.target.value));
-    fetchRecipient(Number(e.target.value), selectedSemester);
+    fetchRecipients(Number(e.target.value), selectedSemester);
   };
 
   const onSemChange = (e: ChangeEvent<HTMLSelectElement>) => {
     setSelectedSemester(Number(e.target.value));
-    fetchRecipient(selectedYear, Number(e.target.value));
+    fetchRecipients(selectedYear, Number(e.target.value));
   };
 
   return {
-    recipientData,
+    filteredRecipients,
     YAS,
     selectedSemester,
     selectedYear,
+    allScholarships,
+    selectedScholarship,
+    setSelectedScholarship,
     onYearChange,
     onSemChange,
   };

@@ -4,6 +4,8 @@ export enum Api {
   APPLICATION_HISTORY = '/application/history',
   CURRENT_YEAR_APPLICATION = '/application/current-year',
   RECIPIENT = '/application/recipient',
+  CONSIDER = '/application/consider',
+  APPROVE = '/application/approve',
 
   SCHOLARSHIP = '/scholarship',
   APPLYABLE_SCHOLARSHIP = '/scholarship/applyable',
@@ -14,7 +16,7 @@ export enum Api {
   CURRENT_YEAR_SEMESTER = '/setting/current-year-semester',
   YEARS_SEMESTERS = '/setting/years-and-semesters',
 
-  STUDENT_PROFILE = '/student',
+  STUDENT = '/student',
 
   ADVISOR = '/advisor',
 
