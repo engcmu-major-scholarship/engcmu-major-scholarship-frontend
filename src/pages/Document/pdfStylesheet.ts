@@ -6,42 +6,73 @@ import THSarabunNewBoldItalic from '../../assets/fonts/THSarabunNew_BoldItalic.t
 
 Font.register({
   family: 'THSarabunNew',
-  src: THSarabunNew,
-});
-
-Font.register({
-  family: 'THSarabunNewBold',
-  src: THSarabunNewBold,
-});
-
-Font.register({
-  family: 'THSarabunNewItalic',
-  src: THSarabunNewItalic,
-});
-
-Font.register({
-  family: 'THSarabunNewBoldItalic',
-  src: THSarabunNewBoldItalic,
+  fonts: [
+    { src: THSarabunNew },
+    { src: THSarabunNewBold, fontWeight: 'bold' },
+    { src: THSarabunNewItalic, fontStyle: 'italic' },
+    { src: THSarabunNewBoldItalic, fontWeight: 'bold', fontStyle: 'italic' },
+  ],
 });
 
 export const pdfStyleSheet = StyleSheet.create({
   page: {
     flexDirection: 'column',
-    padding: 20,
+    paddingHorizontal: 48,
+    paddingVertical: 24,
     fontFamily: 'THSarabunNew',
     fontSize: 16,
+    gap: 10,
+  },
+  hr: {
+    borderBottomWidth: 1,
+    borderBottomStyle: 'solid',
+    width: '100%',
   },
   header: {
     display: 'flex',
-    width: '100%',
     flexDirection: 'row',
+    width: '100%',
     alignItems: 'center',
     fontSize: 24,
-    marginBottom: 20,
   },
-  section: {
-    margin: 10,
-    padding: 10,
-    flexGrow: 1,
+  headerContent: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  fieldRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  field: {
+    display: 'flex',
+    flexDirection: 'row',
+    gap: 5,
+  },
+  row: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  table: {
+    borderStyle: 'solid',
+    borderWidth: 1,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  tableRow: {
+    display: 'flex',
+    flexDirection: 'row',
+    borderBottomWidth: 1,
+    borderBottomStyle: 'solid',
+  },
+  tableCell: {
+    borderRightStyle: 'solid',
+    borderRightWidth: 1,
+    flex: 4,
+    padding: 2,
+    alignItems: 'center',
   },
 });
