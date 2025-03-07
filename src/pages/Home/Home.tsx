@@ -11,6 +11,15 @@ const Home = () => {
     currentYearStatus,
   } = useHomeController();
 
+  const showDateOptions: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  };
+
   return (
     <div className="flex flex-col px-24 py-4 gap-4">
       <div className="flex flex-row gap-2 w-full my-4 text-xl">
@@ -30,7 +39,9 @@ const Home = () => {
         ? 'ยินดีต้อนรับ'
         : 'ยินดีต้อนรับ! กรุณาเข้าสู่ระบบก่อนดำเนินการสมัครทุน'}
       <div className="h-60 w-full flex flex-col gap-2 p-5 shadow-full-2xl rounded-2xl">
-        <div className="text-lg">ข่าวประชาสัมพันธ์</div>
+        <div className="text-lg font-semibold text-[#7D8C6E]">
+          ข่าวประชาสัมพันธ์
+        </div>
         <div className="flex flex-col h-full w-full gap-4 overflow-y-auto">
           {announcements.map((announcement, index) => (
             <div key={index} className="flex flex-col gap-2">
@@ -42,17 +53,41 @@ const Home = () => {
       </div>
       {roles.includes(Role.STUDENT) && (
         <div className="flex gap-4">
-          <div className="h-60 w-full flex flex-col gap-2 bg-white p-6 rounded-2xl shadow-full-2xl rounded-2xl">
-            <h2 className="text-lg font-semibold text-gray-700">
+          <div className="h-60 w-full flex flex-col gap-2 bg-white p-6 rounded-2xl shadow-full-2xl">
+            <h2 className="text-lg font-semibold text-[#7D8C6E] ">
               ทุนที่สมัครได้
             </h2>
-            <div>
+            <div className="flex flex-col">
               {scholarships.length !== 0 ? (
-                scholarships.map((scholarship) => (
-                  <option key={scholarship.id} value={scholarship.id}>
-                    {scholarship.name}
-                  </option>
-                ))
+                <>
+                  <div className="grid grid-cols-3 gap-4 border-b-4 border-gray-300/20 justify-between items-center">
+                    <span>ชื่อทุน</span>
+                    <span>วันเปิดรับสมัคร</span>
+                    <span>วันปิดรับสมัคร</span>
+                  </div>
+                  {scholarships.map((scholarship, index) => (
+                    <div
+                      key={index}
+                      className="grid grid-cols-3 gap-4 justify-between items-center"
+                    >
+                      <span>{scholarship.name}</span>
+                      <span>
+                        {' '}
+                        {scholarship.openDate.toLocaleString(
+                          undefined,
+                          showDateOptions,
+                        )}
+                      </span>
+                      <span>
+                        {' '}
+                        {scholarship.closeDate.toLocaleString(
+                          undefined,
+                          showDateOptions,
+                        )}
+                      </span>
+                    </div>
+                  ))}
+                </>
               ) : (
                 <div className="text-center text-gray-700">
                   ขณะนี้ยังไม่มีทุนที่เปิดรับสมัครในช่วงเวลานี้
@@ -61,20 +96,33 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="h-60 w-full flex flex-col gap-2  bg-white p-6 rounded-2xl shadow-full-2xl rounded-2xl">
-            <h2 className="text-lg font-semibold text-gray-700">
+          <div className="h-60 w-full flex flex-col gap-2 bg-white p-6 rounded-2xl shadow-full-2xl">
+            <h2 className="text-lg font-semibold text-[#7D8C6E]">
               สถานะการขอทุน
             </h2>
             <div>
               {currentYearStatus.length !== 0 ? (
                 currentYearStatus.map((status) => (
-                  <div className="flex flex-row gap-2" key={status.appId}>
+                  <div
+                    className="flex flex-row gap-2 justify-between items-center"
+                    key={status.appId}
+                  >
                     <span>{status.scholarName}</span>
-                    {status.submissionTime
-                      ? status.adminApproveTime
-                        ? 'ได้รับการอนุมัติ'
-                        : 'ยังไม่ได้รับการอนุมัติ'
-                      : 'ยังไม่ได้ยืนยันใบสมัคร'}
+                    <span
+                      className={`p-6 py-1.5 rounded-2xl mb-1 ${
+                        status.submissionTime
+                          ? status.adminApproveTime
+                            ? 'bg-green-600 text-green-200 border-3 border-green-800/40'
+                            : 'bg-yellow-200 text-yellow-600 border-3 border-yellow-500/40'
+                          : 'bg-red-200 text-red-600 border-3 border-red-500/40'
+                      }`}
+                    >
+                      {status.submissionTime
+                        ? status.adminApproveTime
+                          ? 'อนุมัติ'
+                          : 'รออนุมัติ'
+                        : 'ไม่ยืนยันใบสมัคร'}
+                    </span>
                   </div>
                 ))
               ) : (
@@ -88,23 +136,29 @@ const Home = () => {
       )}
 
       {roles.includes(Role.ADMIN) && (
-        <div className="h-60 w-full flex flex-col bg-white p-6 rounded-2xl shadow-full-2xl rounded-2xl gap-2">
-          <h2 className="text-lg font-semibold text-gray-700">
+        <div className="h-60 w-full flex flex-col bg-white p-6 rounded-2xl shadow-full-2xl gap-2">
+          <h2 className="text-lg font-semibold text-[#7D8C6E]">
             ผู้สมัครทุนที่รอการอนุมัติ
           </h2>
-          <div className="">
-            {considers.length != 0 ? (
-              considers.map((consider) => (
-                <div className="flex flex-row gap-2" key={consider.appId}>
-                  <span>{consider.firstName + ' ' + consider.lastName}</span>
-                  <span>{consider.scholarName}</span>
+          <div className="flex items-start justify-between">
+            <div className="">
+              {considers.length != 0 ? (
+                considers.map((consider) => (
+                  <div className="flex flex-row gap-10" key={consider.appId}>
+                    <span>{consider.firstName + ' ' + consider.lastName}</span>
+                    <span>{consider.scholarName}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-700">
+                  ยังไม่มีผู้รอการอนุมัติ
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-700">
-                ยังไม่มีผู้รอการอนุมัติ
-              </div>
-            )}
+              )}
+            </div>
+            <div className="text-5xl text-center font-bold text-green-600 mr-10">
+              <div className="text-lg">จำนวน</div>
+              {considers.length}
+            </div>
           </div>
         </div>
       )}

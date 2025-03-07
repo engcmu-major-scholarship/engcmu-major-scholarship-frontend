@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router';
 import { Path } from '../../constants/Path';
 import { useAuth } from '../../hooks/useAuth';
 import { Role } from '../../types/Roles';
-import { Scholarship } from '../Scholarship/ScholarshipById/useScholarshipByIdController';
 
 export interface BasicRecipientInfo {
   StudentId: string;
@@ -49,12 +48,7 @@ const useRecipientHistoryController = () => {
   const [searchText, setSearchText] = useState<string>('');
 
   const [modalApp, setModalApp] = useState<Application[] | null>([]);
-  const [modalScholarshipData, setModalScholarshipData] =
-    useState<Scholarship | null>(null);
   const [modalStudentData, setModalStudentData] = useState<Student | null>(
-    null,
-  );
-  const [modalConsider, setModalConsider] = useState<ConsiderAppData | null>(
     null,
   );
 
@@ -63,14 +57,14 @@ const useRecipientHistoryController = () => {
   };
 
   useEffect(() => {
-    let endpoint: string = Api.APPLICATION;
     if (roles.includes(Role.ADMIN)) {
-      endpoint = `${Api.STUDENT}/search?search=${searchText}`;
+      httpClient
+        .get<BasicRecipientInfo[]>(`${Api.STUDENT}/search?search=${searchText}`)
+        .then((response) => {
+          setrecipient(response);
+          setSearchResults(response);
+        });
     }
-    httpClient.get<BasicRecipientInfo[]>(endpoint).then((response) => {
-      setrecipient(response);
-      setSearchResults(response);
-    });
   }, [httpClient, roles, searchText, recipient]);
 
   const handleDocCheckClick = (studentId: string) => {
