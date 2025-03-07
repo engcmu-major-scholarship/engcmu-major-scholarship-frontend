@@ -60,7 +60,7 @@ const Home = () => {
             <div className="flex flex-col">
               {scholarships.length !== 0 ? (
                 <>
-                  <div className="grid grid-cols-3 gap-4 justify-between items-center">
+                  <div className="grid grid-cols-3 gap-4 border-b-4 border-gray-300/20 justify-between items-center">
                     <span>ชื่อทุน</span>
                     <span>วันเปิดรับสมัคร</span>
                     <span>วันปิดรับสมัคร</span>
@@ -112,7 +112,7 @@ const Home = () => {
                       className={`p-6 py-1.5 rounded-2xl mb-1 ${
                         status.submissionTime
                           ? status.adminApproveTime
-                            ? 'bg-green-200 text-green-600 border-3 border-green-500/40'
+                            ? 'bg-green-600 text-green-200 border-3 border-green-800/40'
                             : 'bg-yellow-200 text-yellow-600 border-3 border-yellow-500/40'
                           : 'bg-red-200 text-red-600 border-3 border-red-500/40'
                       }`}
@@ -140,19 +140,25 @@ const Home = () => {
           <h2 className="text-lg font-semibold text-[#7D8C6E]">
             ผู้สมัครทุนที่รอการอนุมัติ
           </h2>
-          <div className="">
-            {considers.length != 0 ? (
-              considers.map((consider) => (
-                <div className="flex flex-row gap-2" key={consider.appId}>
-                  <span>{consider.firstName + ' ' + consider.lastName}</span>
-                  <span>{consider.scholarName}</span>
+          <div className="flex items-start justify-between">
+            <div className="">
+              {considers.length != 0 ? (
+                considers.map((consider) => (
+                  <div className="flex flex-row gap-10" key={consider.appId}>
+                    <span>{consider.firstName + ' ' + consider.lastName}</span>
+                    <span>{consider.scholarName}</span>
+                  </div>
+                ))
+              ) : (
+                <div className="text-center text-gray-700">
+                  ยังไม่มีผู้รอการอนุมัติ
                 </div>
-              ))
-            ) : (
-              <div className="text-center text-gray-700">
-                ยังไม่มีผู้รอการอนุมัติ
-              </div>
-            )}
+              )}
+            </div>
+            <div className="text-5xl text-center font-bold text-green-600 mr-10">
+              <div className="text-lg">จำนวน</div>
+              {considers.length}
+            </div>
           </div>
         </div>
       )}
